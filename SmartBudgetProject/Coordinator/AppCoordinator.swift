@@ -8,32 +8,31 @@
 import UIKit
 
 class AppCoordinator: CoordinatorProtocol {
-    func start() {
-        showPasswordRecoveryScreen()
-    }
-    
     var navigationController: UINavigationController
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
         
-    func showPasswordRecoveryScreen() {
-        let viewModel = PasswordRecoveryViewModel()
-        let vc = PasswordRecoveryViewController(viewModel: viewModel)
-        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
+    func showMainTabBar() {
+        let tabBarController = CustomTabBarController()
+        
+        let expensesVM = ExpensesViewModel()
+        let expensesVC = ExpensesViewController(viewModel: expensesVM)
+             
+        expensesVC.coordinator = self
+ 
+        tabBarController.viewControllers = [expensesVC]
+        tabBarController.setupTabBar()
+        navigationController.setViewControllers([tabBarController], animated: true)
+    }
+        
+    func start() {
+        showMainTabBar()
     }
     
-    func showCheckNumberPhoneScreen(type: ConfirmationFlow) {
-        let viewModel = CheckNumberPhoneViewModel()
-        let vc = CheckNumberPhonelViewController(viewModel: viewModel, type: type)
-        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func showNewPasswordScreen() {
-        let viewModel = CreateNewPasswordViewModel()
-        let vc = CreateNewPasswordViewController(viewModel: viewModel)
+    func showExpensesScreen() {
+        let viewModel = ExpensesViewModel()
+        let vc = ExpensesViewController(viewModel: viewModel)
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
