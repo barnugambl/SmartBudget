@@ -32,6 +32,9 @@ class InitialBudgetViewController: UIViewController {
     }
     
     private func setupNavigation() {
+        
+        navigationItem.titleView = initBudgetView.titleLabel
+        
         initBudgetView.clickOnConfirmButton = { [weak self] in
             self?.coordinator?.showSetupPersentScreen()
         }

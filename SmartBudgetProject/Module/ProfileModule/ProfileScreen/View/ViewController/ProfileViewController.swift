@@ -45,7 +45,7 @@ class ProfileViewController: UIViewController {
         profileView.onEvent = { [weak self] event in
             switch event {
             case .didTapEditProfile:
-                self?.coordinator?.showEdtiProfleFlow()
+                self?.coordinator?.showEditProfleFlow()
             case .didTapExpenseHistory:
                 break
             case .didTapFinanses:

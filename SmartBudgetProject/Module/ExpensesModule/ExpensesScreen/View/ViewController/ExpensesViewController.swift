@@ -34,6 +34,11 @@ class ExpensesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDataSource()
+        setupNavigationBar()
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.titleView = expensesView.titleLabel
     }
 }
 

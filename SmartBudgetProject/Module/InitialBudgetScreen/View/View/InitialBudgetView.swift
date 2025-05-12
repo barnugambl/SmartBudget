@@ -16,7 +16,7 @@ class InitialBudgetView: UIView {
     
     private lazy var contentView = UIView()
     
-    private lazy var titleLabel = Label(textLabel: R.string.localizable.distributeBudgetLabel(),
+    lazy var titleLabel = Label(textLabel: R.string.localizable.distributeBudgetLabel(),
                                         textSize: 24, weight: .medium)
     
     private lazy var inputSumLabel = Label(textLabel:  R.string.localizable.inputBudgetLabel(),
@@ -125,7 +125,7 @@ class InitialBudgetView: UIView {
     private func setupLayout() {
         addSubview(scroll)
         scroll.addSubview(contentView)
-        contentView.addSubviews(titleLabel, inputSumLabel, inputSumTextField, setupCategoriesLabel, categoryStack, confirmButton)
+        contentView.addSubviews(inputSumLabel, inputSumTextField, setupCategoriesLabel, categoryStack, confirmButton)
         
         scroll.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
@@ -136,13 +136,8 @@ class InitialBudgetView: UIView {
             make.width.equalToSuperview()
         }
         
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
-            make.centerX.equalToSuperview()
-        }
-        
         inputSumLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(40)
+            make.top.equalToSuperview().offset(32)
             make.leading.equalToSuperview().inset(26)
         }
         

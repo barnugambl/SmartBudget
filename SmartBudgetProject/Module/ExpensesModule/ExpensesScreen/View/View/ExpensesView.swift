@@ -4,7 +4,7 @@ import SnapKit
 
 class ExpensesView: UIView {
     
-    private lazy var titleLabel = Label(textLabel: "Мои расходы", textSize: 24)
+    lazy var titleLabel = Label(textLabel: "Мои расходы", textSize: 24)
     var viewModel = ExpensesViewModel()
     var entries: [PieChartDataEntry] = []
     var data: [BudgetCategory] = []
@@ -102,14 +102,11 @@ class ExpensesView: UIView {
     private func setupTableHeader() {
         let width = UIScreen.main.bounds.width
         
-        // top + title + spacing + chart + bottom
-        let headerHeight: CGFloat = 16 + 24 + 20 + 256 + 32
+        // top + spacing + chart + bottom
+        let headerHeight: CGFloat = 16 + 20 + 256 + 32
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: headerHeight))
-        titleLabel.frame = CGRect(x: 0, y: 16, width: width, height: 24)
-        titleLabel.textAlignment = .center
-        pieChartView.frame = CGRect(x: 32, y: titleLabel.frame.maxY + 20,
+        pieChartView.frame = CGRect(x: 32, y: 20,
                                     width: width - 64, height: 256)
-        headerView.addSubview(titleLabel)
         headerView.addSubview(pieChartView)
         budgetCategoryTableView.tableHeaderView = headerView
     }

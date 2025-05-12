@@ -35,7 +35,7 @@ class ProfileCoordinator: Coordinator {
         navigationController.setViewControllers([profileVC], animated: false)
     }
     
-    func showEdtiProfleFlow() {
+    func showEditProfleFlow() {
         let editProfileVC = moduleBulder.makeEditProfileScreen()
         editProfileVC.coordinator = self
         navigationController.pushViewController(editProfileVC, animated: true)

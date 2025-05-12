@@ -28,5 +28,10 @@ class EditProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.titleView = editProfileView.titleLabel
     }
 }

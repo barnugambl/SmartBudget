@@ -10,7 +10,7 @@ import SnapKit
 
 class EditProfileView: UIView {
     
-    private lazy var titleLabel = Label(textLabel: R.string.localizable.editProfileLabel(),
+    lazy var titleLabel = Label(textLabel: R.string.localizable.editProfileLabel(),
                                         textSize: 20, weight: .medium)
     
     private lazy var editNumberLabel = Label(textLabel: R.string.localizable.editNumberPhoneLabel(),
@@ -54,15 +54,10 @@ class EditProfileView: UIView {
     }
     
     private func setupLayout() {
-        addSubviews(titleLabel, numberStack, passwordStack, confirmPasswordStack, confirmButton)
-        
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(8)
-            make.leading.equalToSuperview().inset(16)
-        }
-        
+        addSubviews(numberStack, passwordStack, confirmPasswordStack, confirmButton)
+            
         numberStack.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(40)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(20)
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
