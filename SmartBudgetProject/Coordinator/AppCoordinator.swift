@@ -9,7 +9,7 @@ import UIKit
 
 class AppCoordinator: CoordinatorProtocol {
     func start() {
-        showMainTabBar()
+        showPasswordRecoveryScreen()
     }
     
     var navigationController: UINavigationController
@@ -17,32 +17,23 @@ class AppCoordinator: CoordinatorProtocol {
         self.navigationController = navigationController
     }
         
-    func showMainTabBar() {
-        let tabBarController = CustomTabBarController()
-        
-        let profileVM = ProfileViewModel()
-        let profileVC = ProfileViewController(viewModel: profileVM)
-        profileVC.coordinator = self
-        
-        let navProfileVC = UINavigationController(rootViewController: profileVC)
-        
-        tabBarController.viewControllers = [navProfileVC]
-        tabBarController.setupTabBar()
-        
-        navigationController.setViewControllers([tabBarController], animated: true)
-    }
-
-        
-    func showProfileScreen() {
-        let viewModel = ProfileViewModel()
-        let vc = ProfileViewController(viewModel: viewModel)
+    func showPasswordRecoveryScreen() {
+        let viewModel = PasswordRecoveryViewModel()
+        let vc = PasswordRecoveryViewController(viewModel: viewModel)
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func showEditProfileScreen() {
-        let viewModel = EditProfileViewModel()
-        let vc = EditProfileViewController(viewModel: viewModel)
+    func showCheckNumberPhoneScreen(type: ConfirmationFlow) {
+        let viewModel = CheckNumberPhoneViewModel()
+        let vc = CheckNumberPhonelViewController(viewModel: viewModel, type: type)
+        vc.coordinator = self
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func showNewPasswordScreen() {
+        let viewModel = CreateNewPasswordViewModel()
+        let vc = CreateNewPasswordViewController(viewModel: viewModel)
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
