@@ -8,42 +8,41 @@
 import UIKit
 
 class AppCoordinator: CoordinatorProtocol {
+    func start() {
+        showMainTabBar()
+    }
+    
     var navigationController: UINavigationController
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
         
-    func start() {
-        let viewModel = LogViewModel()
-        let logVC = LogViewConroller(viewModel: viewModel)
-        logVC.coordinator = self
-        navigationController.pushViewController(logVC, animated: true)
+    func showMainTabBar() {
+        let tabBarController = CustomTabBarController()
+        
+        let profileVM = ProfileViewModel()
+        let profileVC = ProfileViewController(viewModel: profileVM)
+        profileVC.coordinator = self
+        
+        let navProfileVC = UINavigationController(rootViewController: profileVC)
+        
+        tabBarController.viewControllers = [navProfileVC]
+        tabBarController.setupTabBar()
+        
+        navigationController.setViewControllers([tabBarController], animated: true)
     }
-    
-    func showLogScreen() {
-        let viewModel = LogViewModel()
-        let vc = LogViewConroller(viewModel: viewModel)
+
+        
+    func showProfileScreen() {
+        let viewModel = ProfileViewModel()
+        let vc = ProfileViewController(viewModel: viewModel)
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func logout() {
-        let viewModel = LogViewModel()
-        let vc = LogViewConroller(viewModel: viewModel)
-        vc.coordinator = self
-        navigationController.setViewControllers([vc], animated: true)
-    }
-    
-    func showRegScreen() {
-        let viewModel = RegViewModel()
-        let vc = RegViewConroller(viewModel: viewModel)
-        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func showCreatePasswordScreen() {
-        let viewModel = CreatePasswordViewModel()
-        let vc = CreatePasswordViewController(viewModel: viewModel)
+    func showEditProfileScreen() {
+        let viewModel = EditProfileViewModel()
+        let vc = EditProfileViewController(viewModel: viewModel)
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
