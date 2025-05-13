@@ -11,7 +11,7 @@ import UIKit
 class AddFinancialGoalViewController: UIViewController {
     private var addFinancialGoalView = AddFinancialGoalView()
     private var viewModel: FinancialGoalViewModel
-    var coordinator: AppCoordinator?
+    weak var coordinator: FinancialGoalCoordinator?
 
     init(viewModel: FinancialGoalViewModel) {
         self.viewModel = viewModel

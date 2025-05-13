@@ -7,52 +7,47 @@
 
 import UIKit
 
-class AppCoordinator: CoordinatorProtocol {
+class AppCoordinator: Coordinator {
     var navigationController: UINavigationController
-    var finanicalGoalViewModel = FinancialGoalViewModel()
+    var childCoordinators: [Coordinator] = []
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-        
-    func showMainTabBar() {
-        let tabBarController = CustomTabBarController()
-        
-        
-        let goalsVM = finanicalGoalViewModel
-        
-
-        let goalsVC = UINavigationController(rootViewController: FinancialGoalsViewController(viewModel: goalsVM))
-        let goals = goalsVC.viewControllers[0] as? FinancialGoalsViewController
-   
-        
-        goals?.coordinator = self
-        
-        tabBarController.viewControllers = [goalsVC]
-        tabBarController.setupTabBar()
-        navigationController.setViewControllers([tabBarController], animated: true)
-    }
-        
+    
+    
     func start() {
-        showMainTabBar()
+        showAuthFlow()
     }
     
-    func showAddFinancialGoalScreen() {
-        let vc = AddFinancialGoalViewController(viewModel: finanicalGoalViewModel)
-        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
+    func showMainFlow() {
+        let mainTabBarCoordinator = MainTabBarCoordinator(navigationController: navigationController, profileDelegate: self)
+        childCoordinators.append(mainTabBarCoordinator)
+        mainTabBarCoordinator.start()
+                
     }
     
-        
-    func showFinancialGoalScreen() {
-        let vc = FinancialGoalsViewController(viewModel: finanicalGoalViewModel)
-        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func showAddMoneyScreen(name: String) {
-        let viewModel = AddMoneyFinancialGoalViewModel()
-        let vc = AddMoneyFinancialGoalViewController(viewModel: viewModel, name: name)
-        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
+    func showAuthFlow() {
+        let authCoordinator = AuthCoordinator(navigationController: navigationController)
+        authCoordinator.delegate = self
+        childCoordinators.append(authCoordinator)
+        authCoordinator.start()
     }
 }
+
+extension AppCoordinator: AuthCoordinatorDelegate {
+    func didFinishAuthFlow(coordinator: AuthCoordinator) {
+        childDidFinish(coordinator)
+        showMainFlow()
+    }
+}
+
+extension AppCoordinator: ProfileCoordinatorDelegate {
+    func logout(coordinator: Coordinator) {
+        if let mainTabBarCoordinator = childCoordinators.first(where: { $0 is MainTabBarCoordinator }) {
+            childDidFinish(mainTabBarCoordinator)
+        }
+        showAuthFlow()
+    }
+}
+

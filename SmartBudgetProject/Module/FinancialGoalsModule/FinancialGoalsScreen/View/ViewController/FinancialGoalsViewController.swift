@@ -18,7 +18,7 @@ class FinancialGoalsViewController: UIViewController {
     private var financialGoalsView = FinancialGoalsView()
     private var tableViewDataSource: UITableViewDiffableDataSource<TableSection, FinancialGoal>?
     private var cancellables = Set<AnyCancellable>()
-    weak var coordinator: AppCoordinator?
+    weak var coordinator: FinancialGoalCoordinator?
 
     init(viewModel: FinancialGoalViewModel) {
         self.viewModel = viewModel
@@ -55,7 +55,7 @@ class FinancialGoalsViewController: UIViewController {
         navigationItem.titleView = titleLabel
         
         let action = UIAction { [weak self] _ in
-            self?.coordinator?.showAddFinancialGoalScreen()
+            self?.coordinator?.showAddFinancialGoalFlow()
         }
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .add, primaryAction: action)
@@ -97,6 +97,6 @@ extension FinancialGoalsViewController {
 extension FinancialGoalsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let currentItem = viewModel.financialGoals[indexPath.row]
-        coordinator?.showAddMoneyScreen(name: currentItem.name)
+        coordinator?.showAddMoneyFinancialGoalFlow(nameGoal: currentItem.name)
     }
 }

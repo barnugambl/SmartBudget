@@ -9,14 +9,14 @@ import UIKit
 import Foundation
 
 class AddMoneyFinancialGoalViewController: UIViewController {
-    private var viewModel: AddMoneyFinancialGoalViewModel
+    private var viewModel: FinancialGoalViewModel
     private var addMoneyFinancialGoalView = AddMoneyFinancialGoalView()
-    weak var coordinator: AppCoordinator?
-    private var name: String
+    weak var coordinator: FinancialGoalCoordinator?
+    private var nameGoal: String
     
-    init(viewModel: AddMoneyFinancialGoalViewModel, name: String) {
+    init(viewModel: FinancialGoalViewModel, nameGoal: String) {
         self.viewModel = viewModel
-        self.name = name
+        self.nameGoal = nameGoal
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,6 +34,6 @@ class AddMoneyFinancialGoalViewController: UIViewController {
     }
     
     private func setupName() {
-        addMoneyFinancialGoalView.titleLabel.text = name
+        addMoneyFinancialGoalView.titleLabel.text = nameGoal
     }
 }
