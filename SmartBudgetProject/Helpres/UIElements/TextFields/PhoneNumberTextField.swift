@@ -1,7 +1,6 @@
 import UIKit
 
 class PhoneNumberTextField: UITextField {
-    
     private let placeholderText = "Введите номер телефона"
     private let prefix = "+7 "
     
@@ -14,7 +13,6 @@ class PhoneNumberTextField: UITextField {
         super.init(frame: frame)
         setup()
     }
-
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

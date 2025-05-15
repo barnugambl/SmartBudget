@@ -1,0 +1,58 @@
+disabled_rules:
+  - trailing_newline
+  - todo
+  - cyclomatic_complexity
+  - trailing_whitespace
+  - indentation_width
+
+excluded:
+  - Carthage
+  - Pods
+
+identifier_name:
+  excluded:
+    - i
+    - id
+    - r
+    - g
+    - b
+    - a
+
+opt_in_rules:
+  - colon
+  - control_statement
+  - force_cast
+  - force_try
+  - operator_usage_whitespace
+  - implicitly_unwrapped_optional
+  - force_unwrapping
+
+custom_rules:
+  array_constructor:
+    name: "Array/Dictionary initializer"
+    regex: '(let|var) \w+ = \[.*\]\(\)'
+    message: "Используйте корректный синтаксис инициализации"
+    severity: "error"
+
+force_unwrapping:
+  severity: error
+
+reporter: "xcode"
+
+function_body_length:
+  warning: 100
+  error: 150
+
+line_length:
+  warning: 150
+  error: 200
+  ignores_urls: true
+  ignores_function_declarations: true
+
+type_body_length:
+  warning: 400
+  error: 450
+
+file_length:
+  warning: 400
+  error: 500

@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 class AddFinancialGoalViewController: UIViewController {
+    private let formatter = DateFormatter()
     private var addFinancialGoalView = AddFinancialGoalView()
     private var viewModel: FinancialGoalViewModel
     weak var coordinator: FinancialGoalCoordinator?
@@ -40,24 +41,21 @@ class AddFinancialGoalViewController: UIViewController {
     private func addGoals() {
         let name = addFinancialGoalView.nameGoalTextField.text ?? ""
         let sum = addFinancialGoalView.sumGoalTextField.text ?? ""
-//        let dateString = addFinancialGoalView.dateTextField.text ?? ""
+        let date = formatter.date(from: addFinancialGoalView.dateTextField.text ?? "") ?? Date()
 
         let financialGoal = FinancialGoal(
             id: UUID(),
             name: name,
             sum: sum,
-            date: Date(),
+            date: date,
             executionProcess: .progress
         )
-
         viewModel.addGoasl(goal: financialGoal)
     }
 
-    
     @objc
     private func setupDatePicker() {
         addFinancialGoalView.dateTextField.resignFirstResponder()
-        
         let datePickerVC = DatePicker()
         datePickerVC.modalPresentationStyle = .pageSheet
 
@@ -68,9 +66,8 @@ class AddFinancialGoalViewController: UIViewController {
         }
 
         datePickerVC.onDateSelected = { [weak self] selectedDate in
-            let formatter = DateFormatter()
-            formatter.dateStyle = .long
-            self?.addFinancialGoalView.dateTextField.text = formatter.string(from: selectedDate)
+            self?.formatter.dateStyle = .long
+            self?.addFinancialGoalView.dateTextField.text = self?.formatter.string(from: selectedDate)
         }
         present(datePickerVC, animated: true)
     }

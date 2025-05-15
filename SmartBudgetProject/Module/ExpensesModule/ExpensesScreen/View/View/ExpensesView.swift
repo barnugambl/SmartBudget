@@ -3,7 +3,6 @@ import DGCharts
 import SnapKit
 
 class ExpensesView: UIView {
-    
     lazy var titleLabel = Label(textLabel: "Мои расходы", textSize: 24)
     var viewModel = ExpensesViewModel()
     var entries: [PieChartDataEntry] = []
@@ -45,7 +44,6 @@ class ExpensesView: UIView {
         }
     }
 
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -111,7 +109,6 @@ class ExpensesView: UIView {
         budgetCategoryTableView.tableHeaderView = headerView
     }
 
-    
     private func setupLayout() {
         addSubview(budgetCategoryTableView)
         budgetCategoryTableView.snp.makeConstraints { make in

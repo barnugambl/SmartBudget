@@ -13,7 +13,6 @@ class RegViewConroller: UIViewController {
     private var regView = RegView()
     weak var coordinator: AuthCoordinator?
     
-    
     init(viewModel: RegViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)

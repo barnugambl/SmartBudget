@@ -14,7 +14,6 @@ class CustomTabBarController: UITabBarController {
         setupSeparatorView()
     }
     
-    
     func setupTabBar() {
         tabBar.backgroundColor = .systemBackground
         tabBar.unselectedItemTintColor = .systemGray

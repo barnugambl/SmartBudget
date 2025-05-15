@@ -8,33 +8,24 @@
 import UIKit
 
 class SetupCategoryView: UIView {
-    
     var clickOnchangeButton: (() -> Void)?
     
-    private lazy var titleLabel = Label(textLabel:  R.string.localizable.setupCategoryLabel(),
-                                        textSize: 24, weight: .medium)
+    private lazy var titleLabel = Label(textLabel: R.string.localizable.setupCategoryLabel(), textSize: 24, weight: .medium)
+    private lazy var categoryLabel = Label(textLabel: R.string.localizable.categoryLabel(), textSize: 16, weight: .medium)
+    private lazy var editColorCategoryLabel = Label(textLabel: R.string.localizable.changeCategoryColorLabel(), textSize: 16, weight: .medium)
     
-    private lazy var categoryLabel = Label(textLabel:  R.string.localizable.categoryLabel(),
-                                           textSize: 16, weight: .medium)
-    
-    private lazy var changeCategoryButton = DefaultButton(title:  R.string.localizable.changeButton(),
-                                                          buttonBackgroundColor: .white,
-                                                          titleColor: .systemBlue, titleFontSize: 16) { [weak self] in
-        self?.clickOnchangeButton?()
-    }
-    
-    private lazy var stackLabel = Stack(stackAxis: .horizontal, stackDistribution: .equalSpacing,
-                                        views: [categoryLabel, changeCategoryButton])
+    private lazy var stackLabel = Stack(stackAxis: .horizontal, stackDistribution: .equalSpacing, views: [categoryLabel, changeCategoryButton])
     
     private lazy var categoryView = ItemView(title: "Категория", iconName: "food_icon")
-    
-    private lazy var editColorCategoryLabel = Label(textLabel:  R.string.localizable.changeCategoryColorLabel(),
-                                                    textSize: 16, weight: .medium)
     
     private lazy var colorView = ColorView()
     
     private lazy var makeChangesButton = DefaultButton(title: R.string.localizable.makeChangesButton())
-    
+    private lazy var changeCategoryButton = DefaultButton(title: R.string.localizable.changeButton(), buttonBackgroundColor: .white,
+                                                          titleColor: .systemBlue, titleFontSize: 16) { [weak self] in
+        self?.clickOnchangeButton?()
+    }
+
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
         setupView()

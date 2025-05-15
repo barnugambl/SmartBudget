@@ -26,8 +26,7 @@ class SetupCategoryViewController: UIViewController {
     override func loadView() {
         view = setupCategoryView
     }
-    
-    
+                  
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigation()

@@ -13,31 +13,26 @@ enum CheckNumberViewEvent {
 }
 
 class CheckNumberPhoneView: UIView {
-    
     var onEvent: ((CheckNumberViewEvent) -> Void)?
     
-    private lazy var title = Label(textLabel: R.string.localizable.checkPhoneLabel(),
-                                   textSize: 24, weight: .medium)
-    
-    private lazy var codeDescription = Label(textLabel: R.string.localizable.checkPhoneDescrLabel(),
-        textSize: 16, textColor: .systemGray, numberLines: 0)
-    
+    private lazy var title = Label(textLabel: R.string.localizable.checkPhoneLabel(), textSize: 24, weight: .medium)
+    private lazy var codeDescription = Label(textLabel: R.string.localizable.checkPhoneDescrLabel(), textSize: 16,
+                                             textColor: .systemGray, numberLines: 0)
+    private lazy var haventEmailLabel = Label(textLabel: R.string.localizable.havenCodeLabel(), textSize: 14, textColor: .systemGray)
+
     private lazy var continueButton = DefaultButton(title: R.string.localizable.continueButton()) { [weak self] in
         self?.onEvent?(.didTapContinue)
     }
-    
-    private lazy var digitInputView = DigitInputView()
-    
-    private lazy var haventEmailLabel = Label(textLabel: R.string.localizable.havenCodeLabel(),
-                                              textSize: 14, textColor: .systemGray)
-    
-    private lazy var titleDescrStack = Stack(stackSpaicing: 20, views: [title, codeDescription])
     
     private lazy var resendEmailButton = DefaultButton(title: R.string.localizable.resendCodeButton(),
                                                        buttonBackgroundColor: .white, titleColor: .systemBlue,
                                                        titleFontSize: 14) { [weak self] in
         self?.onEvent?(.didTapHaventEmail)
     }
+    
+    private lazy var digitInputView = DigitInputView()
+    
+    private lazy var titleDescrStack = Stack(stackSpaicing: 20, views: [title, codeDescription])
     
     override init(frame: CGRect) {
         super.init(frame: frame)

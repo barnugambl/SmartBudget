@@ -51,7 +51,7 @@ class FinancialGoalsViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        let titleLabel = Label(textLabel: "Мои финансовые цели",textSize: 24, weight: .medium)
+        let titleLabel = Label(textLabel: "Мои финансовые цели", textSize: 24, weight: .medium)
         navigationItem.titleView = titleLabel
         
         let action = UIAction { [weak self] _ in

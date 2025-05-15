@@ -11,26 +11,20 @@ class CreatePasswordView: UIView {
     var didTapContinue: (() -> Void)?
     
     private lazy var title = Label(textLabel: R.string.localizable.createPasswordLabel(), textSize: 24, weight: .medium)
-        
     private lazy var passwordLabel = Label(textLabel: R.string.localizable.passwordLabel(), textSize: 14)
+    private lazy var confirmationPasswordLabel = Label(textLabel: R.string.localizable.confirmNewPasswordLabel(), textSize: 14)
     
-    private lazy var confirmationPasswordLabel = Label(
-        textLabel: R.string.localizable.confirmNewPasswordLabel(),
-        textSize: 14)
-    
-    private lazy var passwordTextField = DefaultTextField(
-        fieldPlaceHodler: R.string.localizable.createNewPasswordTextField(),
-        isPassword: true)
-    
-    private lazy var confirmationPasswordTextField = DefaultTextField(
-        fieldPlaceHodler: R.string.localizable.confirmNewPasswordTextField(), isPassword: true)
+    private lazy var passwordTextField = DefaultTextField(fieldPlaceHodler: R.string.localizable.createNewPasswordTextField(),
+                                                          isPassword: true)
+    private lazy var confirmationPasswordTextField = DefaultTextField(fieldPlaceHodler: R.string.localizable
+                                                                    .confirmNewPasswordTextField(),
+                                                                    isPassword: true)
     
     private lazy var completionButton = DefaultButton(
         title: R.string.localizable.confirmationButton()) { [weak self] in
             self?.didTapContinue?()
     }
     
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -74,7 +68,6 @@ class CreatePasswordView: UIView {
             make.height.equalTo(48)
         }
         
-           
         completionButton.snp.makeConstraints { make in
             make.top.equalTo(confirmationPasswordTextField.snp.bottom).offset(56)
             make.leading.trailing.equalToSuperview().inset(16)

@@ -13,7 +13,6 @@ class CreatePasswordViewController: UIViewController {
     private var viewModel = CreatePasswordViewModel()
     weak var coordinator: AuthCoordinator?
     
-    
     init(viewModel: CreatePasswordViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)

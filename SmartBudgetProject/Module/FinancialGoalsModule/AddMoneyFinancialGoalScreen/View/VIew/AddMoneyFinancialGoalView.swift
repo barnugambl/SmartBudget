@@ -8,13 +8,13 @@
 import UIKit
 
 class AddMoneyFinancialGoalView: UIView {
-                
     lazy var titleLabel = Label(textSize: 24, weight: .medium)
-    
-    private lazy var addAmountLabel = Label(textLabel: "Введите сумму",textSize: 16, weight: .medium)
+    private lazy var addAmountLabel = Label(textLabel: "Введите сумму", textSize: 16, weight: .medium)
         
     private lazy var addAmountTextField = AmountTextField()
+    
     private lazy var amountStack = Stack(stackSpaicing: 8, views: [addAmountLabel, addAmountTextField])
+    
     private lazy var confirmationButton = DefaultButton(title: "Внести сумму")
     
     override init(frame: CGRect) {
@@ -47,7 +47,6 @@ class AddMoneyFinancialGoalView: UIView {
         addAmountTextField.snp.makeConstraints { make in
             make.height.equalTo(60)
         }
-        
         
         confirmationButton.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(16)

@@ -8,8 +8,6 @@
 import UIKit
 
 class BudgetCategoryViewCell: UITableViewCell {
-    
-    
     private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray6
@@ -19,11 +17,8 @@ class BudgetCategoryViewCell: UITableViewCell {
     }()
     
     private lazy var nameBudgetCategoryLabel = Label(textSize: 20, weight: .medium)
-    
     private lazy var budgetSumLabel = Label(textSize: 24, weight: .medium)
-    
     private lazy var plannedAmountLabel = Label(textSize: 14)
-    
     private lazy var spentAmountLabel = Label(textSize: 14)
     
     private lazy var progressBar: UIProgressView = {
@@ -36,7 +31,6 @@ class BudgetCategoryViewCell: UITableViewCell {
     private lazy var sumProgressStack = Stack(stackSpaicing: 5, views: [budgetSumLabel, progressBar])
     private lazy var amountStack = Stack(stackAxis: .horizontal, stackDistribution: .equalSpacing,
                                              views: [plannedAmountLabel, spentAmountLabel])
-    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -8,24 +8,15 @@
 import UIKit
 
 class FinanceGoalsTableViewCell: UITableViewCell {
-    
-    private lazy var containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemGray6
-        view.layer.cornerRadius = 20
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
     private lazy var nameGoalLabel = Label(textSize: 20, weight: .medium)
     private lazy var budgetGoalLabel = Label(textSize: 16)
-    private lazy var nameBudgetStack = Stack(stackAxis: .horizontal, stackSpaicing: 8,
-                                             stackDistribution: .equalSpacing,
-                                             views: [nameGoalLabel, budgetGoalLabel])
-    
     private lazy var dateGoalLabel = Label(textSize: 16)
     private lazy var resultLabel = Label(textSize: 14)
     
+    private lazy var nameBudgetStack = Stack(stackAxis: .horizontal, stackSpaicing: 8, stackDistribution: .equalSpacing,
+                                             views: [nameGoalLabel, budgetGoalLabel])
+    private lazy var dateProgressStack = Stack(stackSpaicing: 10, views: [dateGoalLabel, progressBar, resultLabel])
+
     private lazy var progressBar: UIProgressView = {
         let bar = UIProgressView()
         bar.progressTintColor = UIColor(hex: "FFDD2D")
@@ -34,8 +25,14 @@ class FinanceGoalsTableViewCell: UITableViewCell {
         return bar
     }()
     
-    private lazy var dateProgressStack = Stack(stackSpaicing: 10, views: [dateGoalLabel, progressBar, resultLabel])
-    
+    private lazy var containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray6
+        view.layer.cornerRadius = 20
+        view.layer.masksToBounds = true
+        return view
+    }()
+        
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -78,7 +75,6 @@ class FinanceGoalsTableViewCell: UITableViewCell {
         nameGoalLabel.text = finacialGoal.name
         budgetGoalLabel.text = finacialGoal.sum + " ₽"
         dateGoalLabel.text = "\(R.string.localizable.dateGoalLabel()) \(Date.formated(date: finacialGoal.date))"
-        
         switch finacialGoal.executionProcess {
         case .completed:
             resultLabel.isHidden = false
@@ -87,7 +83,7 @@ class FinanceGoalsTableViewCell: UITableViewCell {
             progressBar.progress = 1
         case .failed:
             resultLabel.isHidden = false
-            resultLabel.text =  R.string.localizable.negativeResult()
+            resultLabel.text = R.string.localizable.negativeResult()
             resultLabel.textColor = .systemRed
             progressBar.progress = 0
         case .progress:

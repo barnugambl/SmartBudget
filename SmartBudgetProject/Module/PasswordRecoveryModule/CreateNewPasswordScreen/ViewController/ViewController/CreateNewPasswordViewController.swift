@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-
-
 class CreateNewPasswordViewController: UIViewController {
     private lazy var newPasswordView = CreateNewPasswordView()
     private var viewModel: CreateNewPasswordViewModel
@@ -36,7 +34,6 @@ class CreateNewPasswordViewController: UIViewController {
     private func setupNavigation() {
         newPasswordView.didTapContinue = { [weak self] in
             self?.coordinator?.navigationController.popToRootViewController(animated: true)
-            print("create")
         }
     }
 }

@@ -32,7 +32,6 @@ class FinancialGoalsView: UIView {
     
     private func setupLayout() {
         addSubviews(financialGoalsTableView)
-        
         financialGoalsTableView.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(16)
             make.leading.trailing.bottom.equalTo(safeAreaLayoutGuide)
