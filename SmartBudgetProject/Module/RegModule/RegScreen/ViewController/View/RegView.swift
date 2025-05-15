@@ -17,22 +17,18 @@ enum RegViewEvent {
 class RegView: UIView {
     var onEvent: ((RegViewEvent) -> Void)?
     
-    private lazy var titleLabel = Label(textLabel: R.string.localizable.regLabel(),
-                                        textSize: 24, weight: .medium)
+    private lazy var titleLabel = Label(textLabel: R.string.localizable.regLabel(), textSize: 24, weight: .medium)
     
     private lazy var phoneNumberTextField = PhoneNumberTextField()
+
+    private lazy var separatorView = SeparatorView()
     
-    private lazy var sendCodeButton = DefaultButton(title: R.string.localizable.sendCodeButton(),
-                                             buttonBackgroundColor: .white,
-                                             layerBorderWidth: 1,
-                                             layerBorderColor: UIColor.systemGray.cgColor) { [weak self] in
+    private lazy var sendCodeButton = DefaultButton(title: R.string.localizable.sendCodeButton(), buttonBackgroundColor: .white,
+                                             layerBorderWidth: 1, layerBorderColor: UIColor.systemGray.cgColor) { [weak self] in
         self?.onEvent?(.didTapSendCode)
     }
     
-    private lazy var separatorView = SeparatorView()
-    
-    private lazy var tIdButton = DefaultButton(title: R.string.localizable.tIdButtonTitle(),
-                                               nameImage: R.image.tid_icon.name) { [weak self] in
+    private lazy var tIdButton = DefaultButton(title: R.string.localizable.tIdButtonTitle(), nameImage: R.image.tid_icon.name) { [weak self] in
         self?.onEvent?(.didTapTId)
     }
     

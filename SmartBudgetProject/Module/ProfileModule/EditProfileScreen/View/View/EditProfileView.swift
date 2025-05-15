@@ -9,33 +9,18 @@ import UIKit
 import SnapKit
 
 class EditProfileView: UIView {
-    
-    lazy var titleLabel = Label(textLabel: R.string.localizable.editProfileLabel(),
-                                        textSize: 20, weight: .medium)
-    
-    private lazy var editNumberLabel = Label(textLabel: R.string.localizable.editNumberPhoneLabel(),
-                                             textSize: 16)
-    
+    lazy var titleLabel = Label(textLabel: R.string.localizable.editProfileLabel(), textSize: 20, weight: .medium)
+    private lazy var editNumberLabel = Label(textLabel: R.string.localizable.editNumberPhoneLabel(), textSize: 16)
+    private lazy var editPasswordLabel = Label(textLabel: R.string.localizable.editPasswordLabel(), textSize: 16)
+    private lazy var confirmPasswordLabel = Label(textLabel: R.string.localizable.confirmNewPasswordLabel(), textSize: 16)
+
     private lazy var editNumberTextField = DefaultTextField(fieldPlaceHodler: "+7-XXX-XXX-XX-XX")
-    
-    private lazy var editPasswordLabel = Label(textLabel: R.string.localizable.editPasswordLabel(),
-                                               textSize: 16)
-    
-    private lazy var editPasswordTextField = DefaultTextField(fieldPlaceHodler: "****",
-                                                       isPassword: true)
-    
-    private lazy var confirmPasswordLabel = Label(textLabel: R.string.localizable.confirmNewPasswordLabel(),
-                                                  textSize: 16)
-    
-    private lazy var confirmPasswordTextField = DefaultTextField(
-        fieldPlaceHodler: R.string.localizable.confirmNewPasswordTextField())
+    private lazy var editPasswordTextField = DefaultTextField(fieldPlaceHodler: "****", isPassword: true)
+    private lazy var confirmPasswordTextField = DefaultTextField(fieldPlaceHodler: R.string.localizable.confirmNewPasswordTextField())
     
     private lazy var numberStack = Stack(stackSpaicing: 8, views: [editNumberLabel, editNumberTextField])
-    
     private lazy var passwordStack = Stack(stackSpaicing: 8, views: [editPasswordLabel, editPasswordTextField])
-    
-    private lazy var confirmPasswordStack = Stack(stackSpaicing: 8,
-                                                  views: [confirmPasswordLabel, confirmPasswordTextField])
+    private lazy var confirmPasswordStack = Stack(stackSpaicing: 8, views: [confirmPasswordLabel, confirmPasswordTextField])
     
     private lazy var confirmButton = DefaultButton(title: R.string.localizable.confirmationButton()) { }
     

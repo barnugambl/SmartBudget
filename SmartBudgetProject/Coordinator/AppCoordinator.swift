@@ -15,7 +15,6 @@ class AppCoordinator: Coordinator {
         self.navigationController = navigationController
     }
     
-    
     func start() {
         showAuthFlow()
     }

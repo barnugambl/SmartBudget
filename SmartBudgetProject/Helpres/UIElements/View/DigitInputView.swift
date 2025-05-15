@@ -8,7 +8,7 @@
 import UIKit
 
 class DigitInputView: UIView {
-    private var textFields = [UITextField]()
+    private var textFields: [UITextField] = []
     private let digitsCount: Int
     
     init(digitsCount: Int = 5) {

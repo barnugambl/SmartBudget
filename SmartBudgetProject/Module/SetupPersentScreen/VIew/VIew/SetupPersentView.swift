@@ -9,12 +9,11 @@ import UIKit
 import DGCharts
 
 class SetupPersentView: UIView {
-    
     private var categories: [ItemView] = []
     
     var clickOnConfirmButton: (() -> Void)?
     
-    lazy var titleLabel = Label(textLabel: "Распределите проценты",textSize: 24, weight: .medium)
+    lazy var titleLabel = Label(textLabel: "Распределите проценты", textSize: 24, weight: .medium)
     
     private lazy var scrollView = ScrollView()
     
@@ -126,7 +125,6 @@ class SetupPersentView: UIView {
                           divorcesCategoryView,
                           accumulationsCategoryView,
                           otherCategoryView]
-        
         let basePercent = 100 / categories.count
         let remainder = 100 - (basePercent * categories.count)
 
@@ -162,7 +160,6 @@ private extension SetupPersentView {
         let data = PieChartData(dataSet: dataSet)
         data.setValueTextColor(.black)
         data.setValueFont(.systemFont(ofSize: 14, weight: .regular))
-            
         pieChartView.data = data
     }
 }

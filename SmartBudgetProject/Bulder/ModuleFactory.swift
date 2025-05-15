@@ -8,7 +8,6 @@
 import UIKit
 
 class ModuleBulder {
-    
     func makeRegScreen() -> RegViewConroller {
         let viewModel = RegViewModel()
         return RegViewConroller(viewModel: viewModel)
@@ -52,7 +51,7 @@ class ModuleBulder {
         return ExpensesViewController(viewModel: viewModel)
     }
     
-     func makeProfileScreen() -> ProfileViewController {
+    func makeProfileScreen() -> ProfileViewController {
         let viewModel = ProfileViewModel()
         return ProfileViewController(viewModel: viewModel)
     }

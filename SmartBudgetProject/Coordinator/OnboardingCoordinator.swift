@@ -12,7 +12,6 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 }
 
 class OnboardingCoordinator: Coordinator {
-    
     weak var delegate: OnboardingCoordinatorDelegate?
     
     var navigationController: UINavigationController

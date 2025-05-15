@@ -9,8 +9,20 @@ import UIKit
 import SnapKit
 
 class PasswordRecoveryView: UIView {
-    
     var completion: (() -> Void)?
+    
+    private lazy var title = Label(textLabel: R.string.localizable.forgotPasswordLabel(), textSize: 24, weight: .medium)
+    private lazy var passwordResDescrLabel = Label(textLabel: R.string.localizable.forgotPasswordDescrLabel(),
+                                                   textSize: 16, textColor: .systemGray)
+    private lazy var phoneNumberInputLabel = Label(textLabel: R.string.localizable.numberPhoneLabel(),
+                                                   textSize: 14, weight: .medium)
+    
+    private lazy var phoneNumberTextField = PhoneNumberTextField()
+    
+    private lazy var continueButton = DefaultButton(title: R.string.localizable.continueButton()) { [weak self] in
+        self?.completion?()
+    }
+    private lazy var titleAndDescrStack = Stack(stackSpaicing: 32, views: [title, passwordResDescrLabel])
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,31 +34,12 @@ class PasswordRecoveryView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private lazy var title = Label(textLabel: R.string.localizable.forgotPasswordLabel(), textSize: 24,
-                                   weight: .medium)
-    
-    private lazy var passwordResDescrLabel = Label(
-        textLabel: R.string.localizable.forgotPasswordDescrLabel(),
-        textSize: 16, textColor: .systemGray)
-    
-    private lazy var phoneNumberInputLabel = Label(textLabel: R.string.localizable.numberPhoneLabel(),
-                                                   textSize: 14, weight: .medium)
-    
-    private lazy var phoneNumberTextField = PhoneNumberTextField()
-    
-    private lazy var continueButton = DefaultButton(
-        title: R.string.localizable.continueButton()) { [weak self] in
-        guard let self else { return }
-        self.completion?()
-    }
-    private lazy var titleAndDescrStack = Stack(stackSpaicing: 32, views: [title, passwordResDescrLabel])
-    
     private func setupView() {
         backgroundColor = .white
     }
     
     private func setupLayout() {
-        addSubviews(titleAndDescrStack,  phoneNumberInputLabel, phoneNumberTextField, continueButton)
+        addSubviews(titleAndDescrStack, phoneNumberInputLabel, phoneNumberTextField, continueButton)
         titleAndDescrStack.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(20)
             make.leading.trailing.equalToSuperview().inset(16)

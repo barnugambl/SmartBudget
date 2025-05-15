@@ -8,7 +8,6 @@
 import UIKit
 
 class ColorView: UIView {
-    
     var onClickColor: ((UIColor) -> Void)?
     
     private lazy var colors: [UIColor] = [
@@ -88,8 +87,6 @@ class ColorView: UIView {
 
     }
 }
-
-
 
 extension Array {
     func chunked(into size: Int) -> [[Element]] {

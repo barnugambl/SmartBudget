@@ -13,7 +13,6 @@ enum ConfirmationFlow {
     case passwordRecovery
 }
 
-
 class CheckNumberPhonelViewController: UIViewController {
     private var type: ConfirmationFlow
     private var viewModel: CheckNumberPhoneViewModel

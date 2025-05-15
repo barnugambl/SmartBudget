@@ -64,7 +64,7 @@ class DefaultButton: UIButton {
     }
     
     private func setupImageButton(name: String?) {
-        guard let image = UIImage(named: name!) else { return }
+        guard let name, let image = UIImage(named: name)  else { return }
         setImage(image, for: .normal)
         tintColor = .blue
         semanticContentAttribute = .forceRightToLeft

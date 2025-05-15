@@ -12,8 +12,6 @@ struct BudgetCategory: Identifiable, Hashable {
     let name: String
     let plannedAmount: Int
     var spentAmount: Int
-    
-    
     var remainingAmount: Int {
         return plannedAmount - spentAmount
     }

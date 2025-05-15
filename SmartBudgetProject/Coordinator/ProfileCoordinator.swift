@@ -12,7 +12,6 @@ protocol ProfileCoordinatorDelegate: AnyObject {
 }
 
 class ProfileCoordinator: Coordinator {
-    
     weak var delegate: ProfileCoordinatorDelegate?
     
     var navigationController: UINavigationController

@@ -8,7 +8,6 @@
 import UIKit
 
 class DatePicker: UIViewController {
-
     var onDateSelected: ((Date) -> Void)?
     
     private lazy var datePicker: UIDatePicker = {

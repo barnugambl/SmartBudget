@@ -9,26 +9,22 @@ import UIKit
 import SnapKit
 
 class CreateNewPasswordView: UIView {
-    
     var didTapContinue: (() -> Void)?
     
     private lazy var titleLabel = Label(textLabel: R.string.localizable.newPasswordLabel(), textSize: 24, weight: .medium)
-    
     private lazy var descriptionLabel = Label(textLabel: R.string.localizable.newPasswordDescrLabel(), textSize: 16,
-                                              textColor: .systemGray, numberLines: 0)
-    
+    textColor: .systemGray, numberLines: 0)
     private lazy var passwordLabel = Label(textLabel: R.string.localizable.passwordLabel(), textSize: 14, weight: .medium)
-    
     private lazy var confirmationPasswordLabel = Label(textLabel: R.string.localizable.confirmNewPasswordLabel(),
                                                        textSize: 14, weight: .medium)
     
     private lazy var passwordTextField = DefaultTextField(fieldPlaceHodler: R.string.localizable.createNewPasswordTextField(),
                                                           isPassword: true)
-    
-    private lazy var confirmationPasswordTextField = DefaultTextField(fieldPlaceHodler: R.string.localizable.confirmNewPasswordTextField(),                                                                    isPassword: true)
+    private lazy var confirmationPasswordTextField = DefaultTextField(fieldPlaceHodler: R.string.localizable
+            .confirmNewPasswordTextField(), isPassword: true)
     
     private lazy var completionButton = DefaultButton(title: R.string.localizable.confirmationButton()) { [weak self] in
-            self?.didTapContinue?()
+        self?.didTapContinue?()
     }
     
     override init(frame: CGRect) {

@@ -30,7 +30,7 @@ class ItemView: UIView {
     
     private let completion: (() -> Void)?
     
-    private lazy var titleLabel = Label(textLabel: title ,textSize: 16, weight: .regular)
+    private lazy var titleLabel = Label(textLabel: title, textSize: 16, weight: .regular)
     
     private lazy var iconContainer: UIView = {
         let view = UIView()
@@ -55,7 +55,6 @@ class ItemView: UIView {
     }()
     
     lazy var persentLabel = Label(textSize: 16)
-
     
     init(title: String, iconName: String, iconColor: UIColor = .systemBlue, isPersent: Bool = false,
          completion: (() -> Void)? = nil, frame: CGRect = .zero) {
