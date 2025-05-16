@@ -7,6 +7,6 @@
 
 import Foundation
 
-class InitialBudgetViewModel {
+final class InitialBudgetViewModel {
     
 }

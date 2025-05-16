@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FinancialGoalCoordinator: Coordinator {
+final class FinancialGoalCoordinator: Coordinator {
     var navigationController: UINavigationController
     
     var childCoordinators: [Coordinator] = []

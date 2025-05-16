@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ModuleBulder {
+final class ModuleBulder {
     func makeRegScreen() -> RegViewConroller {
         let viewModel = RegViewModel()
         return RegViewConroller(viewModel: viewModel)

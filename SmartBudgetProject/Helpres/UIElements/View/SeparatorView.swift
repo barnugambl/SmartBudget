@@ -7,8 +7,8 @@
 
 import UIKit
 
-class SeparatorView: UIView {
-    private lazy var label = Label(textLabel: "или", textSize: 14, textColor: .systemGray3)
+final class SeparatorView: UIView {
+    private lazy var label = UILabel.create(text: "или", fontSize: 14, textColor: .systemGray3)
     
     override init(frame: CGRect) {
         super.init(frame: frame)

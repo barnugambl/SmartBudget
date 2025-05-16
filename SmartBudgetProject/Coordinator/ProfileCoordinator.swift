@@ -11,7 +11,7 @@ protocol ProfileCoordinatorDelegate: AnyObject {
     func logout(coordinator: Coordinator)
 }
 
-class ProfileCoordinator: Coordinator {
+final class ProfileCoordinator: Coordinator {
     weak var delegate: ProfileCoordinatorDelegate?
     
     var navigationController: UINavigationController

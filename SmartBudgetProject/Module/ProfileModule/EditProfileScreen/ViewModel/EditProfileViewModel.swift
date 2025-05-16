@@ -7,6 +7,6 @@
 
 import Foundation
 
-class EditProfileViewModel {
+final class EditProfileViewModel {
     
 }

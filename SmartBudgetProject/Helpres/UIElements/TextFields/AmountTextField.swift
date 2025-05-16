@@ -1,6 +1,6 @@
 import UIKit
 
-class AmountTextField: UITextField {
+final class AmountTextField: UITextField {
     private let currencySymbol = "₽"
     
     override init(frame: CGRect) {

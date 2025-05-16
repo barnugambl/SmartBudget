@@ -14,7 +14,7 @@
 "logButtonTitle" = "Log in";
 
 // MARK: LogScreen
-"logLabel" = "Log in to your account";
+"logLabel" = "Log in to your profile";
 "inputPasswordTextField" = "Password";
 "forgotPasswordButton" = "Forgot password?";
 "logButton" = "Log in";
@@ -22,27 +22,30 @@
 
 // MARK: PasswordRecoveryScreen
 "forgotPasswordLabel" = "Forgot password?";
-"forgotPasswordDescrLabel" = "Enter your phone number to reset password";
+"forgotPasswordDescrLabel" = "Enter your phone number to reset your password";
 "numberPhoneLabel" = "Phone number";
 "continueButton" = "Continue";
 
 // MARK: CheckNumberPhoneScreen
 "checkPhoneLabel" = "Check your SMS";
-"checkPhoneDescrLabel" = "We've sent an SMS with code to 
-+7 (XXX)...XX 
-Enter the 5-digit code from SMS";
+"checkPhoneDescrLabel" = "We sent an SMS with a code to the number 
++7 (XXX)...XX  
+enter the 5-digit code specified in the SMS";
 "sendCodeButton" = "Get code";
-"havenCodeLabel" = "Haven't received the code?";
+"havenCodeLabel" = "Haven't received the code yet?";
 "resendCodeButton" = "Resend code";
 
-// MARK: NewPasswordScreen
-"newPasswordLabel" = "Create new password";
+// MARK: CreateNewPasswordScreen
+"newPasswordLabel" = "Create a new password";
 "newPasswordDescrLabel" = "Create a new password. Make sure it's different from previous ones";
 "passwordLabel" = "Password";
-"createNewPasswordTextField" = "Create new password";
-"confirmNewPasswordLabel" = "Confirm password";
-"confirmNewPasswordTextField" = "Re-enter password";
+"createNewPasswordTextField" = "Create a new password";
+"confirmNewPasswordLabel" = "Password confirmation";
+"confirmNewPasswordTextField" = "Enter password again";
 "confirmationButton" = "Confirm";
+
+//MARK: CreatePasswordScreen
+"createPasswordLabel" = "Create password";
 
 // MARK: ProfileScreen
 "titleProfileLabel" = "Personal account";
@@ -53,7 +56,7 @@ Enter the 5-digit code from SMS";
 "editLanguageButton" = "Language";
 
 // MARK: EditProfileScreen
-"editProfileLabel" = "Edit profile";
+"editProfileLabel" = "Profile editing";
 "editNumberPhoneLabel" = "Change phone number";
 "editPasswordLabel" = "Change password";
 
@@ -62,7 +65,7 @@ Enter the 5-digit code from SMS";
 "inputBudgetLabel" = "Enter your budget";
 "inputBudgetTextFIeld" = "0 ₽";
 "setupCategoryLabel" = "Set up categories";
-"productsCategoryButton" = "Groceries";
+"productsCategoryButton" = "Products";
 "transportCategoryButton" = "Transport";
 "utilitiesCategoryButton" = "Utilities";
 "divorcesCategoryButton" = "Entertainment";
@@ -72,20 +75,30 @@ Enter the 5-digit code from SMS";
 // MARK: FinancialGoalsScreen
 "financialGoalsLabel" = "My financial goals";
 "dateGoalLabel" = "End date";
-"positiveResult" = "Goal achieved successfully!";
-"negativeResult" = "Failed to reach the goal :(";
+"positiveResult" = "The goal was achieved!";
+"negativeResult" = "Failed to achieve the goal :(";
+
+// MARK: AddFinancialGoalScreen
+"addFinancialGoalLabel" = "New goal";
+"nameFinancialGoalTextField" = "Name";
+"budgetFinancialGoalTextField" = "0 ₽";
+"endDateFinancialGoalLabel" = "End date";
+"dateTextFieldPlaceHolder" = "End";
 
 // MARK: SetupCategoryScreen
 "setupCategoryLabel" = "Set up category";
 "categoryLabel" = "Category";
 "changeButton" = "Change";
 "changeCategoryColorLabel" = "Change category color";
-"makeChangesButton" = "Apply changes";
+"makeChangesButton" = "Make changes";
 
-// MARK: AddFinancialGoalScreen
-"addFinancialGoalLabel" = "New goal";
-"nameFinancialGoalTextField" = "Name";
-"budgetFinancialGoalTextField" = "0 ₽";
+// MARK: AddMoneyFinancialScreen
+"addAmountLabel" = "Enter amount";
+"confirmAmountButton" = "Enter amount";
+
+// MARK: SetupPersentScreen
+"setupPersentLabel" = "Distribute percentages";
+"confirmPersentButton" = "Complete setup";
 
 
 

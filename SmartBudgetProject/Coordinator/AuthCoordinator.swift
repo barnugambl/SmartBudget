@@ -11,7 +11,7 @@ protocol AuthCoordinatorDelegate: AnyObject {
     func didFinishAuthFlow(coordinator: AuthCoordinator)
 }
 
-class AuthCoordinator: Coordinator {
+final class AuthCoordinator: Coordinator {
     weak var delegate: AuthCoordinatorDelegate?
     
     private let moduleBulder = ModuleBulder()

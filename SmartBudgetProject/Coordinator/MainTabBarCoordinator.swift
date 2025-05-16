@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainTabBarCoordinator: Coordinator {
+final class MainTabBarCoordinator: Coordinator {
     private weak var profileDelegate: ProfileCoordinatorDelegate?
     
     var navigationController: UINavigationController

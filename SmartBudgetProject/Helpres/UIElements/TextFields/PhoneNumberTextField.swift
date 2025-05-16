@@ -1,6 +1,6 @@
 import UIKit
 
-class PhoneNumberTextField: UITextField {
+final class PhoneNumberTextField: UITextField {
     private let placeholderText = "Введите номер телефона"
     private let prefix = "+7 "
     

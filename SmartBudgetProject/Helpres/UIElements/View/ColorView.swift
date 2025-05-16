@@ -7,14 +7,14 @@
 
 import UIKit
 
-class ColorView: UIView {
+final class ColorView: UIView {
     var onClickColor: ((UIColor) -> Void)?
     
     private lazy var colors: [UIColor] = [
         .systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal,
         .systemBlue, .systemIndigo, .systemPurple, .systemPink, .systemBrown,
         .systemMint, .systemCyan, .magenta, .systemGray, .link]
-    private lazy var containerStack = Stack(stackSpaicing: 10, stackDistribution: .equalSpacing)
+    private lazy var containerStack = UIStackView.create(stackSpacing: 10, stackDistribution: .equalSpacing)
     
     private var selectedButton: UIButton?
     
@@ -49,11 +49,12 @@ class ColorView: UIView {
         let rows = colors.chunked(into: 5)
         
         for row in rows {
-            let rowStack = Stack(stackAxis: .horizontal, stackSpaicing: 10,
+            let rowStack = UIStackView.create(stackAxis: .horizontal, stackSpacing: 10,
                                  stackDistribution: .equalSpacing)
             for color in row {
-                let button = DefaultButton(buttonBackgroundColor: color,
-                                           cornerRadius: buttonSize / 2)
+                let button = UIButton()
+                button.backgroundColor = color
+                button.layer.cornerRadius = buttonSize / 2
                 button.layer.masksToBounds = true
                 button.transform = CGAffineTransform.identity
                 

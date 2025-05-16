@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ItemView: UIView {
+final class ItemView: UIView {
     var title: String {
         didSet {
             titleLabel.text = title
@@ -30,7 +30,7 @@ class ItemView: UIView {
     
     private let completion: (() -> Void)?
     
-    private lazy var titleLabel = Label(textLabel: title, textSize: 16, weight: .regular)
+    private lazy var titleLabel = UILabel.create(text: title, fontSize: 16, weight: .regular)
     
     private lazy var iconContainer: UIView = {
         let view = UIView()
@@ -54,7 +54,7 @@ class ItemView: UIView {
         return button
     }()
     
-    lazy var persentLabel = Label(textSize: 16)
+    lazy var persentLabel = UILabel.create(fontSize: 16)
     
     init(title: String, iconName: String, iconColor: UIColor = .systemBlue, isPersent: Bool = false,
          completion: (() -> Void)? = nil, frame: CGRect = .zero) {

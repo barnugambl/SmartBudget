@@ -7,6 +7,6 @@
 
 import Foundation
 
-class RegViewModel {
+final class RegViewModel {
     
 }

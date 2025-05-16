@@ -35,7 +35,7 @@
 "havenCodeLabel" = "Еще не получили код?";
 "resendCodeButton" = "Отправить код повторно";
 
-// MARK: NewPasswordScreen
+// MARK: CreateNewPasswordScreen
 "newPasswordLabel" = "Придумайте новый пароль";
 "newPasswordDescrLabel" = "Создайте новый пароль. Убедитесь что он отличается от предыдущих";
 "passwordLabel" = "Пароль";
@@ -78,6 +78,13 @@
 "positiveResult" = "Цель удалось достигнуть!";
 "negativeResult" = "Цель не удалось достичь :(";
 
+// MARK: AddFinancialGoalScreen
+"addFinancialGoalLabel" = "Новая цель";
+"nameFinancialGoalTextField" = "Название";
+"budgetFinancialGoalTextField" = "0 ₽";
+"endDateFinancialGoalLabel" = "Дата окончания";
+"dateTextFieldPlaceHolder" = "Конец";
+
 // MARK: SetupCategoryScreen
 "setupCategoryLabel" = "Настройте категорию";
 "categoryLabel" = "Категория";
@@ -85,7 +92,10 @@
 "changeCategoryColorLabel" = "Изменить цвет категории";
 "makeChangesButton" = "Внести изменения";
 
-// MARK: AddFinancialGoalScreen
-"addFinancialGoalLabel" = "Новая цель";
-"nameFinancialGoalTextField" = "Название";
-"budgetFinancialGoalTextField" = "0 ₽";
+// MARK: AddMoneyFinancialScreen
+"addAmountLabel" = "Введите сумму";
+"confirmAmountButton" = "Внести сумму";
+
+// MARK: SetupPersentScreen
+"setupPersentLabel" = "Распределите проценты";
+"confirmPersentButton" = "Завершить настройку";
