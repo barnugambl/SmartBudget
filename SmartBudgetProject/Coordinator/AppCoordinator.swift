@@ -12,15 +12,8 @@ class AppCoordinator: CoordinatorProtocol {
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-                
+
     func start() {
-        showInitialBudgetScreen()
-    }
-    
-    func showInitialBudgetScreen() {
-        let viewModel = InitialBudgetViewModel()
-        let vc = InitialBudgetViewController(viewModel: viewModel)
-        vc.coordinator = self
-        navigationController.pushViewController(vc, animated: true)
+        navigationController.pushViewController(SetupPersentViewController(), animated: false)
     }
 }
