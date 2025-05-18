@@ -11,8 +11,7 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
     func didFinishOnBoarding(coordinator: Coordinator)
 }
 
-class OnboardingCoordinator: Coordinator {
-    
+final class OnboardingCoordinator: Coordinator {
     weak var delegate: OnboardingCoordinatorDelegate?
     
     var navigationController: UINavigationController

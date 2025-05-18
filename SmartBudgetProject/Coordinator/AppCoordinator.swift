@@ -7,14 +7,13 @@
 
 import UIKit
 
-class AppCoordinator: Coordinator {
+final class AppCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-    
     
     func start() {
         showAuthFlow()
@@ -24,7 +23,6 @@ class AppCoordinator: Coordinator {
         let mainTabBarCoordinator = MainTabBarCoordinator(navigationController: navigationController, profileDelegate: self)
         childCoordinators.append(mainTabBarCoordinator)
         mainTabBarCoordinator.start()
-                
     }
     
     func showAuthFlow() {

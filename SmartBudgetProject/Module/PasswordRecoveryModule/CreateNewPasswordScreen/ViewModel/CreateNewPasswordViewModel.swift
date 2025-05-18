@@ -7,6 +7,6 @@
 
 import Foundation
 
-class CreateNewPasswordViewModel {
+final class CreateNewPasswordViewModel {
     
 }

@@ -1,7 +1,6 @@
 import UIKit
 
-class AmountTextField: UITextField {
-    
+final class AmountTextField: UITextField {
     private let currencySymbol = "₽"
     
     override init(frame: CGRect) {
@@ -27,8 +26,8 @@ class AmountTextField: UITextField {
         attributedPlaceholder = NSAttributedString(
             string: placeholderText,
             attributes: [
-                .font: font!,
-                .foregroundColor: textColor!
+                .font: font ?? UIFont(),
+                .foregroundColor: textColor ?? .systemBackground
             ]
         )
     }

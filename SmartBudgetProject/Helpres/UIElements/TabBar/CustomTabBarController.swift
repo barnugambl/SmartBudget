@@ -7,13 +7,13 @@
 
 import UIKit
 import SnapKit
-class CustomTabBarController: UITabBarController {
+
+final class CustomTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSeparatorView()
     }
-    
     
     func setupTabBar() {
         tabBar.backgroundColor = .systemBackground

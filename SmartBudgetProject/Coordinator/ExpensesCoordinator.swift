@@ -7,9 +7,9 @@
 
 import UIKit
 
-class ExpensesCoordinator: Coordinator {
+final class ExpensesCoordinator: Coordinator {
     var navigationController: UINavigationController
-    
+
     var childCoordinators: [Coordinator] = []
     
     private let moduleBulder = ModuleBulder()

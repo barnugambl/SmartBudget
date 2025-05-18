@@ -7,6 +7,6 @@
 
 import Foundation
 
-class LogViewModel {
+final class LogViewModel {
     
 }

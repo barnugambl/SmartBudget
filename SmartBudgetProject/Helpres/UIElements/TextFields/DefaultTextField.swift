@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DefaultTextField: UITextField {
+final class DefaultTextField: UITextField {
     private var isPassword: Bool
     private var fieldPlaceHolder: String
     private var keyType: UIKeyboardType

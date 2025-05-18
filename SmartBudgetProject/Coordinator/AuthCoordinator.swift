@@ -9,11 +9,9 @@ import UIKit
 
 protocol AuthCoordinatorDelegate: AnyObject {
     func didFinishAuthFlow(coordinator: AuthCoordinator)
-    
 }
 
-class AuthCoordinator: Coordinator {
-    
+final class AuthCoordinator: Coordinator {
     weak var delegate: AuthCoordinatorDelegate?
     
     private let moduleBulder = ModuleBulder()
@@ -25,7 +23,6 @@ class AuthCoordinator: Coordinator {
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-    
     
     func start() {
         showLoginFlow()

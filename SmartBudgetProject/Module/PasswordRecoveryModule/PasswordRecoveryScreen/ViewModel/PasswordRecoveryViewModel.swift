@@ -7,6 +7,6 @@
 
 import Foundation
 
-class PasswordRecoveryViewModel {
+final class PasswordRecoveryViewModel {
     
 }

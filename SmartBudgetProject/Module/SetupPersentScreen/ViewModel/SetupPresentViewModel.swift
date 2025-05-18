@@ -7,6 +7,6 @@
 
 import Foundation
 
-class SetupPresentViewModel {
+final class SetupPresentViewModel {
     
 }

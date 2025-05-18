@@ -7,6 +7,6 @@
 
 import Foundation
 
-class SetupCategoryViewModel {
+final class SetupCategoryViewModel {
     
 }

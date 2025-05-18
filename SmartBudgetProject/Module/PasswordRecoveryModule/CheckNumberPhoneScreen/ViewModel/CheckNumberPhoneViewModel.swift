@@ -7,6 +7,6 @@
 
 import Foundation
 
-class CheckNumberPhoneViewModel {
+final class CheckNumberPhoneViewModel {
     
 }
