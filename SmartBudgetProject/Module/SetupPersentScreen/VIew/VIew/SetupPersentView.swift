@@ -12,6 +12,8 @@ class SetupPersentView: UIView {
     
     private var categories: [ItemView] = []
     
+    var clickOnConfirmButton: (() -> Void)?
+    
     lazy var titleLabel = Label(textLabel: "Распределите проценты",textSize: 24, weight: .medium)
     
     private lazy var scrollView = ScrollView()
@@ -56,7 +58,9 @@ class SetupPersentView: UIView {
     private lazy var categoryStack = Stack(stackSpaicing: 20, views: [productsCategoryView, transportCategoryView, utilitiesCategoryView,
                                                                       divorcesCategoryView, accumulationsCategoryView, otherCategoryView])
    
-    private lazy var confirmButton = DefaultButton(title: "Завершить настройку")
+    private lazy var confirmButton = DefaultButton(title: "Завершить настройку") { [weak self] in
+        self?.clickOnConfirmButton?()
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
