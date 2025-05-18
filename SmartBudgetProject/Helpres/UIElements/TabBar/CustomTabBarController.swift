@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-
 class CustomTabBarController: UITabBarController {
     weak var coordinator: AppCoordinator?
     
@@ -21,7 +20,9 @@ class CustomTabBarController: UITabBarController {
         tabBar.unselectedItemTintColor = .systemGray
         tabBar.tintColor = .systemBlue
         
-        viewControllers?[0].tabBarItem = UITabBarItem(title: "Цели", image: UIImage(systemName: "target"), tag: 1)
+        viewControllers?[0].tabBarItem = UITabBarItem(title: "Расходы", image: UIImage(systemName: "creditcard.fill"), tag: 0)
+        viewControllers?[1].tabBarItem = UITabBarItem(title: "Цели", image: UIImage(systemName: "target"), tag: 1)
+        viewControllers?[2].tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.fill"), tag: 2)
     }
     
     private func setupSeparatorView() {
