@@ -1,0 +1,17 @@
+{
+  "income": 100000,
+  "categories": [
+    {
+      "name": "Еда",
+      "spent": 15000,
+      "remaining": 15000,
+      "limit": 30000
+    },
+    {
+      "name": "Транспорт",
+      "spent": 5000,
+      "remaining": 15000,
+      "limit": 20000
+    }
+  ]
+}
