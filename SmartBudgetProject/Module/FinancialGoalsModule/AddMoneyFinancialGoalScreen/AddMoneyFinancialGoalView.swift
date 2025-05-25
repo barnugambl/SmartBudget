@@ -8,12 +8,16 @@
 import UIKit
 
 final class AddMoneyFinancialGoalView: UIView {
+    var clickOnConfirmButton: (() -> Void)?
+    
     lazy var titleLabel = UILabel.create(fontSize: FontSizeConstans.title, weight: .medium)
     private lazy var addAmountLabel = UILabel.create(text: R.string.localizable.addAmountLabel(), fontSize: FontSizeConstans.body, weight: .medium)
         
-    private lazy var addAmountTextField = AmountTextField()
+    lazy var addAmountTextField = AmountTextField()
     
-    private lazy var confirmationButton = UIButton.create(style: .yellow(title: R.string.localizable.confirmAmountButton())) { }
+    private lazy var confirmationButton = UIButton.create(style: .yellow(title: R.string.localizable.confirmAmountButton())) { [weak self] in
+        self?.clickOnConfirmButton?()
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

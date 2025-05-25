@@ -7,13 +7,15 @@
 
 import UIKit
 import Foundation
+import Combine
 
 final class AddMoneyFinancialGoalViewController: UIViewController {
-    private var viewModel: FinancialGoalViewModel
-    private var addMoneyFinancialGoalView = AddMoneyFinancialGoalView()
-    weak var coordinator: FinancialGoalCoordinator?
+    private let viewModel: FinancialGoalViewModel
+    private let addMoneyFinancialGoalView = AddMoneyFinancialGoalView()
     private var nameGoal: String
-    
+    private var cancellables: Set<AnyCancellable> = .init()
+    weak var coordinator: FinancialGoalCoordinator?
+ 
     init(viewModel: FinancialGoalViewModel, nameGoal: String) {
         self.viewModel = viewModel
         self.nameGoal = nameGoal
@@ -26,15 +28,62 @@ final class AddMoneyFinancialGoalViewController: UIViewController {
     
     override func loadView() {
         view = addMoneyFinancialGoalView
+        bindingViewModel()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupName()
+        setupNavigation()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.resetMessages()
     }
     
     private func setupName() {
         addMoneyFinancialGoalView.titleLabel.text = nameGoal
         navigationItem.titleView = addMoneyFinancialGoalView.titleLabel
+    }
+    
+    private func setupNavigation() {
+        addMoneyFinancialGoalView.clickOnConfirmButton = { [weak self] in
+            self?.viewModel.addAmount()
+        }
+    }
+    
+    private func bindingViewModel() {
+        addMoneyFinancialGoalView.addAmountTextField.textPublisher
+            .subscribe(on: DispatchQueue.main)
+            .assign(to: \.amountString,
+                    on: viewModel)
+            .store(in: &cancellables)
+        
+        viewModel.$errorMessage
+            .subscribe(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink { [weak self] message in
+                self?.showAlert(message: message)
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$successMessage
+            .subscribe(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink { [weak self] message in
+                CustomToastView.showSuccessToast(on: self?.view, message: message)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self?.navigationController?.popViewController(animated: true)
+                }
+            }
+            .store(in: &cancellables)
+    }
+           
+    private func showAlert(message: String) {
+        let alertController = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        let actionOk = UIAlertAction(title: "Ок", style: .default)
+        alertController.addAction(actionOk)
+        present(alertController, animated: true)
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum HttpType : String {
+enum HttpType: String {
     case GET
     case POST
     case PUT

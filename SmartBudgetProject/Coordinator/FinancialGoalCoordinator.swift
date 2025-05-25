@@ -14,7 +14,7 @@ final class FinancialGoalCoordinator: Coordinator {
     
     private let moduleBulder = ModuleBulder()
     
-    private let viewModel = FinancialGoalViewModel()
+    private let viewModel = FinancialGoalViewModel(userId: 1, goalId: 1, financilGoaSevice: FinancialGoalAPIService(apiService: ApiService()))
         
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -36,8 +36,8 @@ final class FinancialGoalCoordinator: Coordinator {
         navigationController.pushViewController(addFinancialGoalVC, animated: true)
     }
     
-    func showAddMoneyFinancialGoalFlow(nameGoal: String) {
-        let addMoneyFinancialGoalVC = moduleBulder.makeAddMoneyFinancialGoalScreen(viewModel: viewModel, nameGoal: nameGoal)
+    func showAddMoneyFinancialGoalFlow(nameGoal: String, userId: Int) {
+        let addMoneyFinancialGoalVC = moduleBulder.makeAddMoneyFinancialGoalScreen(viewModel: viewModel, nameGoal: nameGoal, userId: userId)
         addMoneyFinancialGoalVC.coordinator = self
         navigationController.pushViewController(addMoneyFinancialGoalVC, animated: true)
     }

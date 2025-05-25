@@ -1,5 +1,5 @@
 //
-//  EmptyResponce.swift
+//  ServerMessageResponce.swift
 //  SmartBudgetProject
 //
 //  Created by Терёхин Иван on 20.05.2025.
@@ -7,4 +7,6 @@
 
 import Foundation
 
-struct EmptyResponse: Decodable {}
+struct ServerMessageResponce: Decodable {
+    let message: String
+}

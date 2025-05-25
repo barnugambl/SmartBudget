@@ -11,7 +11,7 @@ final class ApiService: APIServiceProtocol {
     private let baseURL: String
     private let session: URLSession
     
-    init(baseURL: String = "", session: URLSession = URLSession.shared) {
+    init(baseURL: String = "http://46.29.161.201:8080/api/v1", session: URLSession = URLSession.shared) {
         self.baseURL = baseURL
         self.session = session
     }
@@ -32,8 +32,8 @@ final class ApiService: APIServiceProtocol {
         try await request(endpoint: endpoint, method: .PUT, body: body)
     }
     
-    func delete(endpoint: String) async throws {
-        let _: EmptyResponse = try await request(endpoint: endpoint, method: .DELETE)
+    func delete<T: Decodable>(endpoint: String) async throws -> T {
+        try await request(endpoint: endpoint, method: .DELETE)
     }
 }
 

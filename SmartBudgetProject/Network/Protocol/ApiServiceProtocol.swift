@@ -13,5 +13,6 @@ protocol APIServiceProtocol {
     func get<T: Decodable>(endpoint: String, parameters: [String: Any]?) async throws -> T
     func post<T: Decodable, U: Encodable>(endpoint: String, body: U) async throws -> T
     func patch<T: Decodable, U: Encodable>(endpoint: String, body: U) async throws -> T
-    func delete(endpoint: String) async throws
+    func put<T: Decodable, U: Encodable>(endpoint: String, body: U) async throws -> T
+    func delete<T: Decodable>(endpoint: String) async throws -> T
 }
