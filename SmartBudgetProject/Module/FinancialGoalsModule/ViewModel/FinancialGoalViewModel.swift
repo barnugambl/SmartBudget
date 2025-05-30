@@ -42,9 +42,8 @@ final class FinancialGoalViewModel: FinancialGoalViewModelProtocol {
         
         Task {
             let responce = await updateFinancialGoal(userId: userId, goalId: goalId, body: goal)
-            if let responce {
+            if responce != nil {
                 successMessage = "Сумма успешна добавлена"
-                print(responce.message)
             } else {
                 errorMessage = "Упс произошла ошибка, попробуйте еще раз"
             }
@@ -58,12 +57,10 @@ final class FinancialGoalViewModel: FinancialGoalViewModelProtocol {
     
         let goal = GoalRequest(userId: userId, name: name, targetAmount: Int(cleanAmountString) ?? 0,
                                deadline: Date.convertToServerFormat(from: dateString) ?? "")
-        print(goal)
         Task {
             let responce = await createFinancialGoal(goal: goal)
-            if let responce {
+            if responce != nil {
                 successMessage = "Цель успешна создана"
-                print(responce.message)
             } else {
                 errorMessage = "Упс произошла ошибка, попробуйте еще раз"
             }

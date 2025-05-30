@@ -12,14 +12,14 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 }
 
 final class OnboardingCoordinator: Coordinator {
+    private let budgetBulder = BudgetScreenBulder.shared
+
     weak var delegate: OnboardingCoordinatorDelegate?
     
     var navigationController: UINavigationController
     
     var childCoordinators: [Coordinator] = []
-    
-    private let moduleBulder = ModuleBulder()
-    
+        
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
@@ -29,19 +29,19 @@ final class OnboardingCoordinator: Coordinator {
     }
     
     func showInitialBudgetScreen() {
-        let initialBudgetVC = moduleBulder.makeInitialBudgetScreen()
+        let initialBudgetVC = budgetBulder.makeInitialBudgetScreen()
         initialBudgetVC.coordinator = self
         navigationController.setViewControllers([initialBudgetVC], animated: true)
     }
     
-    func showSetupCategoryScreen(title: String, iconName: String, iconColor: UIColor) {
-        let setupCategoryVC = moduleBulder.makeSetupCategoryScreen(title: title, iconName: iconName, iconColor: iconColor)
+    func showSetupCategoryScreen(category: CategoryDto) {
+        let setupCategoryVC = budgetBulder.makeSetupCategoryScreen(category: category)
         setupCategoryVC.coordinator = self
         navigationController.pushViewController(setupCategoryVC, animated: true)
     }
     
-    func showSetupPersentScreen() {
-        let setupPersentVC = moduleBulder.makeSetupPersentScreen()
+    func showSetupPersentScreen(categories: [CategoryDto]) {
+        let setupPersentVC = budgetBulder.makeSetupPersentScreen(categories: categories)
         setupPersentVC.coordinator = self
         navigationController.pushViewController(setupPersentVC, animated: true)
     }

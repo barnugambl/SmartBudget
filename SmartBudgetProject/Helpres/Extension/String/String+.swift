@@ -7,8 +7,8 @@
 
 import Foundation
 
-// MARK: Colors
 extension String {
-    static let textFieldPlaceHolderColor = "9299A2"
-    static let textFieldBackgroundColor = "9299A2"
+    var digitsOnly: String {
+        replacingOccurrences(of: "\\D", with: "", options: .regularExpression)
+    }
 }
