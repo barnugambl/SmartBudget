@@ -17,7 +17,7 @@ final class CustomToastView: UIView {
         label.numberOfLines = 0
         return label
     }()
-        
+    
     private let iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -26,7 +26,7 @@ final class CustomToastView: UIView {
     }()
     
     private lazy var stackView = UIStackView.create(stackAxis: .horizontal, stackSpacing: Constans.tinyStackSpacing, stackAlignment: .center,
-                                                     views: [iconImageView, messageLabel])
+                                                    views: [iconImageView, messageLabel])
     
     init() {
         super.init(frame: .zero)
@@ -38,7 +38,6 @@ final class CustomToastView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = UIColor.systemGreen.withAlphaComponent(0.9)
         layer.cornerRadius = Constans.cornerRadiusSmall
         alpha = 0
         transform = CGAffineTransform(translationX: 0, y: -100)
@@ -53,36 +52,41 @@ final class CustomToastView: UIView {
         }
     }
     
-    func configure(with message: String, icon: UIImage?) {
+    func configure(with message: String, icon: UIImage?, backgroundColor: UIColor) {
         messageLabel.text = message
         iconImageView.image = icon
+        self.backgroundColor = backgroundColor
     }
     
     private func show(completion: (() -> Void)? = nil) {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: .curveEaseOut, animations: {
+        self.alpha = 0
+        self.transform = CGAffineTransform(translationX: 0, y: -100)
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5,
+                       options: .curveEaseOut, animations: {
             self.alpha = 1
             self.transform = .identity
-        }, completion: { _ in
+        },
+            completion: { _ in
             completion?()
         })
     }
     
-    private func hide(completion: (() -> Void)? = nil) {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
-            self.alpha = 0
-            self.transform = CGAffineTransform(translationX: 0, y: -100)
-        }, completion: { _ in
-            self.removeFromSuperview()
-            completion?()
-        })
+                self.alpha = 0
+                self.transform = CGAffineTransform(translationX: 0, y: -100)
+            }
+        )
     }
     
     static func showSuccessToast(on view: UIView?, message: String, duration: TimeInterval = 2.0,
-                                 icon: UIImage? = UIImage(systemName: "checkmark.circle.fill")) {
+                                 icon: UIImage? = UIImage(systemName: "checkmark.circle.fill"),
+                                 backgroundColor: UIColor = UIColor.systemGreen.withAlphaComponent(0.9)) {
         guard let view else { return }
         let toastView = CustomToastView()
-        toastView.configure(with: message, icon: icon)
+        toastView.configure(with: message, icon: icon, backgroundColor: backgroundColor)
         view.addSubview(toastView)
+        
         toastView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(Constans.insetSmall)
@@ -92,10 +96,12 @@ final class CustomToastView: UIView {
         
         view.layoutIfNeeded()
         
-        toastView.show {
+        toastView.show { [weak toastView] in
             DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                toastView.hide()
+                toastView?.hide()
+                toastView?.removeFromSuperview()
             }
         }
     }
 }
+    

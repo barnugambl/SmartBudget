@@ -76,7 +76,7 @@ class FinanceGoalsTableViewCell: UITableViewCell {
         nameGoalLabel.text = finacialGoal.name
         budgetGoalLabel.text = "\(finacialGoal.targetAmount) ₽"
         dateGoalLabel.text = "\(R.string.localizable.dateGoalLabel()) \(finacialGoal.deadline)"
-        var progress = min(Float(finacialGoal.savedAmount) / Float(finacialGoal.targetAmount), 1.0)
+        let progress = min(Float(finacialGoal.savedAmount) / Float(finacialGoal.targetAmount), 1.0)
         progressBar.setProgress(progress, animated: false)
         
         switch finacialGoal.status {

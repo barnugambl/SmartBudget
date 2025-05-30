@@ -8,8 +8,15 @@
 import Foundation
 import Combine
 
+enum ErrorField {
+    case name
+    case amount
+    case date
+}
+
 final class FinancialGoalViewModel: FinancialGoalViewModelProtocol {
     private let financialGoalApiService: FinancialGoalAPIServiceProtocol
+    private var requestTask: Task<Void, Never>?
     private var requestTimer: AnyCancellable?
     let userId: Int
     let goalId: Int
@@ -22,6 +29,7 @@ final class FinancialGoalViewModel: FinancialGoalViewModelProtocol {
     
     // Output
     @Published private(set) var successMessage: String?
+    @Published private(set) var errorField: ErrorField?
     @Published private(set) var errorMessage: String?
     @Published var financialGoals: [Goal] = []
     
@@ -33,7 +41,6 @@ final class FinancialGoalViewModel: FinancialGoalViewModelProtocol {
         self.goalId = goalId
         self.userId = userId
         self.financialGoalApiService = financilGoaSevice
-        resetMessages()
     }
     
     func addAmount() {
@@ -43,36 +50,33 @@ final class FinancialGoalViewModel: FinancialGoalViewModelProtocol {
         Task {
             let responce = await updateFinancialGoal(userId: userId, goalId: goalId, body: goal)
             if let responce {
-                successMessage = "Сумма успешна добавлена"
+                successMessage = R.string.localizable.financialGoal_success_added()
                 print(responce.message)
             } else {
-                errorMessage = "Упс произошла ошибка, попробуйте еще раз"
+                errorMessage = R.string.localizable.financialGoal_error_general()
             }
         }
     }
     
     func addGoal() {
-        guard validateName() else { return }
-        guard validateAmount() else { return }
-        guard validateDate() else { return }
-    
+        guard validateName(), validateAmount(), validateDate() else { return }
         let goal = GoalRequest(userId: userId, name: name, targetAmount: Int(cleanAmountString) ?? 0,
                                deadline: Date.convertToServerFormat(from: dateString) ?? "")
-        print(goal)
         Task {
             let responce = await createFinancialGoal(goal: goal)
             if let responce {
-                successMessage = "Цель успешна создана"
+                successMessage = R.string.localizable.financialGoal_success_created()
                 print(responce.message)
             } else {
-                errorMessage = "Упс произошла ошибка, попробуйте еще раз"
+                errorMessage = R.string.localizable.financialGoal_error_general()
             }
         }
     }
     
     func resetMessages() {
-        errorMessage = nil
-        successMessage = nil
+        self.errorMessage = nil
+        self.successMessage = nil
+        self.errorField = nil
     }
 }
 
@@ -98,25 +102,25 @@ extension FinancialGoalViewModel {
     
     func fetchFinancialGoals() {
         isLoading = true
-        
-        requestTimer = Timer.publish(every: 5, on: .main, in: .common)
-            .autoconnect()
-            .sink(receiveValue: { [weak self] _ in
-                self?.handleErrorRequestTimeOut()
-            })
-        
-        Task {
+        requestTask = Task {
             do {
                 let fetchFinancialGoals = try await financialGoalApiService.getFinancialGoals(userId: userId)
                 self.financialGoals = fetchFinancialGoals
                 self.isLoading = false
                 self.requestTimer?.cancel()
             } catch {
-                self.isLoading = false
+                print("Ошибка при получение целей: \(error)")
                 self.requestTimer?.cancel()
-                print("Не удалось получить цели: \(error)")
             }
+            self.isLoading = false
         }
+        requestTimer = Timer.publish(every: 5, on: .main, in: .common)
+            .autoconnect()
+            .prefix(1)
+            .sink(receiveValue: { [weak self] _ in
+                self?.handleErrorRequestTimeOut()
+                self?.requestTask?.cancel()
+            })
     }
 }
 
@@ -124,7 +128,7 @@ extension FinancialGoalViewModel {
 private extension FinancialGoalViewModel {
     func handleErrorRequestTimeOut() {
         isLoading = false
-        errorMessage = "Упс что то пошло не так, попробуйте позже"
+        errorMessage = R.string.localizable.financialGoal_error_timeout()
         print("Время ожидание сервера превышено")
         requestTimer?.cancel()
     }
@@ -134,7 +138,14 @@ private extension FinancialGoalViewModel {
 private extension FinancialGoalViewModel {
     func validateAmount() -> Bool {
         guard !amountString.isEmpty else {
-            errorMessage = "Сумма не может быть пустой"
+            errorMessage = R.string.localizable.financialGoal_error_emptyAmount()
+            errorField = .amount
+            return false
+        }
+        
+        guard let amount = Int(cleanAmountString), amount > 0 else {
+            errorMessage = R.string.localizable.financialGoal_error_zeroAmount()
+            errorField = .amount
             return false
         }
         return true
@@ -142,7 +153,8 @@ private extension FinancialGoalViewModel {
     
     func validateName() -> Bool {
         guard !name.isEmpty else {
-            errorMessage = "Название цели не может быть пустым"
+            errorMessage = R.string.localizable.financialGoal_error_emptyName()
+            errorField = .name
             return false
         }
         return true
@@ -150,7 +162,8 @@ private extension FinancialGoalViewModel {
     
     func validateDate() -> Bool {
         guard !dateString.isEmpty else {
-            errorMessage = "Дата не может быть пустой"
+            errorMessage = R.string.localizable.financialGoal_error_emptyDate()
+            errorField = .date
             return false
         }
         return true

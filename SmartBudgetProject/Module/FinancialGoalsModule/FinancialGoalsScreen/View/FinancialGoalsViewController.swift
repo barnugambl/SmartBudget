@@ -43,6 +43,7 @@ final class FinancialGoalsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel.resetMessages()
         viewModel.fetchFinancialGoals()
     }
     
@@ -71,22 +72,23 @@ final class FinancialGoalsViewController: UIViewController {
             }
             .store(in: &cancellables)
         
+        viewModel.$successMessage
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink { [weak self] message in
+                CustomToastView.showSuccessToast(on: self?.view ?? UIView(), message: message, duration: 0.5)
+            }
+            .store(in: &cancellables)
+        
         viewModel.$errorMessage
             .receive(on: DispatchQueue.main)
             .compactMap({ $0 })
             .sink { [weak self] message in
-                self?.showAlert(message: message)
-            }
+                CustomToastView.showSuccessToast(on: self?.view ?? UIView(), message: message, duration: 1.5,
+                                                 backgroundColor: UIColor.systemRed.withAlphaComponent(0.9)) }
             .store(in: &cancellables)
     }
-    
-    private func showAlert(message: String) {
-        let alertController = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
-        let actionOk = UIAlertAction(title: "Ок", style: .default)
-        alertController.addAction(actionOk)
-        present(alertController, animated: true)
-    }
-    
+
     private func setupNavigationBar() {
         let titleLabel = UILabel.create(text: R.string.localizable.financialGoalsLabel(), fontSize: FontSizeConstans.title,
                                         weight: .medium)
