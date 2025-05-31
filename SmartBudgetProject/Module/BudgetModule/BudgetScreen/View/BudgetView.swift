@@ -63,7 +63,7 @@ final class BudgetView: UIView {
         paragraphStyle.alignment = .center
         
         let centerText = NSMutableAttributedString(
-            string: "\(R.string.localizable.pieChartLabel)\n",
+            string: "Бюджет\n",
             attributes: [
                 .font: UIFont.systemFont(ofSize: FontSizeConstans.body),
                 .foregroundColor: UIColor.gray,

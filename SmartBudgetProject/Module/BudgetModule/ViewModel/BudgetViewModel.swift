@@ -9,12 +9,12 @@ import Foundation
 import Combine
 import UIKit
 
-final class BudgetViewModel: BudgetViewModelProtocol {
+final class BudgetViewModel: BudgetViewModelProtocol {    
     private let userId: Int
     private var budget: Budget?
     private let budgetAPIService = BudgetAPIService(apiService: ApiService())
     private var cancellables: Set<AnyCancellable> = .init()
-    let budgetSubject = CurrentValueSubject<Budget?, Never>(nil)
+    let budgetSubject = CurrentValueSubject<(Budget, [UIColor])?, Never>(nil)
     let colorCategoryUpdate = PassthroughSubject<(UIColor, String), Never>()
     
     // Input
@@ -36,6 +36,7 @@ final class BudgetViewModel: BudgetViewModelProtocol {
             return BudgetCategory(name: categoryDto.name, spent: 0, remaining: limit, limit: limit)
         }
         let budget = Budget(income: incomeInt, categories: budgetCategories)
+        let colors = categories.map({ $0.iconColor })
         
         Task {
             let requestCategory = categories.map({ $0.toRequset() })
@@ -44,7 +45,14 @@ final class BudgetViewModel: BudgetViewModelProtocol {
                 errorMessage = R.string.localizable.budgetErrorGeneral()
             }
         }
-        budgetSubject.send(budget)
+        budgetSubject.send((budget, colors))
+    }
+    
+    func canAdjustPercentage(for categories: [CategoryDto], name: String, newPercentage: Int) -> Bool {
+        let currentTotal = categories.reduce(0) { $0 + $1.persentage }
+        let oldValue = categories.first { $0.name == name }?.persentage ?? 0
+        let delta = newPercentage - oldValue
+        return (currentTotal + delta) <= 100
     }
     
     func updateCategoryColor(_ color: UIColor, _ name: String) {

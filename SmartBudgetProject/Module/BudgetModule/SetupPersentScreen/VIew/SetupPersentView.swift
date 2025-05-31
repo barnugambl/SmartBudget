@@ -11,7 +11,7 @@ import DGCharts
 final class SetupPersentView: UIView {
     var categories: [CategoryDto] = []
 
-    private var categoryViews: [CategoryItemView] = []
+    var categoryViews: [CategoryItemView] = []
     
     var clickOnConfirmButton: (() -> Void)?
     
@@ -59,7 +59,7 @@ final class SetupPersentView: UIView {
             categoryStack.addArrangedSubview(view)
             
             view.snp.makeConstraints { make in
-                make.height.equalTo(Constans.heightItemView)
+                make.height.equalTo(97)
             }
         }
     }
@@ -89,12 +89,6 @@ final class SetupPersentView: UIView {
             make.top.equalTo(pieChartView.snp.bottom).offset(Constans.insetLarge)
             make.leading.trailing.equalToSuperview().inset(Constans.insetMedium)
             
-        }
-        
-        categoryStack.arrangedSubviews.forEach {
-            $0.snp.makeConstraints { make in
-                make.height.equalTo(Constans.heightItemView)
-            }
         }
         
         confirmButton.snp.makeConstraints { make in

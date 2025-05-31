@@ -45,15 +45,15 @@ final class BudgetViewController: UIViewController {
         viewModel.budgetSubject
             .compactMap({ $0 })
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] budget in
+            .sink { [weak self] budget, colors in
                 guard let self else { return }
-                self.updateUI(budget: budget)
+                self.updateUI(budget: budget, colors: colors)
             }
             .store(in: &cancellable)
     }
     
-    private func updateUI(budget: Budget) {
-        setupPieChart(budget: budget)
+    private func updateUI(budget: Budget, colors: [UIColor]) {
+        setupPieChart(budget: budget, colors: colors)
         budgetView.pieChartView.centerAttributedText = budgetView.createCenterAttributedText(amount: "\(budget.income)")
         setupDataSource(budgetCategory: budget.categories)
     }
@@ -61,6 +61,7 @@ final class BudgetViewController: UIViewController {
     private func setupNavigationBar() {
         navigationItem.titleView = budgetView.titleLabel
     }
+    
 }
 
 // MARK: DataSource
@@ -92,9 +93,9 @@ extension BudgetViewController {
 
 // MARK: PieChartSetup
 extension BudgetViewController {
-    func setupPieChart(budget: Budget) {
+    func setupPieChart(budget: Budget, colors: [UIColor]) {
         let entries = createPieChartEntries(budget: budget)
-        let dataSet = createPieChartDataSet(with: entries)
+        let dataSet = createPieChartDataSet(with: entries, colors: colors)
         configurePieChart(with: dataSet)
     }
     
@@ -106,9 +107,9 @@ extension BudgetViewController {
         }
     }
     
-    func createPieChartDataSet(with entries: [PieChartDataEntry]) -> PieChartDataSet {
+    func createPieChartDataSet(with entries: [PieChartDataEntry], colors: [UIColor]) -> PieChartDataSet {
         let dataSet = PieChartDataSet(entries: entries)
-        dataSet.colors = ChartColorTemplates.material()
+        dataSet.colors = colors
         dataSet.valueColors = [.black]
         dataSet.valueFormatter = DefaultValueFormatter(decimals: 0)
         dataSet.drawValuesEnabled = false

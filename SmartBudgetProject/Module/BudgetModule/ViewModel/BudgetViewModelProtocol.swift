@@ -13,7 +13,7 @@ protocol BudgetViewModelProtocol {
     var isIncomeValid: Bool { get set }
     var errorMessage: String? { get }
 
-    var budgetSubject: CurrentValueSubject<Budget?, Never> { get }
+    var budgetSubject: CurrentValueSubject<(Budget, [UIColor])?, Never> { get }
     var colorCategoryUpdate: PassthroughSubject<(UIColor, String), Never> { get }
 
     func createBudget(categories: [CategoryDto])
