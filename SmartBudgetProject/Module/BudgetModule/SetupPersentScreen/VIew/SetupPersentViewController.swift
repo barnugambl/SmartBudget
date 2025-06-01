@@ -13,16 +13,13 @@ import Combine
 final class SetupPersentViewController: UIViewController {
     private var persentView = SetupPersentView()
     weak var coordinator: OnboardingCoordinator?
-    private let viewModel: BudgetViewModel
-    private var categories: [CategoryDto]
+    private let viewModel: SetupPersentageViewModel
+    private var categories: [CategoryDto] = []
     private var cancellable: Set<AnyCancellable> = .init()
     
-    init(viewModel: BudgetViewModel, categories: [CategoryDto]) {
+    init(viewModel: SetupPersentageViewModel) {
         self.viewModel = viewModel
-        self.categories = categories
         super.init(nibName: nil, bundle: nil)
-        setupCategories()
-        persentView.setupCategoryViews()
     }
     
     required init?(coder: NSCoder) {
@@ -36,28 +33,23 @@ final class SetupPersentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
-        setupPieChart()
         bindingViewModel()
-        
+        setupPieChart()
     }
     
     private func bindingViewModel() {
-        viewModel.$incomeString
+        viewModel.budgetService.initialBudgetSubject
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] amount in
+            .sink { [weak self] income, categories in
                 guard let self else { return }
-                self.persentView.pieChartView.centerAttributedText = createCenterAttributedText(amount: amount)
+                self.persentView.pieChartView.centerAttributedText = createCenterAttributedText(amount: income)
+                self.categories = categories
+                self.persentView.categories = categories
+                self.updatePieChart()
+                self.persentView.setupCategoryViews()
+                self.setupSliders()
         }
         .store(in: &cancellable)
-        
-        persentView.categoryViews.forEach { categoryView in
-            categoryView.sliderValue = { [weak self] in
-                guard let self else { return }
-                self.updateCategoriesFromViews()
-                self.setupSliders()
-                self.updatePieChart()
-            }
-        }
     }
     
     private func setupCategories() {
@@ -89,7 +81,7 @@ final class SetupPersentViewController: UIViewController {
         navigationItem.titleView = persentView.titleLabel
         persentView.clickOnConfirmButton = { [weak self] in
             guard let self else { return }
-            viewModel.createBudget(categories: categories)
+            viewModel.createBudget(income: self.persentView.pieChartView.centerAttributedText?.string ?? "", categories: categories)
             self.coordinator?.finishOnBoarding()
         }
     }

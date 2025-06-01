@@ -9,6 +9,7 @@ import UIKit
 
 final class MainTabBarCoordinator: Coordinator {
     private weak var profileDelegate: ProfileCoordinatorDelegate?
+    private let budgetBulder: BudgetScreenBulder
     
     var navigationController: UINavigationController
     
@@ -16,9 +17,10 @@ final class MainTabBarCoordinator: Coordinator {
     
     private var tabBarController: CustomTabBarController
         
-    init(navigationController: UINavigationController, profileDelegate: ProfileCoordinatorDelegate?) {
+    init(navigationController: UINavigationController, profileDelegate: ProfileCoordinatorDelegate?, budgetBulder: BudgetScreenBulder) {
         self.navigationController = navigationController
         self.profileDelegate = profileDelegate
+        self.budgetBulder = budgetBulder
         tabBarController = CustomTabBarController()
     }
     
@@ -32,7 +34,7 @@ final class MainTabBarCoordinator: Coordinator {
         let profileNC = UINavigationController()
         let financialGoalNC = UINavigationController()
         
-        let expensesCoordinator = ExpensesCoordinator(navigationController: expensesNC)
+        let expensesCoordinator = ExpensesCoordinator(navigationController: expensesNC, budgetBulder: budgetBulder)
         let profileCoordinator = ProfileCoordinator(navigationController: profileNC)
         let finanicalGoalCoordinator = FinancialGoalCoordinator(navigationController: financialGoalNC)
         

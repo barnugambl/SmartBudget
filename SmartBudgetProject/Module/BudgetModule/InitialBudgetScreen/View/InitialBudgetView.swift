@@ -8,7 +8,7 @@
 import UIKit
 
 final class InitialBudgetView: UIView {
-    var defaultCategories: [CategoryDto]
+    var categories: [CategoryDto]
     var categoryViews: [CategoryItemView] = []
 
     var clickOnConfirmButton: (([CategoryDto]) -> Void)?
@@ -32,11 +32,11 @@ final class InitialBudgetView: UIView {
     
     private lazy var confirmButton = UIButton.create(style: .yellow(title: R.string.localizable.confirmationButton())) { [weak self] in
         guard let self else { return }
-        self.clickOnConfirmButton?(defaultCategories)
+        self.clickOnConfirmButton?(categories)
     }
     
     init(categories: [CategoryDto]) {
-        self.defaultCategories = categories
+        self.categories = categories
         super.init(frame: .zero)
         setupView()
         setupCategoryViews()
@@ -48,7 +48,7 @@ final class InitialBudgetView: UIView {
     }
     
     private func setupCategoryViews() {
-        defaultCategories.forEach { category in
+        categories.forEach { category in
             let view = CategoryItemView(category: category) { [weak self] _ in
                 self?.clickOnCategory?(category)
             }
@@ -60,10 +60,6 @@ final class InitialBudgetView: UIView {
     func setErrorMessage(_ message: String?) {
         errorLabel.text = message
         errorLabel.isHidden = false
-    }
-    
-    func updateColor(_ color: UIColor) {
-        
     }
     
     private func setupView() {

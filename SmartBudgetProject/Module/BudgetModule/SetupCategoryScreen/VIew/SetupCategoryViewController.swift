@@ -10,11 +10,11 @@ import UIKit
 
 final class SetupCategoryViewController: UIViewController {
     private var setupCategoryView = SetupCategoryView()
-    private var viewModel: BudgetViewModel
+    private var viewModel: SetupCategoryViewModel
     private var category: CategoryDto
     weak var coordinator: OnboardingCoordinator?
 
-    init(viewModel: BudgetViewModel, category: CategoryDto) {
+    init(viewModel: SetupCategoryViewModel, category: CategoryDto) {
         self.viewModel = viewModel
         self.category = category
         super.init(nibName: nil, bundle: nil)
@@ -43,7 +43,7 @@ final class SetupCategoryViewController: UIViewController {
         
         setupCategoryView.clickOnConfirmButton = { [weak self] color, name in
             guard let self else { return }
-            self.viewModel.updateCategoryColor(color, name)
+            viewModel.budgetService.updateColorSubject.send((color, name))
             self.navigationController?.popViewController(animated: true)
         }
     }

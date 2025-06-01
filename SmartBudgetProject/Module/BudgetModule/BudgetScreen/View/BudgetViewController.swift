@@ -42,9 +42,9 @@ final class BudgetViewController: UIViewController {
     }
     
     private func bindingViewModel() {
-        viewModel.budgetSubject
-            .compactMap({ $0 })
+        viewModel.budgetService.budgetSubject
             .receive(on: DispatchQueue.main)
+            .compactMap({ $0 })
             .sink { [weak self] budget, colors in
                 guard let self else { return }
                 self.updateUI(budget: budget, colors: colors)

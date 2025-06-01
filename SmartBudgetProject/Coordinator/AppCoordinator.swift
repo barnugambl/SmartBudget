@@ -11,6 +11,9 @@ final class AppCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     
+    private let budgetBulder = BudgetScreenBulder(
+        budgetService: BudgetService(budgetAPIService: BudgetAPIService(apiService: ApiService())))
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
@@ -20,13 +23,14 @@ final class AppCoordinator: Coordinator {
     }
     
     func showMainFlow() {
-        let mainTabBarCoordinator = MainTabBarCoordinator(navigationController: navigationController, profileDelegate: self)
+        let mainTabBarCoordinator = MainTabBarCoordinator(navigationController: navigationController, profileDelegate: self,
+                                                          budgetBulder: budgetBulder)
         childCoordinators.append(mainTabBarCoordinator)
         mainTabBarCoordinator.start()
     }
     
     func showAuthFlow() {
-        let authCoordinator = AuthCoordinator(navigationController: navigationController)
+        let authCoordinator = AuthCoordinator(navigationController: navigationController, budgetBulder: budgetBulder)
         authCoordinator.delegate = self
         childCoordinators.append(authCoordinator)
         authCoordinator.start()
