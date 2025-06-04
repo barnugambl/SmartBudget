@@ -8,11 +8,11 @@
 import Foundation
 
 final class BudgetScreenBulder {
-    private let budgetService: BudgetServiceProtocol
+    private let budgetService = BudgetService.shared
     
-    init(budgetService: BudgetServiceProtocol) {
-        self.budgetService = budgetService
-    }
+    private init() {}
+    
+    static let shared = BudgetScreenBulder()
     
     func makeBudgetScreen() -> BudgetViewController {
         let viewModel = BudgetViewModel(userId: 1, budgetService: budgetService)

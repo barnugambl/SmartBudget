@@ -9,15 +9,19 @@ import UIKit
 
 class FinanceGoalsTableViewCell: UITableViewCell {
     private lazy var nameGoalLabel = UILabel.create(fontSize: FontSizeConstans.heading, weight: .medium)
-    private lazy var budgetGoalLabel = UILabel.create(fontSize: FontSizeConstans.body)
+    private lazy var targetAmountLabel = UILabel.create(fontSize: FontSizeConstans.body)
     private lazy var dateGoalLabel = UILabel.create(fontSize: FontSizeConstans.body)
     private lazy var resultLabel = UILabel.create(fontSize: FontSizeConstans.subbody)
+    private lazy var savedAmountLabel = UILabel.create(fontSize: FontSizeConstans.subbody)
+    private lazy var remainderLabel = UILabel.create(fontSize: FontSizeConstans.subbody)
     
     private lazy var nameBudgetStack = UIStackView.create(stackAxis: .horizontal, stackSpacing: Constans.smallStackSpacing,
                                                           stackDistribution: .equalSpacing,
-                                             views: [nameGoalLabel, budgetGoalLabel])
+                                             views: [nameGoalLabel, targetAmountLabel])
     private lazy var dateProgressStack = UIStackView.create(stackSpacing: Constans.tinyStackSpacing,
-                                                            views: [dateGoalLabel, progressBar, resultLabel])
+                                                            views: [dateGoalLabel, progressBar])
+    private lazy var savedRemainderStack = UIStackView.create(stackAxis: .horizontal, stackDistribution: .equalSpacing,
+                                                              views: [savedAmountLabel, remainderLabel])
 
     private lazy var progressBar: UIProgressView = {
         let bar = UIProgressView()
@@ -51,7 +55,7 @@ class FinanceGoalsTableViewCell: UITableViewCell {
     
     private func setupLayout() {
         contentView.addSubview(containerView)
-        containerView.addSubviews(nameBudgetStack, dateProgressStack)
+        containerView.addSubviews(nameBudgetStack, dateProgressStack, savedRemainderStack, resultLabel)
         
         containerView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(Constans.insetTiny)
@@ -64,19 +68,32 @@ class FinanceGoalsTableViewCell: UITableViewCell {
         
         dateProgressStack.snp.makeConstraints { make in
             make.top.equalTo(nameBudgetStack.snp.bottom).offset(Constans.insetMedium)
-            make.leading.trailing.bottom.equalToSuperview().inset(Constans.insetSmall)
+            make.leading.trailing.equalToSuperview().inset(Constans.insetSmall)
         }
         
         progressBar.snp.makeConstraints { make in
             make.height.equalTo(Constans.smallHeight)
         }
+        
+        savedRemainderStack.snp.makeConstraints { make in
+            make.top.equalTo(progressBar.snp.bottom).offset(Constans.insetTiny)
+            make.leading.trailing.equalToSuperview().inset(Constans.insetSmall)
+        }
+        
+        resultLabel.snp.makeConstraints { make in
+            make.top.equalTo(savedRemainderStack.snp.bottom).offset(Constans.insetTiny)
+            make.leading.equalToSuperview().inset(Constans.insetSmall)
+            make.bottom.equalToSuperview().inset(8)
+        }
     }
     
     func configureCell(finacialGoal: Goal) {
         nameGoalLabel.text = finacialGoal.name
-        budgetGoalLabel.text = "\(finacialGoal.targetAmount) ₽"
+        targetAmountLabel.text = "\(finacialGoal.targetAmount) ₽"
         dateGoalLabel.text = "\(R.string.localizable.dateGoalLabel()) \(finacialGoal.deadline)"
-        let progress = min(Float(finacialGoal.savedAmount) / Float(finacialGoal.targetAmount), 1.0)
+        savedAmountLabel.text = "Внесено: \(finacialGoal.savedAmount)₽"
+        remainderLabel.text = "Остаток: \(finacialGoal.targetAmount - finacialGoal.savedAmount)₽"
+        let progress = Float(finacialGoal.savedAmount) / Float(finacialGoal.targetAmount)
         progressBar.setProgress(progress, animated: false)
         
         switch finacialGoal.status {

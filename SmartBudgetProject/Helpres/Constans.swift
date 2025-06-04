@@ -25,6 +25,7 @@ enum Constans {
     static let textFieldContentInset: CGFloat = 10
     
     static let heightButton: CGFloat = 48
+    static let heightSpinner: CGFloat = 48
     static let heightTextField: CGFloat = 48
     static let heightTextFieldMedium: CGFloat = 56
     static let heightButtonMedium: CGFloat = 56

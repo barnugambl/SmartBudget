@@ -10,15 +10,13 @@ import Foundation
 import Combine
 
 final class AddMoneyFinancialGoalViewController: UIViewController {
-    private let viewModel: FinancialGoalViewModel
+    private let viewModel: AddMoneyFinancialGoalViewModel
     private let addMoneyFinancialGoalView = AddMoneyFinancialGoalView()
-    private var nameGoal: String
     private var cancellables: Set<AnyCancellable> = .init()
     weak var coordinator: FinancialGoalCoordinator?
  
-    init(viewModel: FinancialGoalViewModel, nameGoal: String) {
+    init(viewModel: AddMoneyFinancialGoalViewModel) {
         self.viewModel = viewModel
-        self.nameGoal = nameGoal
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -33,57 +31,51 @@ final class AddMoneyFinancialGoalViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupName()
         setupNavigation()
+        setupNavigationBar()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        viewModel.resetMessages()
-    }
-    
-    private func setupName() {
-        addMoneyFinancialGoalView.titleLabel.text = nameGoal
-        navigationItem.titleView = addMoneyFinancialGoalView.titleLabel
+    private func setupNavigationBar() {
+        self.addMoneyFinancialGoalView.titleLabel.text = viewModel.goal.name
+        self.navigationItem.titleView = addMoneyFinancialGoalView.titleLabel
     }
     
     private func setupNavigation() {
         addMoneyFinancialGoalView.clickOnConfirmButton = { [weak self] in
-            self?.viewModel.addAmount()
+            guard let self else { return }
+            self.viewModel.addAmount { isSuccess in
+                if isSuccess {
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                }
+            }
         }
     }
     
     private func bindingViewModel() {
         addMoneyFinancialGoalView.addAmountTextField.textPublisher
-            .subscribe(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.main)
             .assign(to: \.amountString,
                     on: viewModel)
             .store(in: &cancellables)
         
-        viewModel.$errorMessage
-            .subscribe(on: DispatchQueue.main)
+        viewModel.$errorMessageField
+            .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .sink { [weak self] message in
-                self?.showAlert(message: message)
+                self?.addMoneyFinancialGoalView.setErrorMessage(message)
             }
             .store(in: &cancellables)
         
-        viewModel.$successMessage
-            .subscribe(on: DispatchQueue.main)
+        viewModel.$errorMessage
+            .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .sink { [weak self] message in
-                CustomToastView.showSuccessToast(on: self?.view, message: message)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self?.navigationController?.popViewController(animated: true)
-                }
+                guard let self else { return }
+                self.addMoneyFinancialGoalView.hideError()
+                CustomToastView.showErrorToast(on: self.addMoneyFinancialGoalView, message: message)
             }
             .store(in: &cancellables)
-    }
-           
-    private func showAlert(message: String) {
-        let alertController = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
-        let actionOk = UIAlertAction(title: "Ок", style: .default)
-        alertController.addAction(actionOk)
-        present(alertController, animated: true)
     }
 }

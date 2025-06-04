@@ -38,23 +38,11 @@ final class ModuleBulder {
         return CreateNewPasswordViewController(viewModel: viewModel)
     }
     
-    func makeAddFinancialGoalScreen(viewModel: FinancialGoalViewModel) -> AddFinancialGoalViewController {
-        return AddFinancialGoalViewController(viewModel: viewModel)
-    }
-    
-    func makeAddMoneyFinancialGoalScreen(viewModel: FinancialGoalViewModel, nameGoal: String, userId: Int) -> AddMoneyFinancialGoalViewController {
-        return AddMoneyFinancialGoalViewController(viewModel: viewModel, nameGoal: nameGoal)
-    }
-    
     func makeProfileScreen() -> ProfileViewController {
         let viewModel = ProfileViewModel()
         return ProfileViewController(viewModel: viewModel)
     }
     
-    func makeFinancialGoalScreen(viewModel: FinancialGoalViewModel) -> FinancialGoalsViewController {
-        return FinancialGoalsViewController(viewModel: viewModel)
-    }
-        
     func makeEditProfileScreen() -> EditProfileViewController {
         let viewModel = EditProfileViewModel()
         return EditProfileViewController(viewModel: viewModel)

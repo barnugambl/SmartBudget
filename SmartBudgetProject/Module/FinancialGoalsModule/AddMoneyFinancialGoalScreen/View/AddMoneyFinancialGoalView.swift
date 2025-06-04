@@ -11,6 +11,7 @@ final class AddMoneyFinancialGoalView: UIView {
     var clickOnConfirmButton: (() -> Void)?
     
     lazy var titleLabel = UILabel.create(fontSize: FontSizeConstans.title, weight: .medium)
+    private lazy var errorLabel = UILabel.create(fontSize: FontSizeConstans.caption, weight: .medium, textColor: .systemRed)
     private lazy var addAmountLabel = UILabel.create(text: R.string.localizable.addAmountLabel(), fontSize: FontSizeConstans.body, weight: .medium)
         
     lazy var addAmountTextField = AmountTextField()
@@ -33,8 +34,19 @@ final class AddMoneyFinancialGoalView: UIView {
         backgroundColor = .systemBackground
     }
     
+    func setErrorMessage(_ message: String?) {
+        errorLabel.text = message
+        errorLabel.isHidden = false
+    }
+    
+    func hideError() {
+        errorLabel.text = nil
+        errorLabel.isHidden = true
+    }
+    
     private func setupLayout() {
-        addSubviews(addAmountLabel, addAmountTextField, confirmationButton)
+        errorLabel.isHidden = true
+        addSubviews(addAmountLabel, addAmountTextField, errorLabel, confirmationButton)
         
         addAmountLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).inset(Constans.insetMedium)
@@ -45,6 +57,11 @@ final class AddMoneyFinancialGoalView: UIView {
             make.top.equalTo(addAmountLabel.snp.bottom).offset(Constans.insetTiny)
             make.leading.trailing.equalToSuperview().inset(Constans.insetSmall)
             make.height.equalTo(Constans.heightTextFieldMedium)
+        }
+        
+        errorLabel.snp.makeConstraints { make in
+            make.top.equalTo(addAmountTextField.snp.bottom).offset(Constans.insetTiny)
+            make.leading.equalTo(addAmountTextField.snp.leading).offset(Constans.textFieldContentInset)
         }
         
         confirmationButton.snp.makeConstraints { make in

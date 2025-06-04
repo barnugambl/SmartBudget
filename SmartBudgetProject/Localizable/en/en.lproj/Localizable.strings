@@ -77,6 +77,11 @@ enter the 5-digit code specified in the SMS";
 "dateGoalLabel" = "End date";
 "positiveResult" = "The goal was achieved!";
 "negativeResult" = "Failed to achieve the goal :(";
+"nameLabel" = "Name";
+"dateLabel" = "Date";
+"amountLabel" = "Target amount";
+"editGoalLabel" = "Edit goal";
+
 
 //MARK: ExpensesScreen
 "expensesLabel" = "My expenses";
@@ -111,5 +116,20 @@ enter the 5-digit code specified in the SMS";
 "budgetErrorZero" = "Budget must be greater than 0";
 "budgetErrorGeneral" = "Oops, something went wrong";
 
+// MARK: - Financial Messages
+"goalEmptyName" = "Goal name cannot be empty";
+"goalEmptyAmount" = "Amount cannot be empty";
+"goalZeroAmount" = "Amount must be greater than 0";
+"goalEmptyDate" = "Date cannot be empty";
+"goalCreateSuccess" = "Goal successfully created";
+"goalUpdateSuccess" = "Goal successfully updated";
+"goalAddMoneySuccess" = "Amount successfully added";
+"goalDeleteSuccess" = "Goal successfully deleted";
+"goalGeneralError" = "Oops, an error occurred, please try again";
+"goalTimeoutError" = "Server timeout exceeded";
+"goalNoChanges" = "No changes to save";
 
-
+// MARK: - Context Menu
+"contextMenuDelete" = "Delete";
+"contextMenuEdit" = "Edit";
+"contextMenuAddMoney" = "Add money";

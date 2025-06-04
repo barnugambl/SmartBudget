@@ -10,7 +10,6 @@ import Combine
 import UIKit
 
 protocol BudgetServiceProtocol {
-    
     var initialBudgetSubject: CurrentValueSubject<(String, [CategoryDto]), Never> { get }
     var budgetSubject: CurrentValueSubject<(Budget, [UIColor])?, Never> { get }
     var updateColorSubject: CurrentValueSubject<(UIColor, String)?, Never> { get }
@@ -26,9 +25,11 @@ class BudgetService: BudgetServiceProtocol {
     let budgetSubject = CurrentValueSubject<(Budget, [UIColor])?, Never>(nil)
     var updateColorSubject = CurrentValueSubject<(UIColor, String)?, Never>(nil)
     
-    init(budgetAPIService: BudgetAPIServiceProtocol) {
+    private init(budgetAPIService: BudgetAPIServiceProtocol) {
         self.budgetAPIService = budgetAPIService
     }
+    
+    static let shared = BudgetService(budgetAPIService: BudgetAPIService(apiService: ApiService()))
 }
 
 // MARK: API

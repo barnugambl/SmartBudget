@@ -33,7 +33,8 @@ final class AmountTextField: UITextField {
     }
     
     private func formatAmount(_ string: String) -> String {
-        let cleanString = string.replacingOccurrences(of: "\\D", with: "", options: .regularExpression)
+        let cleanString = string.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
+        guard !cleanString.isEmpty else { return "" }
         guard let number = Int(cleanString) else { return "" }
         
         let formatter = NumberFormatter()

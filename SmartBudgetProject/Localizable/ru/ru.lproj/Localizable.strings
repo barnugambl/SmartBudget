@@ -77,8 +77,12 @@
 "dateGoalLabel" = "Дата окончания";
 "positiveResult" = "Цель удалось достигнуть!";
 "negativeResult" = "Цель не удалось достичь :(";
+"nameLabel" = "Название";
+"dateLabel" = "Дата";
+"amountLabel" = "Сумма цели";
+"editGoalLabel" = "Изменить цель";
 
-//MARK: ExpensesScreen
+//MARK: BudgetScreen
 "expensesLabel" = "Мои расходы";
 "pieChartLabel" = "Бюджет";
 "spentLabel" = "Потрачено";
@@ -111,4 +115,20 @@
 "budgetErrorZero" = "Бюджет должен быть больше 0";
 "budgetErrorGeneral" = "Упс что-то пошло не так";
 
+// MARK: FinancialGoal Message
+"goalEmptyName" = "Название цели не может быть пустым";
+"goalEmptyAmount" = "Сумма не может быть пустой";
+"goalZeroAmount" = "Сумма не должна равняться 0";
+"goalEmptyDate" = "Дата не может быть пустой";
+"goalCreateSuccess" = "Цель успешно создана";
+"goalUpdateSuccess" = "Цель успешно обновлена";
+"goalAddMoneySuccess" = "Сумма успешно добавлена";
+"goalDeleteSuccess" = "Цель успешно удалена";
+"goalGeneralError" = "Упс, произошла ошибка, попробуйте еще раз";
+"goalTimeoutError" = "Время ожидания сервера превышено";
+"goalNoChanges" = "Нет изменений для сохранения";
 
+// MARK: - Context Menu
+"contextMenuDelete" = "Удалить";
+"contextMenuEdit" = "Изменить";
+"contextMenuAddMoney" = "Добавить деньги";

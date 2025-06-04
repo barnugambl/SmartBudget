@@ -12,11 +12,10 @@ final class ExpensesCoordinator: Coordinator {
 
     var childCoordinators: [Coordinator] = []
     
-    private let budgetBulder: BudgetScreenBulder
+    private let budgetBulder = BudgetScreenBulder.shared
     
-    init(navigationController: UINavigationController, budgetBulder: BudgetScreenBulder) {
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.budgetBulder = budgetBulder
     }
     
     func start() {

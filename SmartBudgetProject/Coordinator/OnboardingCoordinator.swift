@@ -12,7 +12,7 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 }
 
 final class OnboardingCoordinator: Coordinator {
-    private let budgetBulder: BudgetScreenBulder
+    private let budgetBulder = BudgetScreenBulder.shared
 
     weak var delegate: OnboardingCoordinatorDelegate?
     
@@ -20,9 +20,8 @@ final class OnboardingCoordinator: Coordinator {
     
     var childCoordinators: [Coordinator] = []
         
-    init(navigationController: UINavigationController, budgetBulder: BudgetScreenBulder) {
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.budgetBulder = budgetBulder
     }
     
     func start() {

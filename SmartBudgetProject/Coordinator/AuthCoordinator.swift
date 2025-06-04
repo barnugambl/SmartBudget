@@ -14,14 +14,12 @@ protocol AuthCoordinatorDelegate: AnyObject {
 final class AuthCoordinator: Coordinator {
     weak var delegate: AuthCoordinatorDelegate?
     private let moduleBulder = ModuleBulder()
-    private let budgetBulder: BudgetScreenBulder
     var navigationController: UINavigationController
     
     var childCoordinators: [Coordinator] = []
     
-    init(navigationController: UINavigationController, budgetBulder: BudgetScreenBulder) {
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.budgetBulder = budgetBulder
     }
     
     func start() {
@@ -30,7 +28,7 @@ final class AuthCoordinator: Coordinator {
     }
     
     func startOnBoardingFlow() {
-        let onBoardingCoordinator = OnboardingCoordinator(navigationController: navigationController, budgetBulder: budgetBulder)
+        let onBoardingCoordinator = OnboardingCoordinator(navigationController: navigationController)
         onBoardingCoordinator.delegate = self
         childCoordinators.append(onBoardingCoordinator)
         onBoardingCoordinator.start()

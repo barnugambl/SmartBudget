@@ -17,7 +17,8 @@ final class FinancialGoalsViewController: UIViewController {
     private var viewModel: FinancialGoalViewModel
     private var financialGoalsView = FinancialGoalsView()
     private var tableViewDataSource: UITableViewDiffableDataSource<TableSection, Goal>?
-    private var cancellables = Set<AnyCancellable>()
+    private var cancellable = Set<AnyCancellable>()
+    private let refreshControl = UIRefreshControl()
     weak var coordinator: FinancialGoalCoordinator?
     
     init(viewModel: FinancialGoalViewModel) {
@@ -35,15 +36,21 @@ final class FinancialGoalsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.fetchFinancialGoals()
         setupDataSource()
         setupNavigationBar()
         setupTableDelegate()
         bindViewModel()
+        setupRefreshControl()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel.fetchFinancialGoals()
+    private func setupRefreshControl() {
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        financialGoalsView.financialGoalsTableView.refreshControl = refreshControl
+    }
+    
+    @objc private func refreshData() {
+        viewModel.refreshFinancialGoals()
     }
     
     private func bindViewModel() {
@@ -56,7 +63,33 @@ final class FinancialGoalsViewController: UIViewController {
                     self.financialGoalsView.showTable()
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &cancellable)
+        
+        viewModel.financialGoalService.addGoalSubject
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] goal in
+                guard let self else { return }
+                self.viewModel.financialGoals.append(goal)
+                self.updateDataSource()
+            }
+            .store(in: &cancellable)
+        
+        viewModel.finishLoading = { [weak self] in
+            DispatchQueue.main.async {
+                self?.refreshControl.endRefreshing()
+            }
+        }
+        
+        viewModel.financialGoalService.updateGoalSubject
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] goal in
+                guard let self else { return }
+                if let index = self.viewModel.financialGoals.firstIndex(where: { $0.id == goal.id }) {
+                    self.viewModel.financialGoals[index] = goal
+                    self.updateDataSource()
+                }
+            }
+            .store(in: &cancellable)
         
         viewModel.$isLoading
             .receive(on: DispatchQueue.main)
@@ -64,27 +97,39 @@ final class FinancialGoalsViewController: UIViewController {
                 guard let self else { return }
                 if isLoading {
                     self.financialGoalsView.financialGoalsTableView.isHidden = true
-                    self.financialGoalsView.loadIndicator.startAnimating()
+                    self.financialGoalsView.loadIndicator.startAnimation()
                 } else {
-                    self.financialGoalsView.loadIndicator.stopAnimating()
+                    self.financialGoalsView.loadIndicator.stopAnimation()
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &cancellable)
         
         viewModel.$errorMessage
             .receive(on: DispatchQueue.main)
             .compactMap({ $0 })
             .sink { [weak self] message in
-                self?.showAlert(message: message)
+                guard let self else { return }
+                CustomToastView.showErrorToast(on: self.financialGoalsView, message: message)
             }
-            .store(in: &cancellables)
-    }
-    
-    private func showAlert(message: String) {
-        let alertController = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
-        let actionOk = UIAlertAction(title: "Ок", style: .default)
-        alertController.addAction(actionOk)
-        present(alertController, animated: true)
+            .store(in: &cancellable)
+        
+        viewModel.$successMessage
+            .receive(on: DispatchQueue.main)
+            .compactMap({ $0 })
+            .sink { [weak self] message in
+                guard let self else { return }
+                CustomToastView.showSuccessToast(on: self.financialGoalsView, message: message)
+            }
+            .store(in: &cancellable)
+        
+        viewModel.financialGoalService.successMessageSubject
+            .receive(on: DispatchQueue.main)
+            .compactMap({ $0 })
+            .sink { [weak self] message in
+                guard let self else { return }
+                CustomToastView.showSuccessToast(on: self.financialGoalsView, message: message)
+            }
+            .store(in: &cancellable)
     }
     
     private func setupNavigationBar() {
@@ -118,7 +163,6 @@ extension FinancialGoalsViewController {
                 cell?.configureCell(finacialGoal: itemIdentifier)
                 return cell
             })
-        updateDataSource()
     }
     
     private func updateDataSource() {
@@ -126,15 +170,44 @@ extension FinancialGoalsViewController {
         var snaphot = NSDiffableDataSourceSnapshot<TableSection, Goal>()
         snaphot.appendSections([.main])
         snaphot.appendItems(goals)
-        tableViewDataSource?.apply(snaphot)
+        tableViewDataSource?.apply(snaphot, animatingDifferences: false)
         
     }
 }
 
 // MARK: TableViewDelegate
 extension FinancialGoalsViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let currentItem = viewModel.financialGoals[indexPath.row]
-        coordinator?.showAddMoneyFinancialGoalFlow(nameGoal: currentItem.name, userId: viewModel.userId)
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let goal = viewModel.financialGoals[indexPath.row]
+        
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            
+            if goal.status == .inProgress {
+                let deleteAction = UIAction(title: R.string.localizable.contextMenuDelete(),
+                                            image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+                    self?.viewModel.deleteFinancialGoal(goalId: goal.id, userId: 1)
+                }
+                
+                let editAction = UIAction(title: R.string.localizable.contextMenuEdit(),
+                                          image: UIImage(systemName: "pencil")) { [weak self] _ in
+                    self?.coordinator?.showEditFinancialGoal(goal: goal)
+                }
+                
+                let addMoneyAction = UIAction(title: R.string.localizable.contextMenuAddMoney(),
+                                              image: UIImage(systemName: "plus.circle")) { [weak self] _ in
+                    self?.coordinator?.showAddMoneyFinancialGoalFlow(goal: goal)
+                }
+                return UIMenu(title: "", children: [addMoneyAction, editAction, deleteAction])
+                
+            } else {
+                let deleteAction = UIAction(title: R.string.localizable.contextMenuDelete(),
+                                            image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
+                    self?.viewModel.deleteFinancialGoal(goalId: goal.id, userId: 1)
+                }
+                return UIMenu(title: "", children: [deleteAction])
+            }
+            
+        }
     }
 }
+

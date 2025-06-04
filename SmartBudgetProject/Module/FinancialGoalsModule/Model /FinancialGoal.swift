@@ -14,6 +14,7 @@ enum FinancialGoalStatus: String, Codable {
 }
 
 struct Goal: Codable, Hashable {
+    let id: Int
     let name: String
     let targetAmount: Int
     let savedAmount: Int
