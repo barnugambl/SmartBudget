@@ -15,14 +15,14 @@ final class BudgetAPIService: BudgetAPIServiceProtocol {
     }
     
     func setupBudget(budget: BudgetRequest) async throws -> ServerMessageResponce? {
-        try await apiService.post(endpoint: URLConstans.setupBudgetURL, body: budget)
+        try await apiService.post(endpoint: URLConstansBudget.setupBudgetURL, body: budget)
     }
     
     func getBudget(userId: Int) async throws -> Budget {
-        try await apiService.get(endpoint: URLConstans.getBudgetURL(userId: userId), parameters: nil)
+        try await apiService.get(endpoint: URLConstansBudget.getBudgetURL(userId: userId), parameters: nil)
     }
     
     func updateBudget(userId: Int, income: Int) async throws -> ServerMessageResponce? {
-        try await apiService.patch(endpoint: URLConstans.updateBudgetURL(userId: userId), body: ["income": income])
+        try await apiService.patch(endpoint: URLConstansBudget.updateBudgetURL(userId: userId), body: ["income": income])
     }
 }

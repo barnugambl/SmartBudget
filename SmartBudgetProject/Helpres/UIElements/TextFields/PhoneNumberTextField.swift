@@ -74,6 +74,7 @@ extension PhoneNumberTextField: UITextFieldDelegate {
         }
         
         textField.text = formatPhoneNumber(newDigits)
+        textField.notifyTextChanged()
         
         return false
     }

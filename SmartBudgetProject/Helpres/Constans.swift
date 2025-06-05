@@ -48,7 +48,7 @@ enum ColorConstans {
     static let yellow = "FFDD2D"
 }
 
-enum URLConstans {
+enum URLConstansBudget {
     static let setupBudgetURL = "/budget"
     
     static func getBudgetURL(userId: Int) -> String {
@@ -58,5 +58,9 @@ enum URLConstans {
     static func updateBudgetURL(userId: Int) -> String {
         return "/budget/\(userId)"
     }
-    
 }
+
+enum URLConstantLogin {
+    static let login = "/login"
+}
+ 

@@ -12,3 +12,8 @@ extension String {
         replacingOccurrences(of: "\\D", with: "", options: .regularExpression)
     }
 }
+
+// MARK: UserDefaults key
+extension String {
+    static let loggedIn = "loggedIn"
+}

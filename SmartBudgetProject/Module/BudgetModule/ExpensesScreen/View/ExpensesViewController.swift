@@ -56,7 +56,7 @@ final class ExpensesViewController: UIViewController {
     
     private func updateCategoriesFromViews() {
         categories = expensesView.categoryViews.map { view in
-            var category = view.category
+            let category = view.category
             return category
         }
     }

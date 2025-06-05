@@ -38,14 +38,26 @@ final class ApiService: APIServiceProtocol {
 }
 
 private extension ApiService {
-    func request<T: Decodable>(endpoint: String, method: HttpType = .GET, parameters: [String: Any]? = nil,
-                               body: Encodable? = nil, headers: [String: String]? = nil ) async throws -> T {
+    func request<T: Decodable>(endpoint: String,
+                               method: HttpType = .GET,
+                               parameters: [String: Any]? = nil,
+                               body: Encodable? = nil,
+                               customHeaders: [String: String]? = nil ) async throws -> T {
         guard let url = URL(string: baseURL + endpoint) else { throw NetworkError.invalidURL }
         var request = URLRequest(url: url)
+        
         request.httpMethod = method.rawValue
-        headers?.forEach({ key, value in
+        var headers = customHeaders ?? [:]
+        
+        headers["Content-type"] = "application/json"
+        
+        if let accessToken = UserDefaultsService.shared.accessToken {
+            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        }
+       
+        headers.forEach { key, value in
             request.addValue(value, forHTTPHeaderField: key)
-        })
+        }
         
         if let parameters {
             if var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) {
