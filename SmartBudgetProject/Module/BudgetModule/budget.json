@@ -1,0 +1,23 @@
+{
+  "income": 50000,
+  "categories": [
+    {
+      "name": "Food",
+      "spent": 12000,
+      "remaining": 8000,
+      "limit": 20000
+    },
+    {
+      "name": "Transport",
+      "spent": 5000,
+      "remaining": 5000,
+      "limit": 10000
+    },
+    {
+      "name": "Entertainment",
+      "spent": 3000,
+      "remaining": 7000,
+      "limit": 10000
+    }
+  ]
+}

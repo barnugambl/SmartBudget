@@ -19,11 +19,12 @@ class CategoryItemView: UIView {
     lazy var slider: UISlider = {
         let slider = UISlider()
         slider.layer.cornerRadius = 5
+        slider.backgroundColor = .clear
+        slider.minimumTrackTintColor = category.iconColor
+        slider.maximumTrackTintColor = .systemGray5.withAlphaComponent(0.9)
         let thumbImage = UIImage(systemName: "circle.fill")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 15))
             .withTintColor(category.iconColor, renderingMode: .alwaysOriginal)
         slider.setThumbImage(thumbImage, for: .normal)
-        slider.backgroundColor = category.iconColor
-        slider.minimumTrackTintColor = category.iconColor
         slider.minimumValue = 1
         slider.maximumValue = 100
         slider.addAction(UIAction(handler: { _ in
@@ -96,11 +97,24 @@ class CategoryItemView: UIView {
     
     private func sliderValueChanged() {
         let newValue = Int(slider.value)
+        
         if let canAdjust = onPercentageChange?(category.name, newValue), canAdjust {
             category.persentage = newValue
             updatePersentLabel()
+            slider.maximumTrackTintColor = .systemGray5.withAlphaComponent(0.9)
         } else {
             slider.value = Float(category.persentage)
+            UIView.animate(withDuration: 0.1, animations: {
+                    self.slider.transform = CGAffineTransform(translationX: -3, y: 0)
+                },
+                completion: { _ in
+                    UIView.animate(withDuration: 0.1) {
+                        self.slider.transform = .identity
+                    }
+                }
+            )
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
         }
         sliderValue?()
     }

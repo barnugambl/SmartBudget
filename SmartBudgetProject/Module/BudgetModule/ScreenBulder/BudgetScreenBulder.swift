@@ -24,9 +24,9 @@ final class BudgetScreenBulder {
         return InitialBudgetViewController(viewModel: viewModel)
     }
     
-    func makeSetupPersentScreen() -> SetupPersentViewController {
+    func makeSetupPersentScreen() -> SetupPersentageViewController {
         let viewModel = SetupPersentageViewModel(budgetService: budgetService, userId: 1)
-        return SetupPersentViewController(viewModel: viewModel)
+        return SetupPersentageViewController(viewModel: viewModel)
     }
     
     func makeSetupCategoryScreen(category: CategoryDto) -> SetupCategoryViewController {

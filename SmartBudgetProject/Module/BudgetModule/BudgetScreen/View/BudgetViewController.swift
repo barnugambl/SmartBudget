@@ -39,7 +39,17 @@ final class BudgetViewController: UIViewController {
         bindingViewModel()
         setupNavigationBar()
         budgetView.setupTableHeader()
+        viewModel.fetchBudget()
+        setupRefreshControl()
     }
+    
+    private func setupRefreshControl() {
+          budgetView.refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+      }
+      
+      @objc private func handleRefresh() {
+          viewModel.refreshBudget()
+      }
     
     private func bindingViewModel() {
         viewModel.budgetService.budgetSubject
@@ -50,6 +60,46 @@ final class BudgetViewController: UIViewController {
                 self.updateUI(budget: budget, colors: colors)
             }
             .store(in: &cancellable)
+        
+        viewModel.$budget
+            .receive(on: DispatchQueue.main)
+            .compactMap({ $0 })
+            .sink { [weak self] budget in
+                guard let self else { return }
+                self.viewModel.budgetService.budgetSubject.send((budget, [.link]))
+                self.updateUI(budget: budget, colors: [.link])
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
+                guard let self else { return }
+                if isLoading {
+                    self.budgetView.budgetCategoryTableView.isHidden = true
+                    self.budgetView.loadIndicator.startAnimation()
+                } else {
+                    self.budgetView.budgetCategoryTableView.isHidden = false
+                    self.budgetView.loadIndicator.stopAnimation()
+                }
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$errorMessage
+            .receive(on: DispatchQueue.main)
+            .compactMap({ $0 })
+            .sink { [weak self] message in
+                guard let self else { return }
+                CustomToastView.showErrorToast(on: self.budgetView, message: message)
+                self.viewModel.resetMessages()
+            }
+            .store(in: &cancellable)
+        
+        viewModel.finishLoading = { [weak self] in
+            DispatchQueue.main.async {
+                self?.budgetView.refreshControl.endRefreshing()
+            }
+        }
     }
     
     private func updateUI(budget: Budget, colors: [UIColor]) {
@@ -86,7 +136,7 @@ extension BudgetViewController {
         var snaphot = NSDiffableDataSourceSnapshot<BudgetCategoryTableSection, BudgetCategory>()
         snaphot.appendSections([.main])
         snaphot.appendItems(goals)
-        tableViewDataSource?.apply(snaphot)
+        tableViewDataSource?.apply(snaphot, animatingDifferences: false)
         
     }
 }

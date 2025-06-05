@@ -4,6 +4,9 @@ import SnapKit
 
 final class BudgetView: UIView {
     lazy var titleLabel = UILabel.create(text: R.string.localizable.expensesLabel(), fontSize: FontSizeConstans.title)
+    
+    lazy var loadIndicator = CustomSpinnerSimple()
+    
     lazy var pieChartView: PieChartView = {
         let pieChart = PieChartView()
         pieChart.drawEntryLabelsEnabled = false
@@ -12,6 +15,10 @@ final class BudgetView: UIView {
         pieChart.legend.enabled = false
         pieChart.holeRadiusPercent = 0.7
         pieChart.drawEntryLabelsEnabled = true
+        
+        pieChart.noDataText = "Упс, произошла ошибка попробуйте позже"
+        pieChart.noDataTextColor = .systemGray3
+        pieChart.noDataFont = UIFont.systemFont(ofSize: 16)
         return pieChart
     }()
     
@@ -24,11 +31,23 @@ final class BudgetView: UIView {
         table.register(BudgetCategoryViewCell.self, forCellReuseIdentifier: BudgetCategoryViewCell.reuseIdentifier)
         return table
     }()
+    
+    lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.tintColor = UIColor(hex: ColorConstans.yellow)
+        return control
+    }()
         
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         setupLayout()
+        loadIndicator.startAnimation()
+    }
+    
+    func showView() {
+        loadIndicator.stopAnimation()
+        budgetCategoryTableView.isHidden = false
     }
     
     required init?(coder: NSCoder) {
@@ -37,6 +56,7 @@ final class BudgetView: UIView {
     
     private func setupView() {
         backgroundColor = .systemBackground
+        budgetCategoryTableView.refreshControl = refreshControl
     }
     
     func setupTableHeader() {
@@ -52,9 +72,14 @@ final class BudgetView: UIView {
     }
 
     private func setupLayout() {
-        addSubview(budgetCategoryTableView)
+        addSubviews(budgetCategoryTableView, loadIndicator)
         budgetCategoryTableView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
+        }
+        
+        loadIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(Constans.heightSpinner)
         }
     }
     

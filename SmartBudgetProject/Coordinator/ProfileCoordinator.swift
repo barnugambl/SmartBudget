@@ -19,6 +19,7 @@ final class ProfileCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
         
     private let moduleBulder = ModuleBulder()
+    private let profileBulder = ProfileScreenBulder.shared
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -26,6 +27,12 @@ final class ProfileCoordinator: Coordinator {
     
     func start() {
         showProfileFlow()
+    }
+    
+    func showExpensenFlow() {
+        let expensesVC = profileBulder.makeExpensesScreen()
+        expensesVC.coordinator = self
+        navigationController.pushViewController(expensesVC, animated: true)
     }
     
     func showProfileFlow() {

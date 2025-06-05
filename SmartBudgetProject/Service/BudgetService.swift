@@ -17,6 +17,7 @@ protocol BudgetServiceProtocol {
     func fetchBudget(userId: Int) async throws -> Budget?
     func setupBudget(budget: BudgetRequest) async throws -> ServerMessageResponce?
     func updateBudget(userId: Int, income: Int) async throws -> ServerMessageResponce?
+    func mockFetchBudget() async throws -> Budget?
 }
 
 class BudgetService: BudgetServiceProtocol {
@@ -60,4 +61,23 @@ extension BudgetService {
             throw error
         }
     }
+    func mockFetchBudget() async throws -> Budget? {
+        guard let url = Bundle.main.url(forResource: "budget", withExtension: "json") else {
+            print("Mock JSON file not found")
+            return nil
+        }
+        
+        do {
+            let data = try Data(contentsOf: url)
+            
+            let decoder = JSONDecoder()
+            let budget = try decoder.decode(Budget.self, from: data)
+            
+            return budget
+        } catch {
+            print("Error decoding mock budget: \(error)")
+            throw error
+        }
+    }
+    
 }

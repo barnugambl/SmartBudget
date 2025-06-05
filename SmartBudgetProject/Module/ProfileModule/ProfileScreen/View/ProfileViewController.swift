@@ -43,13 +43,14 @@ final class ProfileViewController: UIViewController {
     
     private func setupNavigation() {
         profileView.onEvent = { [weak self] event in
+            guard let self else { return }
             switch event {
             case .didTapEditProfile:
-                self?.coordinator?.showEditProfleFlow()
+                self.coordinator?.showEditProfleFlow()
             case .didTapExpenseHistory:
                 break
             case .didTapFinanses:
-                break
+                self.coordinator?.showExpensenFlow()
             }
         }
     }

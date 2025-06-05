@@ -1,14 +1,14 @@
 //
-//  SetupPersentView.swift
+//  ExpensenVIew.swift
 //  SmartBudgetProject
 //
-//  Created by Терёхин Иван on 04.05.2025.
+//  Created by Терёхин Иван on 04.06.2025.
 //
 
 import UIKit
 import DGCharts
 
-final class SetupPersentView: UIView {
+final class ExpensenView: UIView {
     var categories: [CategoryDto] = []
 
     var categoryViews: [CategoryItemView] = []
@@ -41,7 +41,7 @@ final class SetupPersentView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        setupLayout()        
+        setupLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -99,4 +99,3 @@ final class SetupPersentView: UIView {
         }
     }
 }
-

@@ -1,23 +1,22 @@
 //
-//  SetupPersentViewController.swift
+//  ExpensesViewController.swift
 //  SmartBudgetProject
 //
-//  Created by Терёхин Иван on 04.05.2025.
+//  Created by Терёхин Иван on 04.06.2025.
 //
 
-import Foundation
 import UIKit
-import DGCharts
 import Combine
+import DGCharts
 
-final class SetupPersentViewController: UIViewController {
-    private var persentView = SetupPersentView()
-    weak var coordinator: OnboardingCoordinator?
-    private let viewModel: SetupPersentageViewModel
+final class ExpensesViewController: UIViewController {
+    private var expensesView = ExpensenView()
+    weak var coordinator: ProfileCoordinator?
+    private let viewModel: ExpensenViewModel
     private var categories: [CategoryDto] = []
     private var cancellable: Set<AnyCancellable> = .init()
     
-    init(viewModel: SetupPersentageViewModel) {
+    init(viewModel: ExpensenViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -27,7 +26,7 @@ final class SetupPersentViewController: UIViewController {
     }
     
     override func loadView() {
-        view = persentView
+        view = expensesView
     }
     
     override func viewDidLoad() {
@@ -42,53 +41,36 @@ final class SetupPersentViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] income, categories in
                 guard let self else { return }
-                self.persentView.pieChartView.centerAttributedText = createCenterAttributedText(amount: income)
+                self.expensesView.pieChartView.centerAttributedText = createCenterAttributedText(amount: income)
                 self.categories = categories
-                self.persentView.categories = categories
+                self.expensesView.categories = categories
                 self.updatePieChart()
-                self.persentView.setupCategoryViews()
-                self.setupSliders()
+                self.expensesView.setupCategoryViews()
         }
         .store(in: &cancellable)
     }
     
     private func setupCategories() {
-        persentView.categories = categories
+        expensesView.categories = categories
     }
     
     private func updateCategoriesFromViews() {
-        categories = persentView.categoryViews.map { view in
+        categories = expensesView.categoryViews.map { view in
             var category = view.category
-            category.persentage = Int(view.slider.value)
             return category
         }
     }
     
-    private func setupSliders() {
-        persentView.categoryViews.forEach { view in
-            view.onPercentageChange = { [weak self] name, newValue in
-                guard let self = self else { return false }
-                return self.viewModel.canAdjustPercentage(for: self.categories, name: name, newPercentage: newValue)
-            }
-            view.sliderValue = { [weak self] in
-                self?.updateCategoriesFromViews()
-                self?.updatePieChart()
-            }
-        }
-    }
-    
     private func setupNavigationBar() {
-        navigationItem.titleView = persentView.titleLabel
-        persentView.clickOnConfirmButton = { [weak self] in
+        navigationItem.titleView = expensesView.titleLabel
+        expensesView.clickOnConfirmButton = { [weak self] in
             guard let self else { return }
-            viewModel.createBudget(income: self.persentView.pieChartView.centerAttributedText?.string ?? "", categories: categories)
-            self.coordinator?.finishOnBoarding()
         }
     }
 }
 
 // MARK: SetupPieChartData
-extension SetupPersentViewController {
+extension ExpensesViewController {
     func setupPieChart() {
         let entries = createPieChartEntries()
         let dataSet = createPieChartDataSet(with: entries)
@@ -108,19 +90,19 @@ extension SetupPersentViewController {
         let newDataSet = createPieChartDataSet(with: entries)
         let chartData = PieChartData(dataSet: newDataSet)
         
-        let rotationAngle = persentView.pieChartView.rotationAngle
-        let rotationEnabled = persentView.pieChartView.rotationEnabled
+        let rotationAngle = expensesView.pieChartView.rotationAngle
+        let rotationEnabled = expensesView.pieChartView.rotationEnabled
         
         CATransaction.begin()
         CATransaction.setAnimationDuration(0.8)
         CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
         
-        persentView.pieChartView.data = chartData
+        expensesView.pieChartView.data = chartData
         
         CATransaction.commit()
         
-        persentView.pieChartView.rotationAngle = rotationAngle
-        persentView.pieChartView.rotationEnabled = rotationEnabled
+        expensesView.pieChartView.rotationAngle = rotationAngle
+        expensesView.pieChartView.rotationEnabled = rotationEnabled
     }
     
     func createPieChartDataSet(with entries: [PieChartDataEntry]) -> PieChartDataSet {
@@ -136,8 +118,8 @@ extension SetupPersentViewController {
     
     func configurePieChart(with dataSet: PieChartDataSet) {
         let chartData = PieChartData(dataSet: dataSet)
-        persentView.pieChartView.data = chartData
-        persentView.pieChartView.animate(yAxisDuration: 1.4, easingOption: .easeOutBack)
+        expensesView.pieChartView.data = chartData
+        expensesView.pieChartView.animate(yAxisDuration: 1.4, easingOption: .easeOutBack)
     }
     
     func createCenterAttributedText(amount: String) -> NSAttributedString {

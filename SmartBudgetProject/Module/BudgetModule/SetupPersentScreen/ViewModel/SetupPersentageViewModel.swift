@@ -27,6 +27,15 @@ class SetupPersentageViewModel {
         return (currentTotal + delta) <= 100
     }
     
+    func isFullPercentage(for categories: [CategoryDto]) -> Bool {
+        if categories.reduce(0, { $0 + $1.persentage }) == 100 {
+            return true
+        } else {
+            errorMessage = "Сумма процентов не равна 100"
+            return false
+        }
+    }
+    
     func createBudget(income: String, categories: [CategoryDto]) {
         let incomeInt = Int(income.digitsOnly) ?? 0
         let budgetCategories = categories.map { categoryDto in
@@ -45,5 +54,9 @@ class SetupPersentageViewModel {
                 errorMessage = R.string.localizable.budgetErrorGeneral()
             }
         }
+    }
+    
+    func resetError() {
+        errorMessage = nil
     }
 }
