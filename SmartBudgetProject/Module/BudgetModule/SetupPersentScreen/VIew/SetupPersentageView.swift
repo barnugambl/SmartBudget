@@ -15,7 +15,7 @@ final class SetupPersentageView: UIView {
     
     var clickOnConfirmButton: (() -> Void)?
     
-    lazy var titleLabel = UILabel.create(text: R.string.localizable.setupPersentLabel(), fontSize: FontSizeConstans.title, weight: .medium)
+    lazy var titleLabel = UILabel.create(fontSize: FontSizeConstans.title, weight: .medium)
     
     private lazy var scrollView = UIScrollView.create()
     
@@ -54,7 +54,7 @@ final class SetupPersentageView: UIView {
     
     func setupCategoryViews() {
         categories.forEach { category in
-            let view = CategoryItemView(category: category, persentage: category.persentage, completion: nil)
+            let view = CategoryItemView(category: category, persentage: category.persentage, isSlider: true, completion: nil)
             categoryViews.append(view)
             categoryStack.addArrangedSubview(view)
             

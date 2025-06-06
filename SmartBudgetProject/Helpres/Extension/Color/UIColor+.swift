@@ -26,3 +26,14 @@ extension UIColor {
         self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
     }
 }
+
+extension UIColor {
+    func toData() throws -> Data {
+        let colorData = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+        return colorData
+    }
+    
+    static func from(data: Data) throws -> UIColor? {
+        return try NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data)
+    }
+}

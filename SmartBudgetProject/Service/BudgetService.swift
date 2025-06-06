@@ -7,12 +7,11 @@
 
 import Foundation
 import Combine
-import UIKit
 
 protocol BudgetServiceProtocol {
     var initialBudgetSubject: CurrentValueSubject<(String, [CategoryDto]), Never> { get }
-    var budgetSubject: CurrentValueSubject<(Budget, [UIColor])?, Never> { get }
-    var updateColorSubject: CurrentValueSubject<(UIColor, String)?, Never> { get }
+    var budgetSubject: CurrentValueSubject<(Budget)?, Never> { get }
+    var updateColorSubject: CurrentValueSubject<(String, String)?, Never> { get }
     
     func fetchBudget(userId: Int) async throws -> Budget?
     func setupBudget(budget: BudgetRequest) async throws -> ServerMessageResponce?
@@ -23,8 +22,8 @@ protocol BudgetServiceProtocol {
 class BudgetService: BudgetServiceProtocol {
     private let budgetAPIService: BudgetAPIServiceProtocol
     let initialBudgetSubject = CurrentValueSubject<(String, [CategoryDto]), Never>(("", CategoryDto.defaultCategories()))
-    let budgetSubject = CurrentValueSubject<(Budget, [UIColor])?, Never>(nil)
-    var updateColorSubject = CurrentValueSubject<(UIColor, String)?, Never>(nil)
+    let budgetSubject = CurrentValueSubject<(Budget)?, Never>(nil)
+    var updateColorSubject = CurrentValueSubject<(String, String)?, Never>(nil)
     
     private init(budgetAPIService: BudgetAPIServiceProtocol) {
         self.budgetAPIService = budgetAPIService

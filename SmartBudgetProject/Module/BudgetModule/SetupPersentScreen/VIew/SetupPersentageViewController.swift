@@ -137,7 +137,7 @@ extension SetupPersentageViewController {
     
     func createPieChartDataSet(with entries: [PieChartDataEntry]) -> PieChartDataSet {
         let dataSet = PieChartDataSet(entries: entries)
-        dataSet.colors = categories.map({ $0.iconColor })
+        dataSet.colors = categories.map({ UIColor(hex: $0.iconColor) })
         dataSet.valueColors = [.black]
         dataSet.valueFormatter = DefaultValueFormatter(decimals: 0)
         dataSet.drawValuesEnabled = false

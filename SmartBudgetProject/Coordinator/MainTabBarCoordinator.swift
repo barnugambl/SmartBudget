@@ -15,7 +15,7 @@ final class MainTabBarCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     
     private var tabBarController: CustomTabBarController
-        
+    
     init(navigationController: UINavigationController, profileDelegate: ProfileCoordinatorDelegate?) {
         self.navigationController = navigationController
         self.profileDelegate = profileDelegate
@@ -49,5 +49,8 @@ final class MainTabBarCoordinator: Coordinator {
         tabBarController.viewControllers = [expensesNC, financialGoalNC, profileNC]
         tabBarController.setupTabBar()
     }
+    
+    deinit {
+        print("Main dead")
+    }
 }
-

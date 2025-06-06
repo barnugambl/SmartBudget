@@ -9,7 +9,7 @@ import UIKit
 
 final class SetupCategoryView: UIView {
     var clickOnchangeButton: (() -> Void)?
-    var clickOnConfirmButton: ((UIColor, String) -> Void)?
+    var clickOnConfirmButton: ((String, String) -> Void)?
     
     lazy var titleLabel = UILabel.create(text: R.string.localizable.setupCategoryLabel(), fontSize: FontSizeConstans.title, weight: .medium)
     private lazy var categoryLabel = UILabel.create(text: R.string.localizable.categoryLabel(), fontSize: FontSizeConstans.body, weight: .medium)
@@ -19,7 +19,7 @@ final class SetupCategoryView: UIView {
     private lazy var stackLabel = UIStackView.create(stackAxis: .horizontal, stackDistribution: .equalSpacing,
                                                           views: [categoryLabel, changeCategoryButton])
     
-    private lazy var categoryView = ItemView(title: "Категория", iconName: "food_icon", iconColor: .black)
+    private lazy var categoryView = ItemView(title: "Категория", iconName: "food_icon")
     
     private lazy var colorView = ColorView()
     

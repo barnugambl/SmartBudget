@@ -20,9 +20,9 @@ final class ItemView: UIView {
         }
     }
     
-    var iconColor: UIColor {
+    var iconColor: String {
         didSet {
-            iconContainer.backgroundColor = iconColor
+            iconContainer.backgroundColor = UIColor(hex: iconColor)
         }
     }
     
@@ -56,7 +56,7 @@ final class ItemView: UIView {
     
     lazy var persentLabel = UILabel.create(fontSize: 16)
     
-    init(title: String, iconName: String, iconColor: UIColor = .systemBlue, isPersent: Bool = false,
+    init(title: String, iconName: String, iconColor: String = "#007AFF", isPersent: Bool = false,
          completion: (() -> Void)? = nil, frame: CGRect = .zero) {
         self.title = title
         self.iconName = iconName
@@ -105,7 +105,7 @@ final class ItemView: UIView {
         addSubviews(iconContainer)
         iconContainer.addSubview(icon)
         icon.image = UIImage(named: iconName)
-        iconContainer.backgroundColor = iconColor
+        iconContainer.backgroundColor = UIColor(hex: iconColor)
         
         iconContainer.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(12)

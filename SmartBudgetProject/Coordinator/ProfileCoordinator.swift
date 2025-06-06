@@ -9,8 +9,8 @@ import UIKit
 
 protocol ProfileCoordinatorDelegate: AnyObject {
     func logout(coordinator: Coordinator)
+    func startOnboarding(coordinator: Coordinator)
 }
-
 final class ProfileCoordinator: Coordinator {
     weak var delegate: ProfileCoordinatorDelegate?
     
@@ -47,6 +47,10 @@ final class ProfileCoordinator: Coordinator {
         navigationController.pushViewController(editProfileVC, animated: true)
     }
     
+    func showOnboardingFlow() {
+        delegate?.startOnboarding(coordinator: self)
+    }
+        
     func logout() {
         delegate?.logout(coordinator: self)
     }

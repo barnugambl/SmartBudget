@@ -63,7 +63,7 @@ final class InitialBudgetViewController: UIViewController {
             .store(in: &cancellable)
     }
     
-    private func handleColorUpdate(name: String, color: UIColor) {
+    private func handleColorUpdate(name: String, color: String) {
         if let index = initBudgetView.categories.firstIndex(where: { $0.name == name }) {
             initBudgetView.categories[index].iconColor = color
             initBudgetView.categoryViews[index].updateColor(color)

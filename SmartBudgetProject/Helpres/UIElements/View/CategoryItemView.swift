@@ -13,6 +13,7 @@ class CategoryItemView: UIView {
     var sliderValue: (() -> Void)?
     var onPercentageChange: ((String, Int) -> Bool)?
     private let persentage: Int?
+    private let isSlider: Bool
     
     private lazy var nameLabel = UILabel.create(text: category.name, fontSize: 16, weight: .regular)
     private lazy var persentLabel = UILabel.create(fontSize: 16)
@@ -20,10 +21,10 @@ class CategoryItemView: UIView {
         let slider = UISlider()
         slider.layer.cornerRadius = 5
         slider.backgroundColor = .clear
-        slider.minimumTrackTintColor = category.iconColor
+        slider.minimumTrackTintColor = UIColor(hex: category.iconColor)
         slider.maximumTrackTintColor = .systemGray5.withAlphaComponent(0.9)
         let thumbImage = UIImage(systemName: "circle.fill")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 15))
-            .withTintColor(category.iconColor, renderingMode: .alwaysOriginal)
+            .withTintColor(UIColor(hex: category.iconColor), renderingMode: .alwaysOriginal)
         slider.setThumbImage(thumbImage, for: .normal)
         slider.minimumValue = 1
         slider.maximumValue = 100
@@ -56,14 +57,17 @@ class CategoryItemView: UIView {
         return button
     }()
     
-    init(category: CategoryDto, persentage: Int? = nil, completion: ((CategoryDto) -> Void)?) {
+    init(category: CategoryDto, persentage: Int? = nil, isSlider: Bool = false, completion: ((CategoryDto) -> Void)?) {
         self.category = category
         self.completion = completion
         self.persentage = persentage
+        self.isSlider = isSlider
         super.init(frame: .zero)
         setupView()
         setupLayout()
-        slider.value = Float(persentage ?? 0)
+        if isSlider {
+            slider.value = Float(persentage ?? 0)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -123,8 +127,8 @@ class CategoryItemView: UIView {
         persentLabel.text = "\(category.persentage)%"
     }
     
-    func updateColor(_ color: UIColor) {
-        iconContainer.backgroundColor = color
+    func updateColor(_ color: String) {
+        iconContainer.backgroundColor = UIColor(hex: color)
     }
     
     func update(with category: CategoryDto) {
@@ -137,7 +141,7 @@ class CategoryItemView: UIView {
         addSubviews(iconContainer)
         iconContainer.addSubview(icon)
         icon.image = UIImage(named: category.iconName)
-        iconContainer.backgroundColor = category.iconColor
+        iconContainer.backgroundColor = UIColor(hex: category.iconColor)
         
         iconContainer.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(12)
@@ -156,6 +160,10 @@ class CategoryItemView: UIView {
         
         if persentage != nil {
             setupPersentLabel()
+            
+        }
+        
+        if isSlider {
             setupSlider()
         }
     }

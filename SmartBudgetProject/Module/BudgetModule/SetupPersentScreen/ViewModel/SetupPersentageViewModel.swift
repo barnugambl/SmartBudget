@@ -45,7 +45,8 @@ class SetupPersentageViewModel {
         let budget = Budget(income: incomeInt, categories: budgetCategories)
         let colors = categories.map({ $0.iconColor })
         
-        budgetService.budgetSubject.send((budget, colors))
+        budgetService.budgetSubject.send(budget)
+        UserDefaultsService.shared.categoryDto = categories
         
         Task {
             let requestCategory = categories.map({ $0.toRequset() })

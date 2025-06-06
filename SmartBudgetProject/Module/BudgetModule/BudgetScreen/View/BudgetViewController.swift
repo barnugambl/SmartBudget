@@ -55,9 +55,9 @@ final class BudgetViewController: UIViewController {
         viewModel.budgetService.budgetSubject
             .receive(on: DispatchQueue.main)
             .compactMap({ $0 })
-            .sink { [weak self] budget, colors in
+            .sink { [weak self] budget in
                 guard let self else { return }
-                self.updateUI(budget: budget, colors: colors)
+                self.updateUI(budget: budget, colors: [.brown])
             }
             .store(in: &cancellable)
         
@@ -66,7 +66,7 @@ final class BudgetViewController: UIViewController {
             .compactMap({ $0 })
             .sink { [weak self] budget in
                 guard let self else { return }
-                self.viewModel.budgetService.budgetSubject.send((budget, [.link]))
+                self.viewModel.budgetService.budgetSubject.send(budget)
                 self.updateUI(budget: budget, colors: [.link])
             }
             .store(in: &cancellable)

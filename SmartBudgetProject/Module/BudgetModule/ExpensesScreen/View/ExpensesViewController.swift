@@ -33,21 +33,22 @@ final class ExpensesViewController: UIViewController {
         super.viewDidLoad()
         setupNavigationBar()
         bindingViewModel()
-        setupPieChart()
+        updateCategoriesFromViews()
+        setupCategories()
     }
     
     private func bindingViewModel() {
-        viewModel.budgetService.initialBudgetSubject
+        viewModel.budgetService.budgetSubject
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] income, categories in
+            .compactMap({ $0 })
+            .sink { [weak self] budget in
                 guard let self else { return }
-                self.expensesView.pieChartView.centerAttributedText = createCenterAttributedText(amount: income)
-                self.categories = categories
-                self.expensesView.categories = categories
-                self.updatePieChart()
-                self.expensesView.setupCategoryViews()
-        }
-        .store(in: &cancellable)
+                self.expensesView.pieChartView.centerAttributedText = createCenterAttributedText(amount: String(describing: budget.income))
+                self.categories = self.viewModel.budgetCategoriesToCategoryDto(budget: budget)
+                self.expensesView.categories = self.categories 
+                self.setupPieChart()
+            }
+            .store(in: &cancellable)
     }
     
     private func setupCategories() {
@@ -56,16 +57,19 @@ final class ExpensesViewController: UIViewController {
     
     private func updateCategoriesFromViews() {
         categories = expensesView.categoryViews.map { view in
-            var category = view.category
+            let category = view.category
             return category
         }
     }
     
     private func setupNavigationBar() {
         navigationItem.titleView = expensesView.titleLabel
-        expensesView.clickOnConfirmButton = { [weak self] in
-            guard let self else { return }
-        }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Изменить", style: .plain, target: self, action: #selector(editTapped))
+        
+    }
+    
+    @objc private func editTapped() {
+        coordinator?.showOnboardingFlow()
     }
 }
 
@@ -85,29 +89,9 @@ extension ExpensesViewController {
         }
     }
     
-    private func updatePieChart() {
-        let entries = createPieChartEntries()
-        let newDataSet = createPieChartDataSet(with: entries)
-        let chartData = PieChartData(dataSet: newDataSet)
-        
-        let rotationAngle = expensesView.pieChartView.rotationAngle
-        let rotationEnabled = expensesView.pieChartView.rotationEnabled
-        
-        CATransaction.begin()
-        CATransaction.setAnimationDuration(0.8)
-        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
-        
-        expensesView.pieChartView.data = chartData
-        
-        CATransaction.commit()
-        
-        expensesView.pieChartView.rotationAngle = rotationAngle
-        expensesView.pieChartView.rotationEnabled = rotationEnabled
-    }
-    
     func createPieChartDataSet(with entries: [PieChartDataEntry]) -> PieChartDataSet {
         let dataSet = PieChartDataSet(entries: entries)
-        dataSet.colors = categories.map({ $0.iconColor })
+        dataSet.colors = categories.map({ UIColor(hex: $0.iconColor) })
         dataSet.valueColors = [.black]
         dataSet.valueFormatter = DefaultValueFormatter(decimals: 0)
         dataSet.drawValuesEnabled = false

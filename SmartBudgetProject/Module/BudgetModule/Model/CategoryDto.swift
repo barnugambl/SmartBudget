@@ -6,34 +6,39 @@
 //
 
 import Foundation
-import UIKit
 
-struct CategoryDto {
+struct CategoryDto: Codable {
     let name: String
     let iconName: String
-    var iconColor: UIColor
+    var iconColor: String
     var persentage: Int
     
     static func defaultCategories() -> [CategoryDto] {
         return [
             .init(name: R.string.localizable.productsCategoryButton(),
                   iconName: R.image.food_icon.name,
-                  iconColor: .systemGreen, persentage: 16),
+                  iconColor: "#34C759",
+                  persentage: 16),
             .init(name: R.string.localizable.transportCategoryButton(),
                   iconName: R.image.transport_icon.name,
-                  iconColor: .systemBlue, persentage: 16),
+                  iconColor: "#007AFF",
+                  persentage: 16),
             .init(name: R.string.localizable.utilitiesCategoryButton(),
                   iconName: R.image.faucet_icon.name,
-                  iconColor: .systemYellow, persentage: 16),
+                  iconColor: "#FFCC00",
+                  persentage: 16),
             .init(name: R.string.localizable.divorcesCategoryButton(),
                   iconName: R.image.event_icon.name,
-                  iconColor: .systemPurple, persentage: 16),
+                  iconColor: "#AF52DE",
+                  persentage: 16),
             .init(name: R.string.localizable.accumulationsCategoryButton(),
                   iconName: R.image.coins_icon.name,
-                  iconColor: .systemOrange, persentage: 16),
+                  iconColor: "#FF9500",
+                  persentage: 16),
             .init(name: R.string.localizable.otherCategoryButton(),
                   iconName: R.image.other_icon.name,
-                  iconColor: .systemGray, persentage: 20)
+                  iconColor: "#8E8E93",  
+                  persentage: 20)
         ]
     }
     

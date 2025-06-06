@@ -9,13 +9,15 @@ import UIKit
 import DGCharts
 
 final class ExpensenView: UIView {
-    var categories: [CategoryDto] = []
-
+    var categories: [CategoryDto] = [] {
+        didSet {
+            setupCategoryViews()
+        }
+    }
+    
     var categoryViews: [CategoryItemView] = []
-    
-    var clickOnConfirmButton: (() -> Void)?
-    
-    lazy var titleLabel = UILabel.create(text: R.string.localizable.setupPersentLabel(), fontSize: FontSizeConstans.title, weight: .medium)
+        
+    lazy var titleLabel = UILabel.create(text: "Мои финансы", fontSize: FontSizeConstans.title, weight: .medium)
     
     private lazy var scrollView = UIScrollView.create()
     
@@ -33,11 +35,7 @@ final class ExpensenView: UIView {
     }()
         
     private lazy var categoryStack = UIStackView.create(stackSpacing: Constans.mediumStackSpacing)
-                                           
-    private lazy var confirmButton = UIButton.create(style: .yellow(title: R.string.localizable.confirmPersentButton())) { [weak self] in
-        self?.clickOnConfirmButton?()
-    }
-
+                                    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -54,12 +52,12 @@ final class ExpensenView: UIView {
     
     func setupCategoryViews() {
         categories.forEach { category in
-            let view = CategoryItemView(category: category, persentage: category.persentage, completion: nil)
+            let view = CategoryItemView(category: category, persentage: category.persentage, isSlider: false, completion: nil)
             categoryViews.append(view)
             categoryStack.addArrangedSubview(view)
             
             view.snp.makeConstraints { make in
-                make.height.equalTo(97)
+                make.height.equalTo(60)
             }
         }
     }
@@ -68,7 +66,7 @@ final class ExpensenView: UIView {
         
         addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addSubviews(pieChartView, categoryStack, confirmButton)
+        contentView.addSubviews(pieChartView, categoryStack)
         
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
@@ -89,13 +87,6 @@ final class ExpensenView: UIView {
             make.top.equalTo(pieChartView.snp.bottom).offset(Constans.insetLarge)
             make.leading.trailing.equalToSuperview().inset(Constans.insetMedium)
             
-        }
-        
-        confirmButton.snp.makeConstraints { make in
-            make.top.equalTo(categoryStack.snp.bottom).offset(Constans.insetMedium)
-            make.leading.trailing.equalToSuperview().inset(Constans.insetMedium)
-            make.height.equalTo(Constans.heightButton)
-            make.bottom.equalToSuperview().inset(Constans.insetTiny)
         }
     }
 }
