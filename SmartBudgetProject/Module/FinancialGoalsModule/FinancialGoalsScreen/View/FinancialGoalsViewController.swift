@@ -86,6 +86,7 @@ final class FinancialGoalsViewController: UIViewController {
                 guard let self else { return }
                 if let index = self.viewModel.financialGoals.firstIndex(where: { $0.id == goal.id }) {
                     self.viewModel.financialGoals[index] = goal
+                    viewModel.updateGoalToCoreDate(goal: goal)
                     self.updateDataSource()
                 }
             }
@@ -170,7 +171,7 @@ extension FinancialGoalsViewController {
         var snaphot = NSDiffableDataSourceSnapshot<TableSection, Goal>()
         snaphot.appendSections([.main])
         snaphot.appendItems(goals)
-        tableViewDataSource?.apply(snaphot, animatingDifferences: false)
+        tableViewDataSource?.apply(snaphot, animatingDifferences: true)
         
     }
 }

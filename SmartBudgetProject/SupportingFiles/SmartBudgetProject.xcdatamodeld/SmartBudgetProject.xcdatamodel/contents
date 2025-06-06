@@ -1,4 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23507" systemVersion="24D81" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="BudgetCategoryCD" representedClassName="BudgetCategoryCD" syncable="YES">
+        <attribute name="iconColor" attributeType="String"/>
+        <attribute name="iconName" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="limit" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="persentage" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="remaining" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="spent" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="budget" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BudgetCD" inverseName="budgetCategory" inverseEntity="BudgetCD"/>
+    </entity>
+    <entity name="BudgetCD" representedClassName="BudgetCD" syncable="YES">
+        <attribute name="income" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="budgetCategory" toMany="YES" deletionRule="Cascade" destinationEntity="BudgetCategoryCD" inverseName="budget" inverseEntity="BudgetCategoryCD"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCD" inverseName="budget" inverseEntity="UserCD"/>
+    </entity>
+    <entity name="FinancialGoalCD" representedClassName="FinancialGoalCD" syncable="YES">
+        <attribute name="deadline" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="recommendedMonthlySaving" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="savedAmount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="status" attributeType="String"/>
+        <attribute name="targetAmount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCD" inverseName="financialGoal" inverseEntity="UserCD"/>
+    </entity>
+    <entity name="UserCD" representedClassName="UserCD" syncable="YES">
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="password" attributeType="String"/>
+        <attribute name="phoneNumber" attributeType="String"/>
+        <relationship name="budget" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="BudgetCD" inverseName="user" inverseEntity="BudgetCD"/>
+        <relationship name="financialGoal" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FinancialGoalCD" inverseName="user" inverseEntity="FinancialGoalCD"/>
+    </entity>
 </model>

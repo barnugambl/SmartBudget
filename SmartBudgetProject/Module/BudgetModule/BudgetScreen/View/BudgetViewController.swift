@@ -42,7 +42,6 @@ final class BudgetViewController: UIViewController {
         viewModel.fetchBudget()
         setupRefreshControl()
         fetchNotification()
-        
     }
     
     private func setupRefreshControl() {

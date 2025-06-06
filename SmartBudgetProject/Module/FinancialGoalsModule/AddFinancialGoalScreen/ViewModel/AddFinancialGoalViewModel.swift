@@ -16,6 +16,7 @@ enum ErrorField {
 class AddFinancialGoalViewModel {
     let financialGoalService: FinancialGoalServiceProtocol
     private let userId: Int
+    private let coreDataService = CoreDataService.shared
     
     // Input
     @Published var name: String = ""
@@ -47,7 +48,7 @@ class AddFinancialGoalViewModel {
             return
         }
         
-        let goal = Goal(id: 20,
+        let goal = Goal(id: Int.random(in: 0...100_000),
                         name: name,
                         targetAmount: cleanAmountInt,
                         savedAmount: 0,
@@ -56,9 +57,10 @@ class AddFinancialGoalViewModel {
                         status: .inProgress)
         Task {
             do {
-                if (try await financialGoalService.createFinancialGoal(goal: goal.toRequset(userId: userId))) != nil {
+                if (try await financialGoalService.createFinancialGoal(goal: goal.toRequset(userId: userId))) == nil {
                     financialGoalService.successMessageSubject.send(R.string.localizable.goalCreateSuccess())
                     financialGoalService.addGoalSubject.send(goal)
+                    coreDataService.saveFinancialGoal(goal: goal)
                     completion(true)
                 } else {
                     errorMessage = R.string.localizable.goalGeneralError()

@@ -11,6 +11,7 @@ class EditFinancialGoalViewModel {
     let financialGoalService: FinancialGoalServiceProtocol
     private let userId: Int
     let goal: Goal
+    private let coreDataService = CoreDataService.shared
     
     // Input
     @Published var name: String = ""
@@ -55,7 +56,7 @@ class EditFinancialGoalViewModel {
         Task {
             do {
                 if (try await financialGoalService.updateFinancialGoal(userId: userId, goalId: updateGoal.id,
-                                                                       body: updateGoal.toRequset(userId: userId))) != nil {
+                                                                       body: updateGoal.toRequset(userId: userId))) == nil {
                     financialGoalService.successMessageSubject.send(R.string.localizable.goalUpdateSuccess())
                     financialGoalService.updateGoalSubject.send(updateGoal)
                     completion(true)

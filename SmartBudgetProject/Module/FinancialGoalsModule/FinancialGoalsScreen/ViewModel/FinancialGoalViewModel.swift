@@ -12,6 +12,7 @@ final class FinancialGoalViewModel {
     let financialGoalService: FinancialGoalServiceProtocol
     private var requestTimer: AnyCancellable?
     private var requestTask: Task<Void, Never>?
+    private var coreDataService = CoreDataService.shared
     let userId: Int
     
     @Published var isLoading: Bool = false
@@ -39,13 +40,36 @@ final class FinancialGoalViewModel {
     
     func fetchFinancialGoals() {
         performRequest(isLoading: \.isLoading, request: { [weak self] in
-            try await Task.sleep(nanoseconds: 3_000_000_000)
-            return try await self?.financialGoalService.loadMockGoals(userId: self?.userId ?? 0)
+            return try await self?.financialGoalService.fetchFinancialGoals(userId: self?.userId ?? 0)
         },
-                       completion: { [weak self] result in
-            self?.handleGoalsResult(result)
+        completion: { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let goals):
+                if let goals = goals {
+                    self.financialGoals = goals
+                    self.coreDataService.saveFinancialGoals(goals)
+                    self.requestTimer?.cancel()
+                } else {
+                    self.loadCachedGoals()
+                    self.handleError(R.string.localizable.goalGeneralError())
+                }
+            case .failure:
+                self.loadCachedGoals()
+                self.handleError(R.string.localizable.goalGeneralError())
+            }
+        })
+    }
+    
+    private func loadCachedGoals() {
+        let cachedGoals = coreDataService.getAllFinancialGoals()
+        if !cachedGoals.isEmpty {
+            self.financialGoals = cachedGoals
         }
-        )
+    }
+    
+    func updateGoalToCoreDate(goal: Goal) {
+        coreDataService.updateFinancialGoal(goal: goal)
     }
     
     func refreshFinancialGoals() {
@@ -55,9 +79,19 @@ final class FinancialGoalViewModel {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.performRequest(isLoading: \.isRefreshing, request: { [weak self] in
                 try await self?.financialGoalService.fetchFinancialGoals(userId: self?.userId ?? 0)
-            },
-                                 completion: { [weak self] result in
-                self?.handleGoalsResult(result)
+            }, completion: { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let goal):
+                    guard let goal else {
+                        self.handleError(R.string.localizable.goalGeneralError())
+                        return
+                    }
+                    self.financialGoals = goal
+                    self.coreDataService.saveFinancialGoals(goal)
+                case .failure:
+                    self.handleError(R.string.localizable.goalGeneralError())
+                }
             }
             )
         }
@@ -66,9 +100,11 @@ final class FinancialGoalViewModel {
     func deleteFinancialGoal(goalId: Int, userId: Int) {
         Task {
             do {
-                if try await financialGoalService.deleteFinancialGoal(userId: userId, goalId: goalId) != nil {
+                if try await financialGoalService.deleteFinancialGoal(userId: userId, goalId: goalId) == nil {
                     handleSuccess(R.string.localizable.goalDeleteSuccess()) {
                         self.financialGoals.removeAll(where: { $0.id == goalId })
+                        self.coreDataService.deleteFinancialGoal(by: Int64(goalId))
+                        
                     }
                 } else {
                     errorMessage = (R.string.localizable.goalGeneralError())
@@ -115,20 +151,6 @@ private extension FinancialGoalViewModel {
         self[keyPath: keyPath] = false
         handleError(R.string.localizable.goalTimeoutError())
         requestTask?.cancel()
-    }
-    
-    func handleGoalsResult(_ result: Result<[Goal]?, Error>) {
-        switch result {
-        case .success(let goals):
-            if let goals = goals {
-                financialGoals = goals
-                requestTimer?.cancel()
-            } else {
-                handleError(R.string.localizable.goalGeneralError())
-            }
-        case .failure(let error):
-            print("Ошибка: \(error.localizedDescription)")
-        }
     }
     
     func handleError(_ message: String) {

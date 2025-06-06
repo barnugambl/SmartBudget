@@ -10,6 +10,7 @@ import Foundation
 class AddMoneyFinancialGoalViewModel {
     let financialGoalService: FinancialGoalServiceProtocol
     private let userId: Int
+    private let coreDataService = CoreDataService.shared
     let goal: Goal
     
     // Input
@@ -52,7 +53,7 @@ class AddMoneyFinancialGoalViewModel {
         Task {
             do {
                 if (try await financialGoalService.updateFinancialGoal(userId: userId, goalId: goal.id,
-                                                                       body: updateGoal.toRequset(userId: userId))) != nil {
+                                                                       body: updateGoal.toRequset(userId: userId))) == nil {
                     financialGoalService.successMessageSubject.send(R.string.localizable.goalAddMoneySuccess())
                     financialGoalService.updateGoalSubject.send(updateGoal)
                     completion(true)

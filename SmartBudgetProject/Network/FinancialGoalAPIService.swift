@@ -7,6 +7,13 @@
 
 import Foundation
 
+protocol FinancialGoalAPIServiceProtocol {
+    func createFinancialGoal(goal: GoalRequest) async throws -> ServerMessageResponce
+    func getFinancialGoals(userId: Int) async throws -> [Goal]
+    func updateFinancialGoal(userId: Int, goalId: Int, request: GoalRequest) async throws -> ServerMessageResponce
+    func deleteFinancialGoal(userId: Int, goalId: Int) async throws -> ServerMessageResponce
+}
+
 final class FinancialGoalAPIService: FinancialGoalAPIServiceProtocol {
     let apiService: APIServiceProtocol
     
@@ -47,18 +54,5 @@ private extension FinancialGoalAPIService {
     
     func deleteGoalURL(userId: Int, goalId: Int) -> String {
         return "/goals/\(userId)/\(goalId)"
-    }
-}
-
-// MARK: Mock
-extension FinancialGoalAPIService {
-    func getMockFinancialGoal(userId: Int) async throws -> [Goal] {
-        guard let url = Bundle(for: type(of: self)).url(forResource: "financialgoal", withExtension: "json"),
-              let data = try? Data(contentsOf: url) else {
-            throw NSError(domain: "Tests", code: 1, userInfo: [NSLocalizedDescriptionKey: "Не удалось загрузить JSON файл"])
-        }
-        
-        let decoder = JSONDecoder()
-        return try decoder.decode([Goal].self, from: data)
     }
 }
