@@ -45,6 +45,22 @@ final class BudgetViewModel {
         })
     }
     
+    func startNotification() {
+        Task {
+            do {
+                let isRegistered = try await NotificationService.shared.registerForNotification()
+                if isRegistered {
+                    NotificationService.shared.startNotificationTimer()
+                } else {
+                    print("Нет доступа к уведомлениям")
+                }
+            } catch {
+                print("Ошибка в получение уведомлений: \(error.localizedDescription)")
+                
+            }
+        }
+    }
+    
     func refreshBudget() {
         guard !isRefreshing else { return }
         isRefreshing = true

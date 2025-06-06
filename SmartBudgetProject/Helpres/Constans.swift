@@ -58,5 +58,10 @@ enum URLConstans {
     static func updateBudgetURL(userId: Int) -> String {
         return "/budget/\(userId)"
     }
-    
+}
+
+enum URLConstansNotification {
+    static func getNotification(userId: Int) -> String {
+        return "/notifications/\(userId)"
+    }
 }

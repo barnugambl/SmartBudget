@@ -132,3 +132,9 @@
 "contextMenuDelete" = "Удалить";
 "contextMenuEdit" = "Изменить";
 "contextMenuAddMoney" = "Добавить деньги";
+
+// MARK: Noticiation
+"notification.warning.title" = "⚠️ Внимание";
+"notification.error.title" = "❌ Ошибка";
+"notification.info.title" = "Уведомление";
+"notification.category.subtitle" = "Категория: %@";

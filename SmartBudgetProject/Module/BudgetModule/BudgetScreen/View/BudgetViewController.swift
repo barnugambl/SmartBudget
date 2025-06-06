@@ -20,7 +20,7 @@ final class BudgetViewController: UIViewController {
     private var tableViewDataSource: UITableViewDiffableDataSource<BudgetCategoryTableSection, BudgetCategory>?
     private var cancellable: Set<AnyCancellable> = .init()
     weak var coordinator: ExpensesCoordinator?
-
+    
     init(viewModel: BudgetViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -41,15 +41,21 @@ final class BudgetViewController: UIViewController {
         budgetView.setupTableHeader()
         viewModel.fetchBudget()
         setupRefreshControl()
+        fetchNotification()
+        
     }
     
     private func setupRefreshControl() {
-          budgetView.refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-      }
-      
-      @objc private func handleRefresh() {
-          viewModel.refreshBudget()
-      }
+        budgetView.refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+    }
+    
+    @objc private func handleRefresh() {
+        viewModel.refreshBudget()
+    }
+    
+    private func fetchNotification() {
+        viewModel.startNotification()
+    }
     
     private func bindingViewModel() {
         viewModel.budgetService.budgetSubject

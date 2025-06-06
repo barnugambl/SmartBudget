@@ -29,7 +29,6 @@ final class LogViewConroller: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigation()
-       
     }
     
     private func setupNavigation() {

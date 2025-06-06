@@ -43,7 +43,6 @@ class SetupPersentageViewModel {
             return BudgetCategory(name: categoryDto.name, spent: 0, remaining: limit, limit: limit)
         }
         let budget = Budget(income: incomeInt, categories: budgetCategories)
-        let colors = categories.map({ $0.iconColor })
         
         budgetService.budgetSubject.send(budget)
         UserDefaultsService.shared.categoryDto = categories

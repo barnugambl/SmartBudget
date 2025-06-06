@@ -133,3 +133,9 @@ enter the 5-digit code specified in the SMS";
 "contextMenuDelete" = "Delete";
 "contextMenuEdit" = "Edit";
 "contextMenuAddMoney" = "Add money";
+
+// MARK: Notification
+"notification.warning.title" = "⚠️ Warning";
+"notification.error.title" = "❌ Error";
+"notification.info.title" = "Notification";
+"notification.category.subtitle" = "Category: %@";
