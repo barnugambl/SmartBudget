@@ -36,6 +36,7 @@ final class ProfileViewController: UIViewController {
         navigationItem.titleView = profileView.titleLabel
         
         let action = UIAction { [weak self] _ in
+            UserDefaultsService.shared.clearAuthData()
             self?.coordinator?.logout()
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Выйти", primaryAction: action)

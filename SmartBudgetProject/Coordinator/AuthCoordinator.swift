@@ -14,6 +14,7 @@ protocol AuthCoordinatorDelegate: AnyObject {
 final class AuthCoordinator: Coordinator {
     weak var delegate: AuthCoordinatorDelegate?
     private let moduleBulder = ModuleBulder()
+    private let loginBulder = LoginScreenBulder()
     var navigationController: UINavigationController
     
     var childCoordinators: [Coordinator] = []
@@ -35,7 +36,7 @@ final class AuthCoordinator: Coordinator {
     }
     
     func showLoginFlow() {
-        let loginVC = moduleBulder.makeLoginScreen()
+        let loginVC = loginBulder.makeLoginScreen()
         loginVC.coordinator = self
         navigationController.setViewControllers([loginVC], animated: true)
     }

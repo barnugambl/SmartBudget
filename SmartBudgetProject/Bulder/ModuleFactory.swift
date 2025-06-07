@@ -13,11 +13,6 @@ final class ModuleBulder {
         return RegViewConroller(viewModel: viewModel)
     }
     
-    func makeLoginScreen() -> LogViewConroller {
-        let viewModel = LogViewModel()
-        return LogViewConroller(viewModel: viewModel)
-    }
-    
     func makePasswordRecoveryScreen() -> PasswordRecoveryViewController {
         let viewModel = PasswordRecoveryViewModel()
         return PasswordRecoveryViewController(viewModel: viewModel)
