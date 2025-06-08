@@ -44,11 +44,17 @@ class SetupPersentageViewModel {
             return BudgetCategory(name: categoryDto.name, spent: 0, remaining: limit, limit: limit)
         }
         let budget = Budget(income: incomeInt, categories: budgetCategories)
+        let requestCategories = categories.map { $0.toRequest() }
         
         Task {
-            let requestCategory = categories.map({ $0.toRequset() })
-            let responce = try await budgetService.setupBudget(budget: BudgetRequest(userId: userId, income: incomeInt, categories: requestCategory))
-            if responce == nil {
+            let responce = try await budgetService.setupBudget(
+                budget: BudgetRequest(
+                    userId: userId,
+                    income: incomeInt,
+                    categories: requestCategories
+                )
+            )
+            if responce != nil {
                 budgetService.budgetSubject.send(budget)
                 do {
                     try coreDataService.saveBudget(income: incomeInt, categories: categories)

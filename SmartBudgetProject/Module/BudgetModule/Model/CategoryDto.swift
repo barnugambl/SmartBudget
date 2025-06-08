@@ -42,7 +42,7 @@ struct CategoryDto: Codable {
         ]
     }
     
-    func toRequset() -> Category {
+    func toRequest() -> Category {
         return Category(name: name, percentage: persentage)
     }
 }

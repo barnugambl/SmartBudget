@@ -8,40 +8,40 @@
 import Foundation
 
 protocol FinancialGoalAPIServiceProtocol {
-    func createFinancialGoal(goal: GoalRequest) async throws -> ServerMessageResponce
-    func getFinancialGoals(userId: Int) async throws -> [Goal]
-    func updateFinancialGoal(userId: Int, goalId: Int, request: GoalRequest) async throws -> ServerMessageResponce
-    func deleteFinancialGoal(userId: Int, goalId: Int) async throws -> ServerMessageResponce
+    func createFinancialGoal(userId: Int, goal: GoalRequest) async throws -> Goal?
+    func getFinancialGoals(userId: Int) async throws -> [Goal]?
+    func updateFinancialGoal(userId: Int, goalId: Int, request: GoalRequest) async throws -> Goal?
+    func deleteFinancialGoal(userId: Int, goalId: Int) async throws -> ServerMessageResponce?
 }
 
-final class FinancialGoalAPIService: FinancialGoalAPIServiceProtocol {
+final class FinancialGoalAPIService: FinancialGoalAPIServiceProtocol {    
     let apiService: APIServiceProtocol
     
     init(apiService: APIServiceProtocol) {
         self.apiService = apiService
     }
     
-    func createFinancialGoal(goal: GoalRequest) async throws -> ServerMessageResponce {
-        try await apiService.post(endpoint: createGoalURL, body: goal)
+    func createFinancialGoal(userId: Int, goal: GoalRequest) async throws -> Goal? {
+        try await apiService.post(endpoint: createGoalURL(userId: userId), body: goal)
     }
     
-    func getFinancialGoals(userId: Int) async throws -> [Goal] {
+    func getFinancialGoals(userId: Int) async throws -> [Goal]? {
         try await apiService.get(endpoint: getGoalsURL(userId: userId), parameters: nil)
     }
     
-    func updateFinancialGoal(userId: Int, goalId: Int, request: GoalRequest) async throws -> ServerMessageResponce {
+    func updateFinancialGoal(userId: Int, goalId: Int, request: GoalRequest) async throws -> Goal? {
         try await apiService.put(endpoint: updateGoalURL(userId: userId, goalId: goalId), body: request)
     }
     
-    func deleteFinancialGoal(userId: Int, goalId: Int) async throws -> ServerMessageResponce {
+    func deleteFinancialGoal(userId: Int, goalId: Int) async throws -> ServerMessageResponce? {
         try await apiService.delete(endpoint: deleteGoalURL(userId: userId, goalId: goalId))
     }
 }
 
 // MARK: URL
 private extension FinancialGoalAPIService {
-    var createGoalURL: String {
-        return "/goals"
+    func createGoalURL(userId: Int) -> String {
+        return "/goals/\(userId)"
     }
     
     func getGoalsURL(userId: Int) -> String {

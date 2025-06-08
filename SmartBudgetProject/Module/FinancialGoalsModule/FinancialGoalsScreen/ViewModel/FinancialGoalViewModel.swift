@@ -44,21 +44,19 @@ final class FinancialGoalViewModel {
         },
         completion: { [weak self] result in
             guard let self else { return }
+            self.requestTimer?.cancel()
             switch result {
             case .success(let goals):
                 if let goals = goals {
                     self.financialGoals = goals
                     self.coreDataService.saveFinancialGoals(goals)
-                    self.requestTimer?.cancel()
                 } else {
                     self.loadCachedGoals()
                     self.handleError(R.string.localizable.goalGeneralError())
-                    self.requestTimer?.cancel()
                 }
             case .failure:
                 self.loadCachedGoals()
                 self.handleError(R.string.localizable.goalGeneralError())
-                self.requestTimer?.cancel()
             }
         })
     }
@@ -77,24 +75,22 @@ final class FinancialGoalViewModel {
     func refreshFinancialGoals() {
         guard !isRefreshing else { return }
         isRefreshing = true
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.performRequest(isLoading: \.isRefreshing, request: { [weak self] in
                 try await self?.financialGoalService.fetchFinancialGoals(userId: self?.userId ?? 0)
             }, completion: { [weak self] result in
                 guard let self else { return }
+                self.requestTimer?.cancel()
                 switch result {
                 case .success(let goal):
                     guard let goal else {
                         self.handleError(R.string.localizable.goalGeneralError())
-                        self.requestTimer?.cancel()
                         return
                     }
                     self.financialGoals = goal
                     self.coreDataService.saveFinancialGoals(goal)
                 case .failure:
                     self.handleError(R.string.localizable.goalGeneralError())
-                    self.requestTimer?.cancel()
                 }
             }
             )
@@ -104,9 +100,9 @@ final class FinancialGoalViewModel {
     func deleteFinancialGoal(goalId: Int, userId: Int) {
         Task {
             do {
-                if try await financialGoalService.deleteFinancialGoal(userId: userId, goalId: goalId) == nil {
+                if try await financialGoalService.deleteFinancialGoal(userId: userId, goalId: goalId) != nil {
                     handleSuccess(R.string.localizable.goalDeleteSuccess()) {
-                        self.financialGoals.removeAll(where: { $0.id == goalId })
+                        self.financialGoals.removeAll(where: { $0.goalId == goalId })
                         self.coreDataService.deleteFinancialGoal(by: Int64(goalId))
                         
                     }
@@ -118,6 +114,7 @@ final class FinancialGoalViewModel {
             }
         }
     }
+    
 }
 
 private extension FinancialGoalViewModel {
@@ -126,8 +123,10 @@ private extension FinancialGoalViewModel {
         request: @escaping () async throws -> T?,
         completion: @escaping (Result<T?, Error>) -> Void
     ) {
+        errorMessage = nil
         self[keyPath: keyPath] = true
-        
+        setupRequestTimer(keyPath: keyPath)
+
         requestTask = Task {
             do {
                 let result = try await request()
@@ -138,8 +137,6 @@ private extension FinancialGoalViewModel {
             self[keyPath: keyPath] = false
             self.finishLoading?()
         }
-        
-        setupRequestTimer(keyPath: keyPath)
     }
     
     func setupRequestTimer(keyPath: ReferenceWritableKeyPath<FinancialGoalViewModel, Bool>) {

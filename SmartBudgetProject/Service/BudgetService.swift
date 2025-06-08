@@ -14,7 +14,7 @@ protocol BudgetServiceProtocol {
     var updateColorSubject: CurrentValueSubject<(String, String)?, Never> { get }
     
     func fetchBudget(userId: Int) async throws -> Budget?
-    func setupBudget(budget: BudgetRequest) async throws -> ServerMessageResponce?
+    func setupBudget(budget: BudgetRequest) async throws -> Budget?
     func updateBudget(userId: Int, income: Int) async throws -> ServerMessageResponce?
     func mockFetchBudget() async throws -> Budget?
 }
@@ -43,7 +43,7 @@ extension BudgetService {
         }
     }
     
-    func setupBudget(budget: BudgetRequest) async throws -> ServerMessageResponce? {
+    func setupBudget(budget: BudgetRequest) async throws -> Budget? {
         do {
             return try await budgetAPIService.setupBudget(budget: budget)
         } catch {

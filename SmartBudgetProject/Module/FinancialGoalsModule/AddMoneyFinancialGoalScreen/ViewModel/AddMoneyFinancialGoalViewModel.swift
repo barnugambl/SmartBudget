@@ -43,17 +43,17 @@ class AddMoneyFinancialGoalViewModel {
         }
         let savedAmount = min((goal.savedAmount + cleanAmountInt), goal.targetAmount)
         let status = checkStatus(goal: goal)
-        let updateGoal = Goal(id: goal.id,
+        let updateGoal = Goal(goalId: goal.goalId,
+                              userId: userId,
                               name: goal.name,
                               targetAmount: goal.targetAmount,
                               savedAmount: savedAmount,
-                              recommendedMonthlySaving: goal.recommendedMonthlySaving,
                               deadline: goal.deadline,
                               status: status)
         Task {
             do {
-                if (try await financialGoalService.updateFinancialGoal(userId: userId, goalId: goal.id,
-                                                                       body: updateGoal.toRequset(userId: userId))) == nil {
+                if (try await financialGoalService.updateFinancialGoal(userId: userId, goalId: goal.goalId,
+                                                                       body: updateGoal.toRequset(userId: userId))) != nil {
                     financialGoalService.successMessageSubject.send(R.string.localizable.goalAddMoneySuccess())
                     financialGoalService.updateGoalSubject.send(updateGoal)
                     completion(true)

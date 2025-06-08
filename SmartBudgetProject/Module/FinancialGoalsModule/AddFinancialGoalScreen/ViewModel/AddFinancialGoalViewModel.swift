@@ -47,20 +47,18 @@ class AddFinancialGoalViewModel {
             completion(false)
             return
         }
-        
-        let goal = Goal(id: Int.random(in: 0...100_000),
-                        name: name,
-                        targetAmount: cleanAmountInt,
-                        savedAmount: 0,
-                        recommendedMonthlySaving: 0,
-                        deadline: dateServerFormat,
-                        status: .inProgress)
+        let goal = GoalRequest(
+            userId: userId,
+            name: name,
+            targetAmount: cleanAmountInt,
+            deadline: dateServerFormat)
         Task {
             do {
-                if (try await financialGoalService.createFinancialGoal(goal: goal.toRequset(userId: userId))) == nil {
+                let responce = try await financialGoalService.createFinancialGoal(userId: userId, goal: goal)
+                if let responce {
                     financialGoalService.successMessageSubject.send(R.string.localizable.goalCreateSuccess())
-                    financialGoalService.addGoalSubject.send(goal)
-                    coreDataService.saveFinancialGoal(goal: goal)
+                    financialGoalService.addGoalSubject.send(responce)
+                    coreDataService.saveFinancialGoal(goal: responce)
                     completion(true)
                 } else {
                     errorMessage = R.string.localizable.goalGeneralError()

@@ -44,11 +44,11 @@ extension FinancialGoalCD {
             return nil
         }
         return Goal(
-            id: Int(id),
+            goalId: Int(id),
+            userId: Int(user?.id ?? 0),
             name: name,
             targetAmount: Int(targetAmount),
             savedAmount: Int(savedAmount),
-            recommendedMonthlySaving: Int(recommendedMonthlySaving),
             deadline: deadline,
             status: status
         )

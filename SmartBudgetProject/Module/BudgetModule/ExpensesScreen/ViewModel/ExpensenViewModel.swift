@@ -27,6 +27,7 @@ final class ExpensenViewModel {
     func initCategories() -> [CategoryDto] {
         let budget = getBudget()
         guard let budget else { return [] }
+        print(budget)
         return budget.categories.map({ budgetCategory in
             return CategoryDto(
                 name: budgetCategory.name,

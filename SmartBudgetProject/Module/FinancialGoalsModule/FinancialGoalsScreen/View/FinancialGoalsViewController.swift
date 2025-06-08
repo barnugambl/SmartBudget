@@ -84,7 +84,7 @@ final class FinancialGoalsViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] goal in
                 guard let self else { return }
-                if let index = self.viewModel.financialGoals.firstIndex(where: { $0.id == goal.id }) {
+                if let index = self.viewModel.financialGoals.firstIndex(where: { $0.goalId == goal.goalId }) {
                     self.viewModel.financialGoals[index] = goal
                     viewModel.updateGoalToCoreDate(goal: goal)
                     self.updateDataSource()
@@ -186,7 +186,8 @@ extension FinancialGoalsViewController: UITableViewDelegate {
             if goal.status == .inProgress {
                 let deleteAction = UIAction(title: R.string.localizable.contextMenuDelete(),
                                             image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
-                    self?.viewModel.deleteFinancialGoal(goalId: goal.id, userId: 1)
+                    guard let self else { return }
+                    self.viewModel.deleteFinancialGoal(goalId: goal.goalId, userId: self.viewModel.userId)
                 }
                 
                 let editAction = UIAction(title: R.string.localizable.contextMenuEdit(),
@@ -203,7 +204,7 @@ extension FinancialGoalsViewController: UITableViewDelegate {
             } else {
                 let deleteAction = UIAction(title: R.string.localizable.contextMenuDelete(),
                                             image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
-                    self?.viewModel.deleteFinancialGoal(goalId: goal.id, userId: 1)
+                    self?.viewModel.deleteFinancialGoal(goalId: goal.goalId, userId: 1)
                 }
                 return UIMenu(title: "", children: [deleteAction])
             }

@@ -15,11 +15,11 @@ enum FinancialGoalStatus: String, Codable {
 }
 
 struct Goal: Codable, Hashable {
-    let id: Int
+    let goalId: Int
+    let userId: Int
     let name: String
     let targetAmount: Int
     let savedAmount: Int
-    let recommendedMonthlySaving: Int
     let deadline: String
     let status: FinancialGoalStatus
     
@@ -31,11 +31,11 @@ struct Goal: Codable, Hashable {
 extension Goal {
     func toFinancialGoalCD(context: NSManagedObjectContext) -> FinancialGoalCD {
         let goalCD = FinancialGoalCD(context: context)
-        goalCD.id = Int64(id)
+        goalCD.id = Int64(goalId)
+        goalCD.user?.id = Int64(userId)
         goalCD.name = name
         goalCD.targetAmount = Int32(targetAmount)
         goalCD.savedAmount = Int32(savedAmount)
-        goalCD.recommendedMonthlySaving = Int32(recommendedMonthlySaving)
         goalCD.deadline = deadline
         goalCD.status = status.rawValue
         return goalCD
@@ -45,7 +45,6 @@ extension Goal {
         goalCD.name = name
         goalCD.targetAmount = Int32(targetAmount)
         goalCD.savedAmount = Int32(savedAmount)
-        goalCD.recommendedMonthlySaving = Int32(recommendedMonthlySaving)
         goalCD.deadline = deadline
         goalCD.status = status.rawValue
     }

@@ -9,4 +9,9 @@ import Foundation
 
 struct ServerMessageResponce: Decodable {
     let message: String
+    
+    init(from decoder: Decoder) throws {
+           let container = try decoder.singleValueContainer()
+            message = try container.decode(String.self)
+       }
 }

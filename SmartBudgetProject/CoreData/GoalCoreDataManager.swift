@@ -64,11 +64,11 @@ final class GoalCoreDataManager {
     }
     
     func updateFinancialGoal(goal: Goal) {
-        if let goalCD = getFinancialGoalCD(by: Int64(goal.id)) {
+        if let goalCD = getFinancialGoalCD(by: Int64(goal.goalId)) {
             goalCD.name = goal.name
+            goalCD.user?.id = Int64(goal.userId)
             goalCD.targetAmount = Int32(goal.targetAmount)
             goalCD.savedAmount = Int32(goal.savedAmount)
-            goalCD.recommendedMonthlySaving = Int32(goal.recommendedMonthlySaving)
             goalCD.deadline = goal.deadline
             goalCD.status = goal.status.rawValue
             saveContext()
@@ -91,11 +91,11 @@ final class GoalCoreDataManager {
     func saveFinancialGoal(goal: Goal) {
         let entity = FinancialGoalCD.entity()
         let goalCD = FinancialGoalCD(entity: entity, insertInto: viewContext)
-        goalCD.id = Int64(goal.id)
+        goalCD.id = Int64(goal.goalId)
+        goalCD.user?.id = Int64(goal.userId)
         goalCD.name = goal.name
         goalCD.targetAmount = Int32(goal.targetAmount)
         goalCD.savedAmount = Int32(goal.savedAmount)
-        goalCD.recommendedMonthlySaving = Int32(goal.recommendedMonthlySaving)
         goalCD.deadline = goal.deadline
         goalCD.status = goal.status.rawValue
         goalCD.user = nil

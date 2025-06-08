@@ -13,8 +13,8 @@ protocol FinancialGoalServiceProtocol {
     var updateGoalSubject: PassthroughSubject<Goal, Never> { get }
     var addGoalSubject: PassthroughSubject<Goal, Never> { get }
     
-    func createFinancialGoal(goal: GoalRequest) async throws -> ServerMessageResponce?
-    func updateFinancialGoal(userId: Int, goalId: Int, body: GoalRequest) async throws -> ServerMessageResponce?
+    func createFinancialGoal(userId: Int, goal: GoalRequest) async throws -> Goal?
+    func updateFinancialGoal(userId: Int, goalId: Int, body: GoalRequest) async throws -> Goal?
     func fetchFinancialGoals(userId: Int) async throws -> [Goal]?
     func deleteFinancialGoal(userId: Int, goalId: Int) async throws -> ServerMessageResponce?
     func loadMockGoals(userId: Int) async throws -> [Goal]?
@@ -35,16 +35,16 @@ class FinancialGoalService: FinancialGoalServiceProtocol {
 
 // MARK: API
 extension FinancialGoalService {
-    func createFinancialGoal(goal: GoalRequest) async throws -> ServerMessageResponce? {
+    func createFinancialGoal(userId: Int, goal: GoalRequest) async throws -> Goal? {
         do {
-            return try await financialGoalAPIService.createFinancialGoal(goal: goal)
+            return try await financialGoalAPIService.createFinancialGoal(userId: userId, goal: goal)
         } catch {
             print("Не удалось создать цель: \(error)")
             return nil
         }
     }
     
-    func updateFinancialGoal(userId: Int, goalId: Int, body: GoalRequest) async throws -> ServerMessageResponce? {
+    func updateFinancialGoal(userId: Int, goalId: Int, body: GoalRequest) async throws -> Goal? {
         do {
             return try await financialGoalAPIService.updateFinancialGoal(userId: userId, goalId: goalId, request: body)
         } catch {

@@ -45,20 +45,13 @@ class EditFinancialGoalViewModel {
             completion(false)
             return
         }
-        
-        let updateGoal = Goal(id: goal.id,
-                              name: name,
-                              targetAmount: cleanAmountInt,
-                              savedAmount: goal.savedAmount,
-                              recommendedMonthlySaving: goal.recommendedMonthlySaving,
-                              deadline: dateString,
-                              status: goal.status)
+        let updateGoal = GoalRequest(userId: userId, name: name, targetAmount: cleanAmountInt, deadline: dateString)
         Task {
             do {
-                if (try await financialGoalService.updateFinancialGoal(userId: userId, goalId: updateGoal.id,
-                                                                       body: updateGoal.toRequset(userId: userId))) == nil {
+                let responce = try await financialGoalService.updateFinancialGoal(userId: userId, goalId: goal.goalId, body: updateGoal)
+                if let responce {
                     financialGoalService.successMessageSubject.send(R.string.localizable.goalUpdateSuccess())
-                    financialGoalService.updateGoalSubject.send(updateGoal)
+                    financialGoalService.updateGoalSubject.send(responce)
                     completion(true)
                 } else {
                     errorMessage = R.string.localizable.goalGeneralError()

@@ -9,14 +9,15 @@ import Foundation
 
 final class BudgetScreenBulder {
     private let budgetService = BudgetService.shared
-    
+    private let currentUserId = Int(UserCoreDataManager.shared.getCurrentUser()?.id ?? 0)
     private init() {}
     
     static let shared = BudgetScreenBulder()
     
     func makeBudgetScreen() -> BudgetViewController {
-        let viewModel = BudgetViewModel(userId: 1, budgetService: budgetService)
+        let viewModel = BudgetViewModel(userId: currentUserId, budgetService: budgetService)
         return BudgetViewController(viewModel: viewModel)
+        
     }
     
     func makeInitialBudgetScreen() -> InitialBudgetViewController {
@@ -25,7 +26,7 @@ final class BudgetScreenBulder {
     }
     
     func makeSetupPersentScreen() -> SetupPersentageViewController {
-        let viewModel = SetupPersentageViewModel(budgetService: budgetService, userId: 1)
+        let viewModel = SetupPersentageViewModel(budgetService: budgetService, userId: currentUserId)
         return SetupPersentageViewController(viewModel: viewModel)
     }
     

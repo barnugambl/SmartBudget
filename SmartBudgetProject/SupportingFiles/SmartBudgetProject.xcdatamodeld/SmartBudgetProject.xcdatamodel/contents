@@ -20,7 +20,6 @@
         <attribute name="deadline" attributeType="String"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
-        <attribute name="recommendedMonthlySaving" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="savedAmount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="status" attributeType="String"/>
         <attribute name="targetAmount" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>

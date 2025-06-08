@@ -22,6 +22,7 @@ final class NotificationService: NSObject, NotificationServiceProtocol {
     private let notification = UNMutableNotificationContent()
     private var notificationTimer: Timer?
     private var notificationInterval: TimeInterval = 900
+    private let currentUserId = Int(UserCoreDataManager.shared.getCurrentUser()?.id ?? 0)
     
     init(notificationAPIService: NotificationAPIServiceProtocol) {
         self.notificationAPIService = notificationAPIService
@@ -57,7 +58,7 @@ final class NotificationService: NSObject, NotificationServiceProtocol {
     
     func showNotification() async {
         do {
-            let fetchNotifications = try await fetchNotification(userId: 1)
+            let fetchNotifications = try await fetchNotification(userId: currentUserId)
             guard let notifications = fetchNotifications else { return }
             
             for (index, notificationData) in notifications.enumerated() {

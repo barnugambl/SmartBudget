@@ -7,6 +7,12 @@
 
 import Foundation
 
+protocol BudgetAPIServiceProtocol {
+    func setupBudget(budget: BudgetRequest) async throws -> Budget?
+    func getBudget(userId: Int) async throws -> Budget?
+    func updateBudget(userId: Int, income: Int) async throws -> ServerMessageResponce?
+}
+
 final class BudgetAPIService: BudgetAPIServiceProtocol {
     private let apiService: APIServiceProtocol
     
@@ -14,11 +20,11 @@ final class BudgetAPIService: BudgetAPIServiceProtocol {
         self.apiService = apiService
     }
     
-    func setupBudget(budget: BudgetRequest) async throws -> ServerMessageResponce? {
+    func setupBudget(budget: BudgetRequest) async throws -> Budget? {
         try await apiService.post(endpoint: URLConstansBudget.setupBudgetURL, body: budget)
     }
     
-    func getBudget(userId: Int) async throws -> Budget {
+    func getBudget(userId: Int) async throws -> Budget? {
         try await apiService.get(endpoint: URLConstansBudget.getBudgetURL(userId: userId), parameters: nil)
     }
     

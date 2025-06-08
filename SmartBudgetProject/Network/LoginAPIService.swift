@@ -7,6 +7,20 @@
 
 import Foundation
 
+enum UserError: Error {
+    case userNotFound
+    
+    var localizedDescription: String {
+        switch self {
+        case .userNotFound: return "Пользователь не найден"
+        }
+    }
+}
+
+protocol LoginAPIServiceProtocol {
+    func getUser(loginForm: LoginForm) async throws -> AuthResponse
+}
+
 final class LoginAPIService: LoginAPIServiceProtocol {
     private let apiService: APIServiceProtocol
     
