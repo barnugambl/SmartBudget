@@ -42,7 +42,7 @@ final class ModuleBulder {
         return AddFinancialGoalViewController(viewModel: viewModel)
     }
     
-    func makeAddMoneyFinancialGoalScreen(viewModel: FinancialGoalViewModel, nameGoal: String) -> AddMoneyFinancialGoalViewController {
+    func makeAddMoneyFinancialGoalScreen(viewModel: FinancialGoalViewModel, nameGoal: String, userId: Int) -> AddMoneyFinancialGoalViewController {
         return AddMoneyFinancialGoalViewController(viewModel: viewModel, nameGoal: nameGoal)
     }
     

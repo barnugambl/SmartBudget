@@ -13,13 +13,13 @@ enum TableSection {
     case main
 }
 
-class FinancialGoalsViewController: UIViewController {
+final class FinancialGoalsViewController: UIViewController {
     private var viewModel: FinancialGoalViewModel
     private var financialGoalsView = FinancialGoalsView()
-    private var tableViewDataSource: UITableViewDiffableDataSource<TableSection, FinancialGoal>?
+    private var tableViewDataSource: UITableViewDiffableDataSource<TableSection, Goal>?
     private var cancellables = Set<AnyCancellable>()
     weak var coordinator: FinancialGoalCoordinator?
-
+    
     init(viewModel: FinancialGoalViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -32,7 +32,7 @@ class FinancialGoalsViewController: UIViewController {
     override func loadView() {
         view = financialGoalsView
     }
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDataSource()
@@ -41,17 +41,57 @@ class FinancialGoalsViewController: UIViewController {
         bindViewModel()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.resetMessages()
+        viewModel.fetchFinancialGoals()
+    }
+    
     private func bindViewModel() {
         viewModel.$financialGoals
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.updateDataSource()
+                guard let self else { return }
+                self.updateDataSource()
+                if !self.viewModel.isLoading {
+                    self.financialGoalsView.showTable()
+                }
             }
             .store(in: &cancellables)
+        
+        viewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
+                guard let self else { return }
+                if isLoading {
+                    self.financialGoalsView.financialGoalsTableView.isHidden = true
+                    self.financialGoalsView.loadIndicator.startAnimating()
+                } else {
+                    self.financialGoalsView.loadIndicator.stopAnimating()
+                }
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$successMessage
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink { [weak self] message in
+                CustomToastView.showSuccessToast(on: self?.view ?? UIView(), message: message, duration: 0.5)
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$errorMessage
+            .receive(on: DispatchQueue.main)
+            .compactMap({ $0 })
+            .sink { [weak self] message in
+                CustomToastView.showSuccessToast(on: self?.view ?? UIView(), message: message, duration: 1.5,
+                                                 backgroundColor: UIColor.systemRed.withAlphaComponent(0.9)) }
+            .store(in: &cancellables)
     }
-    
+
     private func setupNavigationBar() {
-        let titleLabel = UILabel.create(text: "Мои финансовые цели", fontSize: FontSizeConstans.title, weight: .medium)
+        let titleLabel = UILabel.create(text: R.string.localizable.financialGoalsLabel(), fontSize: FontSizeConstans.title,
+                                        weight: .medium)
         navigationItem.titleView = titleLabel
         
         let action = UIAction { [weak self] _ in
@@ -85,7 +125,7 @@ extension FinancialGoalsViewController {
     
     private func updateDataSource() {
         let goals = viewModel.financialGoals
-        var snaphot = NSDiffableDataSourceSnapshot<TableSection, FinancialGoal>()
+        var snaphot = NSDiffableDataSourceSnapshot<TableSection, Goal>()
         snaphot.appendSections([.main])
         snaphot.appendItems(goals)
         tableViewDataSource?.apply(snaphot)
@@ -97,6 +137,6 @@ extension FinancialGoalsViewController {
 extension FinancialGoalsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let currentItem = viewModel.financialGoals[indexPath.row]
-        coordinator?.showAddMoneyFinancialGoalFlow(nameGoal: currentItem.name)
+        coordinator?.showAddMoneyFinancialGoalFlow(nameGoal: currentItem.name, userId: viewModel.userId)
     }
 }

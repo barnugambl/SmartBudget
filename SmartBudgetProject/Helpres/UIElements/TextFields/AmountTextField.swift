@@ -48,9 +48,7 @@ final class AmountTextField: UITextField {
 extension AmountTextField: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
         guard let currentText = textField.text else { return false }
-        
         let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
         let cleanText = newText.replacingOccurrences(of: "\\D", with: "", options: .regularExpression)
         
@@ -58,6 +56,7 @@ extension AmountTextField: UITextFieldDelegate {
         
         let formatted = formatAmount(cleanText)
         textField.text = formatted
+        textField.notifyTextChanged()
         
         if let newCursorPosition = calculateCursorPosition(in: textField, offsetFromEnd: formatted.count - (cleanText.isEmpty ? 0 : 2)) {
             textField.selectedTextRange = newCursorPosition

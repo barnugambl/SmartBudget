@@ -23,4 +23,21 @@ extension Date {
         return formatter.date(from: string)
     }
 }
+extension Date {
+    static func convertToServerFormat(from input: String) -> String? {
+        let cleaned = input.replacingOccurrences(of: "\u{202F}г.", with: "").trimmingCharacters(in: .whitespaces)
+
+        let inputFormatter = DateFormatter()
+        inputFormatter.locale = Locale(identifier: "ru_RU")
+        inputFormatter.dateFormat = "d MMMM yyyy"
+
+        guard let date = inputFormatter.date(from: cleaned) else {
+            return nil
+        }
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "yyyy-MM-dd"
+        return outputFormatter.string(from: date)
+    }
+}
 

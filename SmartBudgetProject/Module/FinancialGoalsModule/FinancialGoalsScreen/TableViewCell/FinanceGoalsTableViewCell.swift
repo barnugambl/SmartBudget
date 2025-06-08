@@ -22,7 +22,6 @@ class FinanceGoalsTableViewCell: UITableViewCell {
     private lazy var progressBar: UIProgressView = {
         let bar = UIProgressView()
         bar.progressTintColor = UIColor(hex: ColorConstans.yellow)
-        bar.progress = 0
         bar.layer.cornerRadius = Constans.cornerRadiusSmall
         return bar
     }()
@@ -73,24 +72,24 @@ class FinanceGoalsTableViewCell: UITableViewCell {
         }
     }
     
-    func configureCell(finacialGoal: FinancialGoal) {
+    func configureCell(finacialGoal: Goal) {
         nameGoalLabel.text = finacialGoal.name
-        budgetGoalLabel.text = finacialGoal.sum + " ₽"
-        dateGoalLabel.text = "\(R.string.localizable.dateGoalLabel()) \(Date.formated(date: finacialGoal.date))"
-        switch finacialGoal.executionProcess {
+        budgetGoalLabel.text = "\(finacialGoal.targetAmount) ₽"
+        dateGoalLabel.text = "\(R.string.localizable.dateGoalLabel()) \(finacialGoal.deadline)"
+        let progress = min(Float(finacialGoal.savedAmount) / Float(finacialGoal.targetAmount), 1.0)
+        progressBar.setProgress(progress, animated: false)
+        
+        switch finacialGoal.status {
         case .completed:
             resultLabel.isHidden = false
             resultLabel.text = R.string.localizable.positiveResult()
             resultLabel.textColor = .systemGreen
-            progressBar.progress = 1
         case .failed:
             resultLabel.isHidden = false
             resultLabel.text = R.string.localizable.negativeResult()
             resultLabel.textColor = .systemRed
-            progressBar.progress = 0
-        case .progress:
+        case .inProgress:
             resultLabel.isHidden = true
-            progressBar.setProgress(0.7, animated: false)
         }
     }
 }
