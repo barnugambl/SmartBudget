@@ -46,3 +46,42 @@ extension BudgetCD {
 extension BudgetCD: Identifiable {
 
 }
+
+extension BudgetCD {
+    func toBudget() -> Budget {
+        let categoriesArray = categoriesArray
+        let categories = categoriesArray.map { categoryCD in
+            BudgetCategory(
+                name: categoryCD.name ?? "",
+                spent: Int(categoryCD.spent),
+                remaining: Int(categoryCD.remaining),
+                limit: Int(categoryCD.limit)
+            )
+        }
+        
+        return Budget(
+            income: Int(income),
+            categories: categories
+        )
+    }
+}
+
+extension BudgetCD {
+    var categories: Set<BudgetCategoryCD> {
+        get {
+            budgetCategory as? Set<BudgetCategoryCD> ?? []
+        }
+        set {
+            budgetCategory = newValue as NSSet
+        }
+    }
+    
+    var categoriesArray: [BudgetCategoryCD] {
+        get {
+            (budgetCategory?.allObjects as? [BudgetCategoryCD]) ?? []
+        }
+        set {
+            budgetCategory = NSSet(array: newValue)
+        }
+    }
+}

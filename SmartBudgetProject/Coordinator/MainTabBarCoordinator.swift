@@ -49,8 +49,4 @@ final class MainTabBarCoordinator: Coordinator {
         tabBarController.viewControllers = [expensesNC, financialGoalNC, profileNC]
         tabBarController.setupTabBar()
     }
-    
-    deinit {
-        print("Main dead")
-    }
 }

@@ -27,9 +27,9 @@
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserCD" inverseName="financialGoal" inverseEntity="UserCD"/>
     </entity>
     <entity name="UserCD" representedClassName="UserCD" syncable="YES">
+        <attribute name="accessToken" attributeType="String"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="password" attributeType="String"/>
-        <attribute name="phoneNumber" attributeType="String"/>
+        <attribute name="refreshToken" attributeType="String"/>
         <relationship name="budget" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="BudgetCD" inverseName="user" inverseEntity="BudgetCD"/>
         <relationship name="financialGoal" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="FinancialGoalCD" inverseName="user" inverseEntity="FinancialGoalCD"/>
     </entity>

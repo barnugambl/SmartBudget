@@ -12,7 +12,7 @@ final class FinancialGoalViewModel {
     let financialGoalService: FinancialGoalServiceProtocol
     private var requestTimer: AnyCancellable?
     private var requestTask: Task<Void, Never>?
-    private var coreDataService = CoreDataService.shared
+    private var coreDataService = GoalCoreDataManager.shared
     let userId: Int
     
     @Published var isLoading: Bool = false
@@ -53,10 +53,12 @@ final class FinancialGoalViewModel {
                 } else {
                     self.loadCachedGoals()
                     self.handleError(R.string.localizable.goalGeneralError())
+                    self.requestTimer?.cancel()
                 }
             case .failure:
                 self.loadCachedGoals()
                 self.handleError(R.string.localizable.goalGeneralError())
+                self.requestTimer?.cancel()
             }
         })
     }
@@ -85,12 +87,14 @@ final class FinancialGoalViewModel {
                 case .success(let goal):
                     guard let goal else {
                         self.handleError(R.string.localizable.goalGeneralError())
+                        self.requestTimer?.cancel()
                         return
                     }
                     self.financialGoals = goal
                     self.coreDataService.saveFinancialGoals(goal)
                 case .failure:
                     self.handleError(R.string.localizable.goalGeneralError())
+                    self.requestTimer?.cancel()
                 }
             }
             )

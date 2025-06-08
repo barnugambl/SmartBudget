@@ -15,6 +15,7 @@ enum ErrorFieldLogin {
 
 final class LoginViewModel {
     private let loginService: LoginServiceProtocol
+    private let coreDataManager = UserCoreDataManager.shared
     
     // Input
     @Published var phoneNumber: String = ""
@@ -44,10 +45,9 @@ final class LoginViewModel {
         Task {
             do {
                 if let responce = try await loginService.getUsers(loginForm: loginForm) {
-                    UserDefaultsService.shared.isFirstLaunch = true
-                    UserDefaultsService.shared.saveAuthData(userId: responce.userId,
-                                                            accessToken: responce.jwtTokenPairDto.accessToken,
-                                                            refreshToken: responce.jwtTokenPairDto.refreshToken)
+                    UserDefaultsService.shared.isLogged = true
+                    print(UserDefaultsService.shared.isLogged)
+                    coreDataManager.saveUser(response: responce)
                     completion(true)
                 } else {
                     errorMessage = "Не верный логин или пароль"

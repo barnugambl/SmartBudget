@@ -13,7 +13,8 @@ final class BudgetViewModel {
     let budgetService: BudgetServiceProtocol
     private var requestTimer: AnyCancellable?
     private var requestTask: Task<Void, Never>?
-   
+    private let coreDataService = BudgetCoreDataManager.shared
+    
     let userId: Int
     
     @Published var budget: Budget?
@@ -38,11 +39,83 @@ final class BudgetViewModel {
     func fetchBudget() {
         guard budgetService.budgetSubject.value == nil else { return }
         performRequest(isLoading: \.isLoading, request: { [weak self] in
-            return try await self?.budgetService.mockFetchBudget()
-        },
-                       completion: { [weak self] result in
-            self?.handleBudgetResult(result)
+            return try await self?.budgetService.fetchBudget(userId: 5)
+        }, completion: { [weak self] result in
+            guard let self else { return }
+            self.requestTimer?.cancel()
+            switch result {
+            case .success(let budget):
+                if let budget {
+                    self.budget = budget
+                    self.requestTimer?.cancel()
+                    updateBudget(budget)
+                } else {
+                    handleError(R.string.localizable.budgetErrorGeneral())
+                    loadBudget()
+                    self.requestTimer?.cancel()
+                }
+            case .failure:
+                handleError(R.string.localizable.budgetErrorGeneral())
+                loadBudget()
+                self.requestTimer?.cancel()
+            }
         })
+    }
+    
+    private func loadBudget() {
+        do {
+            let budgetCD = try coreDataService.fetchCurrentBudget()
+            if let budgetCD {
+                let categories = budgetCD.categories.map { budgetCategoryCD in
+                    return BudgetCategory(
+                        name: budgetCategoryCD.name ?? "",
+                        spent: Int(budgetCategoryCD.spent),
+                        remaining: Int(budgetCategoryCD.remaining),
+                        limit: Int(budgetCategoryCD.limit))
+                }
+                let loadBudget = Budget(income: Int(budgetCD.income), categories: categories)
+                self.budget = loadBudget
+            }
+        } catch {
+            print(BudgetCoreDataError.fetchFailed.localizedDescription)
+        }
+    }
+    
+    private func updateBudget(_ budget: Budget) {
+        do {
+            try self.coreDataService.updateBudget(budget: budget)
+        } catch {
+            print(BudgetCoreDataError.updateCategoryFailder)
+        }
+    }
+    
+    func refreshBudget() {
+        guard !isRefreshing else { return }
+        isRefreshing = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.performRequest(isLoading: \.isRefreshing, request: { [weak self] in
+                try await self?.budgetService.fetchBudget(userId: 5)
+            }, completion: { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let budget):
+                    guard let budget else {
+                        self.handleError(R.string.localizable.budgetErrorGeneral())
+                        self.requestTimer?.cancel()
+                        return
+                    }
+                    self.budget = budget
+                    self.updateBudget(budget)
+                case .failure:
+                    handleError(R.string.localizable.budgetErrorGeneral())
+                    self.requestTimer?.cancel()
+                }
+            })
+        }
+    }
+    
+    func getColor(for categoryName: String) -> String {
+        return coreDataService.fetchCategoryColor(for: categoryName) ?? "#CCCCCC"
     }
     
     func startNotification() {
@@ -58,20 +131,6 @@ final class BudgetViewModel {
                 print("Ошибка в получение уведомлений: \(error.localizedDescription)")
                 
             }
-        }
-    }
-    
-    func refreshBudget() {
-        guard !isRefreshing else { return }
-        isRefreshing = true
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.performRequest(isLoading: \.isRefreshing, request: { [weak self] in
-                try await self?.budgetService.mockFetchBudget()
-            },
-                                 completion: { [weak self] result in
-                self?.handleBudgetResult(result)
-            })
         }
     }
 }
@@ -112,20 +171,6 @@ private extension BudgetViewModel {
         self[keyPath: keyPath] = false
         handleError("Превышен лимит ожидания")
         requestTask?.cancel()
-    }
-    
-    func handleBudgetResult(_ result: Result<Budget?, Error>) {
-        switch result {
-        case .success(let budget):
-            if let budget = budget {
-                self.budget = budget
-                requestTimer?.cancel()
-            } else {
-                handleError("Упс произошла ошибка, попробуйте еще раз")
-            }
-        case .failure:
-            handleError("Упс произошла ошибка, попробуйте еще раз")
-        }
     }
     
     func handleError(_ message: String) {

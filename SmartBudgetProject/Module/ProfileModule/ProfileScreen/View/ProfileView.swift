@@ -17,7 +17,7 @@ final class ProfileView: UIView {
     var onEvent: ((ProfileViewEvent) -> Void)?
     
     lazy var titleLabel = UILabel.create(text: "Личный кабинет", fontSize: FontSizeConstans.title, weight: .medium)
-    private lazy var nameLabel = UILabel.create(text: "Ivan ivanov", fontSize: FontSizeConstans.body, textColor: .systemGray2)
+    lazy var nameLabel = UILabel.create(fontSize: FontSizeConstans.body, textColor: .systemGray2)
 
     private lazy var avatarImage: UIImageView = {
         let image = UIImageView()

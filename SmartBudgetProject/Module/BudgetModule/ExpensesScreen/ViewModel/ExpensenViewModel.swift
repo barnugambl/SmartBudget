@@ -32,27 +32,4 @@ final class ExpensenViewModel {
             }
             .store(in: &cancellable)
     }
-    
-    func budgetCategoriesToCategoryDto(budget: Budget) -> [CategoryDto] {
-        let defaultCategories = UserDefaultsService.shared.categoryDto
-        
-        return budget.categories.map { budgetCategory in
-            if let defaultCategory = defaultCategories?.first(where: { $0.name == budgetCategory.name }) {
-                return CategoryDto(
-                    name: budgetCategory.name,
-                    iconName: defaultCategory.iconName,
-                    iconColor: defaultCategory.iconColor,
-                    persentage: budget.income > 0 ? Int((Double(budgetCategory.limit) / Double(budget.income)) * 100) : 0
-                )
-            } else {
-                return CategoryDto(
-                    name: budgetCategory.name,
-                    iconName: R.image.other_icon.name,
-                    iconColor: "#8E8E93",
-                    persentage: budget.income > 0 ? Int((Double(budgetCategory.limit) / Double(budget.income)) * 100) : 0
-                )
-            }
-        }
-    }
-        
 }

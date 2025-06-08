@@ -35,3 +35,14 @@ extension BudgetCategoryCD {
 extension BudgetCategoryCD: Identifiable {
 
 }
+
+extension BudgetCategoryCD {
+    func toBudgetCategory() -> BudgetCategory {
+        return BudgetCategory(
+            name: name ?? "",
+            spent: Int(spent),
+            remaining: Int(remaining),
+            limit: Int(limit)
+        )
+    }
+}

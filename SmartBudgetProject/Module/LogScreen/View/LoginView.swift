@@ -15,8 +15,10 @@ final class LoginView: UIView {
     private lazy var errorLabel = UILabel.create(fontSize: FontSizeConstans.caption, weight: .medium, textColor: .systemRed)
     
     lazy var phoneNumberTextField = PhoneNumberTextField()
-    lazy var passwordTextField = DefaultTextField(fieldPlaceHodler: R.string.localizable.inputPasswordTextField(),
-                                                          isPassword: true)
+    lazy var passwordTextField = DefaultTextField(
+        fieldPlaceHodler: R.string.localizable.inputPasswordTextField(),
+        isPassword: true
+    )
     
     private lazy var logButton = UIButton.create(style: .yellow(title: R.string.localizable.logButton())) { [weak self] in
         self?.didTapLogin?()

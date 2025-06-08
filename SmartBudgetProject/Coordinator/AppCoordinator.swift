@@ -16,7 +16,7 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        if UserDefaultsService.shared.isFirstLaunch {
+        if UserDefaultsService.shared.isLogged {
             showMainFlow()
         } else {
             showAuthFlow()

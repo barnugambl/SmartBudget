@@ -92,9 +92,15 @@ final class SetupPersentageViewController: UIViewController {
         persentView.clickOnConfirmButton = { [weak self] in
             guard let self else { return }
             guard viewModel.isFullPercentage(for: categories) else { return }
-            viewModel.createBudget(income: self.persentView.pieChartView.centerAttributedText?.string ?? "", categories: categories)
-            self.coordinator?.finishOnBoarding()
-            
+            viewModel.createBudget(
+                income: self.persentView.pieChartView.centerAttributedText?.string ?? "",
+                categories: categories) { isSuccess in
+                    if isSuccess {
+                        DispatchQueue.main.async {
+                            self.coordinator?.finishOnBoarding()                            
+                        }
+                    }
+                }
         }
     }
 }

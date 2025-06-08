@@ -21,8 +21,8 @@ extension UserCD {
     }
 
     @NSManaged public var id: Int64
-    @NSManaged public var phoneNumber: String?
-    @NSManaged public var password: String?
+    @NSManaged public var refreshToken: String?
+    @NSManaged public var accessToken: String?
     @NSManaged public var budget: BudgetCD?
     @NSManaged public var financialGoal: NSSet?
 

@@ -62,7 +62,7 @@ final class BudgetViewController: UIViewController {
             .compactMap({ $0 })
             .sink { [weak self] budget in
                 guard let self else { return }
-                self.updateUI(budget: budget, colors: [.brown])
+                self.updateUI(budget: budget)
             }
             .store(in: &cancellable)
         
@@ -72,7 +72,7 @@ final class BudgetViewController: UIViewController {
             .sink { [weak self] budget in
                 guard let self else { return }
                 self.viewModel.budgetService.budgetSubject.send(budget)
-                self.updateUI(budget: budget, colors: [.link])
+                self.updateUI(budget: budget)
             }
             .store(in: &cancellable)
         
@@ -107,8 +107,13 @@ final class BudgetViewController: UIViewController {
         }
     }
     
-    private func updateUI(budget: Budget, colors: [UIColor]) {
-        setupPieChart(budget: budget, colors: colors)
+    private func updateUI(budget: Budget) {
+        let colors = budget.categories.compactMap { category -> UIColor in
+            let colorHex = viewModel.getColor(for: category.name)
+            return UIColor(hex: colorHex)
+        }
+        
+        setupPieChart(budget: budget, colors: colors.isEmpty ? [.systemBlue] : colors)
         budgetView.pieChartView.centerAttributedText = budgetView.createCenterAttributedText(amount: "\(budget.income)")
         setupDataSource(budgetCategory: budget.categories)
     }

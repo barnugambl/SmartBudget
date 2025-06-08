@@ -11,7 +11,7 @@ class EditFinancialGoalViewModel {
     let financialGoalService: FinancialGoalServiceProtocol
     private let userId: Int
     let goal: Goal
-    private let coreDataService = CoreDataService.shared
+    private let coreDataService = GoalCoreDataManager.shared
     
     // Input
     @Published var name: String = ""

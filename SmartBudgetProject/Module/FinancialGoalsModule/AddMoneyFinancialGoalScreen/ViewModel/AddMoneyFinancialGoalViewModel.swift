@@ -10,7 +10,7 @@ import Foundation
 class AddMoneyFinancialGoalViewModel {
     let financialGoalService: FinancialGoalServiceProtocol
     private let userId: Int
-    private let coreDataService = CoreDataService.shared
+    private let coreDataService = GoalCoreDataManager.shared
     let goal: Goal
     
     // Input

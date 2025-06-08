@@ -39,7 +39,7 @@ extension BudgetService {
             return try await budgetAPIService.getBudget(userId: userId)
         } catch {
             print("Не удалось получить бюджет")
-            throw error
+            return nil
         }
     }
     
@@ -48,7 +48,7 @@ extension BudgetService {
             return try await budgetAPIService.setupBudget(budget: budget)
         } catch {
             print("Установить бюджет не удалось: \(error)")
-            throw error
+            return nil
         }
     }
     
@@ -57,7 +57,7 @@ extension BudgetService {
             return try await budgetAPIService.updateBudget(userId: userId, income: income)
         } catch {
             print("Не удалось обновить бюджет: \(error)")
-            throw error
+            return nil
         }
     }
     func mockFetchBudget() async throws -> Budget? {
@@ -75,7 +75,7 @@ extension BudgetService {
             return budget
         } catch {
             print("Error decoding mock budget: \(error)")
-            throw error
+            return nil
         }
     }
     

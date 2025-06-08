@@ -16,7 +16,7 @@ enum ErrorField {
 class AddFinancialGoalViewModel {
     let financialGoalService: FinancialGoalServiceProtocol
     private let userId: Int
-    private let coreDataService = CoreDataService.shared
+    private let coreDataService = GoalCoreDataManager.shared
     
     // Input
     @Published var name: String = ""

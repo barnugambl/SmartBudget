@@ -51,10 +51,10 @@ private extension ApiService {
         
         headers["Content-type"] = "application/json"
         
-        if let accessToken = UserDefaultsService.shared.accessToken {
+        if let accessToken = UserCoreDataManager.shared.getCurrentUser()?.accessToken {
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
-       
+        
         headers.forEach { key, value in
             request.addValue(value, forHTTPHeaderField: key)
         }

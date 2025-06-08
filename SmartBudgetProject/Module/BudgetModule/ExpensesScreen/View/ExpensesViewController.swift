@@ -32,24 +32,24 @@ final class ExpensesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
-        bindingViewModel()
+//        bindingViewModel()
         updateCategoriesFromViews()
         setupCategories()
     }
     
-    private func bindingViewModel() {
-        viewModel.budgetService.budgetSubject
-            .receive(on: DispatchQueue.main)
-            .compactMap({ $0 })
-            .sink { [weak self] budget in
-                guard let self else { return }
-                self.expensesView.pieChartView.centerAttributedText = createCenterAttributedText(amount: String(describing: budget.income))
-                self.categories = self.viewModel.budgetCategoriesToCategoryDto(budget: budget)
-                self.expensesView.categories = self.categories 
-                self.setupPieChart()
-            }
-            .store(in: &cancellable)
-    }
+//    private func bindingViewModel() {
+//        viewModel.budgetService.budgetSubject
+//            .receive(on: DispatchQueue.main)
+//            .compactMap({ $0 })
+//            .sink { [weak self] budget in
+//                guard let self else { return }
+//                self.expensesView.pieChartView.centerAttributedText = createCenterAttributedText(amount: String(describing: budget.income))
+//                self.categories = self.viewModel.budgetCategoriesToCategoryDto(budget: budget)
+//                self.expensesView.categories = self.categories 
+//                self.setupPieChart()
+//            }
+//            .store(in: &cancellable)
+//    }
     
     private func setupCategories() {
         expensesView.categories = categories

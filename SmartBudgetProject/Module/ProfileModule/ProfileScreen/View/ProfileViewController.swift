@@ -30,16 +30,23 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setupNavigation()
         setupTabBar()
+        setupName()
+    }
+    
+    private func setupName() {
+        let name = viewModel.getCurrentUser()?.id
+        self.profileView.nameLabel.text = String(describing: name)
     }
     
     private func setupTabBar() {
         navigationItem.titleView = profileView.titleLabel
         
         let action = UIAction { [weak self] _ in
-            UserDefaultsService.shared.clearAuthData()
+            self?.viewModel.exitUser()
             self?.coordinator?.logout()
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Выйти", primaryAction: action)
+        
     }
     
     private func setupNavigation() {

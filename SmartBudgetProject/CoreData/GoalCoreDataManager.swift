@@ -1,36 +1,19 @@
 //
-//  CoreDataService.swift
+//  GoalCoreDataManager.swift
 //  SmartBudgetProject
 //
-//  Created by Терёхин Иван on 06.06.2025.
+//  Created by Терёхин Иван on 07.06.2025.
 //
 
-import Foundation
 import CoreData
 
-protocol CoreDataServiceProtocol {
+final class GoalCoreDataManager {
+    private let coreDataStack = CoreDataStack.shared
     
-}
-
-final class CoreDataService: CoreDataServiceProtocol {
-    
-    static let shared = CoreDataService()
+    static let shared = GoalCoreDataManager()
     
     private init() { }
     
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "SmartBudgetProject")
-        container.loadPersistentStores(completionHandler: { (_, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-}
-
-// MARK: FinancialGoal
-extension CoreDataService {
     func getAllFinancialGoals() -> [Goal] {
         let fetchRequest: NSFetchRequest<FinancialGoalCD> = FinancialGoalCD.fetchRequest()
         
@@ -125,20 +108,12 @@ extension CoreDataService {
     }
 }
 
-extension CoreDataService {
+extension GoalCoreDataManager {
     var viewContext: NSManagedObjectContext {
-        return persistentContainer.viewContext
+        coreDataStack.viewContext
     }
     
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
+    func saveContext() {
+        coreDataStack.saveContext()
     }
 }

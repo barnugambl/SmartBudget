@@ -14,7 +14,7 @@ class UserDefaultsService {
     static let shared = UserDefaultsService()
     
     private enum Keys {
-        static let categoryDto = "categoryDto"
+        static let isLogged = "isLogged"
     }
     
     private init(userDefaults: UserDefaults = .standard) {
@@ -22,32 +22,13 @@ class UserDefaultsService {
     }
 }
 
-// MARK: User Categories
+// MARK: IsLogged
 extension UserDefaultsService {
-    var categoryDto: [CategoryDto]? {
-        get {
-            guard let data = UserDefaults.standard.data(forKey: Keys.categoryDto) else {
-                return nil
-            }
-            do {
-                let categories = try JSONDecoder().decode([CategoryDto].self, from: data)
-                return categories
-            } catch {
-                print("Failed to decode:\(error)")
-                return nil
-            }
-        }
+    var isLogged: Bool {
+        get { userDefaults.bool(forKey: Keys.isLogged) }
         set {
-            if let categories = newValue {
-                do {
-                    let data = try JSONEncoder().encode(categories)
-                    UserDefaults.standard.set(data, forKey: Keys.categoryDto)
-                } catch {
-                    print("Failed to encode: \(error)")
-                }
-            } else {
-                UserDefaults.standard.removeObject(forKey: Keys.categoryDto)
-            }
+            userDefaults.set(newValue, forKey: Keys.isLogged)
+            userDefaults.synchronize()
         }
     }
 }

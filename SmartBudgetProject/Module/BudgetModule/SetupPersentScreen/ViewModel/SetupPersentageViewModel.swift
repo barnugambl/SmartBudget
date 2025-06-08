@@ -12,7 +12,8 @@ import UIKit
 class SetupPersentageViewModel {
     private let userId: Int
     let budgetService: BudgetServiceProtocol
-
+    private let coreDataService = BudgetCoreDataManager.shared
+    
     @Published private(set) var errorMessage: String?
     
     init(budgetService: BudgetServiceProtocol, userId: Int) {
@@ -36,7 +37,7 @@ class SetupPersentageViewModel {
         }
     }
     
-    func createBudget(income: String, categories: [CategoryDto]) {
+    func createBudget(income: String, categories: [CategoryDto], completion: @escaping (Bool) -> Void) {
         let incomeInt = Int(income.digitsOnly) ?? 0
         let budgetCategories = categories.map { categoryDto in
             let limit = (incomeInt * categoryDto.persentage) / 100
@@ -44,16 +45,45 @@ class SetupPersentageViewModel {
         }
         let budget = Budget(income: incomeInt, categories: budgetCategories)
         
-        budgetService.budgetSubject.send(budget)
-        UserDefaultsService.shared.categoryDto = categories
-        
         Task {
             let requestCategory = categories.map({ $0.toRequset() })
             let responce = try await budgetService.setupBudget(budget: BudgetRequest(userId: userId, income: incomeInt, categories: requestCategory))
             if responce == nil {
+                budgetService.budgetSubject.send(budget)
+                do {
+                    try coreDataService.saveBudget(income: incomeInt, categories: categories)
+                } catch {
+                    print(BudgetCoreDataError.saveFailed.localizedDescription)
+                }
+                completion(true)
+            } else {
                 errorMessage = R.string.localizable.budgetErrorGeneral()
+                completion(false)
             }
         }
+    }
+    
+    func createBudgetCD(income: String, categories: [CategoryDto]) -> BudgetCD {
+        let incomeInt = Int32(income.digitsOnly) ?? 0
+        let budgetCD = BudgetCD(context: coreDataService.viewContext)
+        budgetCD.income = incomeInt
+        categories.enumerated().forEach { index, categoryDto in
+            let limit = (Int(incomeInt) * categoryDto.persentage) / 100
+            
+            let budgetCategoryCD = BudgetCategoryCD(context: coreDataService.viewContext)
+            budgetCategoryCD.id = Int64(index)
+            budgetCategoryCD.name = categoryDto.name
+            budgetCategoryCD.persentage = Int32(categoryDto.persentage)
+            budgetCategoryCD.limit = Int32(limit)
+            budgetCategoryCD.spent = 0
+            budgetCategoryCD.remaining = Int32(limit)
+            budgetCategoryCD.iconColor = categoryDto.iconColor
+            budgetCategoryCD.iconName = categoryDto.iconName
+            
+            budgetCD.addToBudgetCategory(budgetCategoryCD)
+        }
+        
+        return budgetCD
     }
     
     func resetError() {
