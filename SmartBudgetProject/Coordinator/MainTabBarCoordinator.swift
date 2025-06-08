@@ -17,7 +17,6 @@ final class MainTabBarCoordinator: Coordinator {
     private var tabBarController: CustomTabBarController
         
     init(navigationController: UINavigationController, profileDelegate: ProfileCoordinatorDelegate?) {
-        
         self.navigationController = navigationController
         self.profileDelegate = profileDelegate
         tabBarController = CustomTabBarController()

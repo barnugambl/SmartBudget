@@ -46,3 +46,16 @@ enum FontSizeConstans {
 enum ColorConstans {
     static let yellow = "FFDD2D"
 }
+
+enum URLConstans {
+    static let setupBudgetURL = "/budget"
+    
+    static func getBudgetURL(userId: Int) -> String {
+        return "/budget/status/\(userId)"
+    }
+    
+    static func updateBudgetURL(userId: Int) -> String {
+        return "/budget/\(userId)"
+    }
+    
+}

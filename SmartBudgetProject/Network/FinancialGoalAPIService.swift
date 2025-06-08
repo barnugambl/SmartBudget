@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FinancialGoalAPIService: FinancialGoalAPIServiceProtocol {
+final class FinancialGoalAPIService: FinancialGoalAPIServiceProtocol {
     let apiService: APIServiceProtocol
     
     init(apiService: APIServiceProtocol) {

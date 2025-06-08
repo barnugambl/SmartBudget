@@ -87,6 +87,12 @@ enter the 5-digit code specified in the SMS";
 "financialGoal_success_added" = "Amount successfully added";
 
 
+//MARK: ExpensesScreen
+"expensesLabel" = "My expenses";
+"pieChartLabel" = "Budget";
+"spentLabel" = "spent";
+"remainingLabel" = "remaining";
+
 // MARK: AddFinancialGoalScreen
 "addFinancialGoalLabel" = "New goal";
 "nameFinancialGoalTextField" = "Name";
@@ -109,6 +115,10 @@ enter the 5-digit code specified in the SMS";
 "setupPersentLabel" = "Distribute percentages";
 "confirmPersentButton" = "Complete setup";
 
+// MARK: Budget Errors
+"budgetErrorEmpty" = "Budget must not be empty";
+"budgetErrorZero" = "Budget must be greater than 0";
+"budgetErrorGeneral" = "Oops, something went wrong";
 
 
 

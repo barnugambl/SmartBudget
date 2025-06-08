@@ -87,6 +87,12 @@
 "financialGoal_success_added" = "Сумма успешно добавлена";
 
 
+//MARK: ExpensesScreen
+"expensesLabel" = "Мои расходы";
+"pieChartLabel" = "Бюджет";
+"spentLabel" = "Потрачено";
+"remainingLabel" = "Осталось";
+
 // MARK: AddFinancialGoalScreen
 "addFinancialGoalLabel" = "Новая цель";
 "nameFinancialGoalTextField" = "Название";
@@ -108,3 +114,10 @@
 // MARK: SetupPersentScreen
 "setupPersentLabel" = "Распределите проценты";
 "confirmPersentButton" = "Завершить настройку";
+
+// MARK: Budget Errors
+"budgetErrorEmpty" = "Бюджет не должен быть пустым";
+"budgetErrorZero" = "Бюджет должен быть больше 0";
+"budgetErrorGeneral" = "Упс что-то пошло не так";
+
+

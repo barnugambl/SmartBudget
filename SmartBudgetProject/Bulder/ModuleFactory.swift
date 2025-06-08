@@ -46,11 +46,6 @@ final class ModuleBulder {
         return AddMoneyFinancialGoalViewController(viewModel: viewModel, nameGoal: nameGoal)
     }
     
-    func makeExpensesScreen() -> ExpensesViewController {
-        let viewModel = ExpensesViewModel()
-        return ExpensesViewController(viewModel: viewModel)
-    }
-    
     func makeProfileScreen() -> ProfileViewController {
         let viewModel = ProfileViewModel()
         return ProfileViewController(viewModel: viewModel)
@@ -59,29 +54,10 @@ final class ModuleBulder {
     func makeFinancialGoalScreen(viewModel: FinancialGoalViewModel) -> FinancialGoalsViewController {
         return FinancialGoalsViewController(viewModel: viewModel)
     }
-    
-    func makeInitialBudgetScreen() -> InitialBudgetViewController {
-        let viewModel = InitialBudgetViewModel()
-        return InitialBudgetViewController(viewModel: viewModel)
-    }
-    
-    func setupCategoryScreen() -> SetupPersentViewController {
-        let viewModel = SetupPresentViewModel()
-        return SetupPersentViewController(viewModel: viewModel)
-    }
-    
+        
     func makeEditProfileScreen() -> EditProfileViewController {
         let viewModel = EditProfileViewModel()
         return EditProfileViewController(viewModel: viewModel)
     }
     
-    func makeSetupCategoryScreen(title: String, iconName: String, iconColor: UIColor) -> SetupCategoryViewController {
-        let viewModel = SetupCategoryViewModel()
-        return SetupCategoryViewController(viewModel: viewModel, title: title, iconName: iconName, iconColor: iconColor)
-    }
-    
-    func makeSetupPersentScreen() -> SetupPersentViewController {
-        let viewModel = SetupPresentViewModel()
-        return SetupPersentViewController(viewModel: viewModel)
-    }
 }

@@ -13,7 +13,6 @@ protocol AuthCoordinatorDelegate: AnyObject {
 
 final class AuthCoordinator: Coordinator {
     weak var delegate: AuthCoordinatorDelegate?
-    
     private let moduleBulder = ModuleBulder()
     
     var navigationController: UINavigationController
