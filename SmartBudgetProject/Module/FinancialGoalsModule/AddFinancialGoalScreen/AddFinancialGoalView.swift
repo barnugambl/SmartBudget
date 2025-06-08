@@ -14,9 +14,10 @@ final class AddFinancialGoalView: UIView {
                                                  weight: .medium)
     lazy var dateTextFieldLabel = UILabel.create(text: R.string.localizable.endDateFinancialGoalLabel(), fontSize: FontSizeConstans.body,
                                                  weight: .medium)
+    private lazy var errorLabel = UILabel.create(fontSize: FontSizeConstans.caption, weight: .medium, textColor: .systemRed)
     
     lazy var nameGoalTextField = DefaultTextField(fieldPlaceHodler: R.string.localizable.nameFinancialGoalTextField())
-    lazy var sumGoalTextField = AmountTextField()
+    lazy var amountGoalTextField = AmountTextField()
     lazy var dateTextField: UITextField = {
         let field = UITextField()
         let leftView = UIView(frame: AddFinancialGoalView.sizeLeftView)
@@ -34,8 +35,6 @@ final class AddFinancialGoalView: UIView {
         return field
     }()
     
-    private lazy var nameSumGoalStackView = UIStackView.create(stackSpacing: Constans.mediumStackSpacing,
-                                                               views: [nameGoalTextField, sumGoalTextField])
     private lazy var dateStackView = UIStackView.create(views: [dateTextFieldLabel, dateTextField])
     
     private lazy var separatorView: UIView = {
@@ -58,24 +57,41 @@ final class AddFinancialGoalView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setTextLabelError(_ message: String?) {
+        errorLabel.text = message
+        errorLabel.isHidden = false
+    }
+    
+    func updateErrorLabelPosition(for textField: UITextField) {
+        addSubviews(errorLabel)
+        errorLabel.snp.remakeConstraints { make in
+            make.top.equalTo(textField.snp.bottom).offset(Constans.insetTiny)
+            make.leading.equalTo(textField.snp.leading).offset(Constans.textFieldContentInset)
+        }
+    }
+    
     private func setupView() {
         backgroundColor = .systemBackground
     }
     
     private func setupLayout() {
-        addSubviews(nameSumGoalStackView, separatorView, dateTextFieldLabel, dateTextField, confirmationButton)
+        errorLabel.isHidden = true
+        addSubviews(nameGoalTextField, errorLabel, amountGoalTextField, separatorView, dateTextFieldLabel, dateTextField, confirmationButton)
         
-        nameSumGoalStackView.snp.makeConstraints { make in
+        nameGoalTextField.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(Constans.insetMedium)
             make.leading.trailing.equalToSuperview().inset(Constans.insetMedium)
+            make.height.equalTo(Constans.heightTextFieldMedium)
         }
         
-        nameSumGoalStackView.arrangedSubviews.forEach({ $0.snp.makeConstraints { make in
+        amountGoalTextField.snp.makeConstraints { make in
+            make.top.equalTo(nameGoalTextField.snp.bottom).offset(Constans.insetXLarge)
+            make.leading.trailing.equalToSuperview().inset(Constans.insetMedium)
             make.height.equalTo(Constans.heightTextFieldMedium)
-        }})
+        }
         
         separatorView.snp.makeConstraints { make in
-            make.top.equalTo(nameSumGoalStackView.snp.bottom).offset(Constans.insetMedium)
+            make.top.equalTo(amountGoalTextField.snp.bottom).offset(Constans.insetMedium)
             make.leading.trailing.equalToSuperview().inset(Constans.insetMedium)
             make.height.equalTo(AddFinancialGoalView.heightSeparatorView)
         }

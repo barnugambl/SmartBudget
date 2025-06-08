@@ -37,11 +37,6 @@ final class AddFinancialGoalViewController: UIViewController {
         setupNavigation()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        viewModel.resetMessages()
-    }
-    
     private func setupNavigation() {
         addFinancialGoalView.onClickButton = { [weak self] in
             self?.viewModel.addGoal()
@@ -65,7 +60,7 @@ final class AddFinancialGoalViewController: UIViewController {
                     on: viewModel)
             .store(in: &cancellables)
         
-        addFinancialGoalView.sumGoalTextField.textPublisher
+        addFinancialGoalView.amountGoalTextField.textPublisher
             .receive(on: DispatchQueue.main)
             .assign(to: \.amountString,
                     on: viewModel)
@@ -77,33 +72,26 @@ final class AddFinancialGoalViewController: UIViewController {
                     on: viewModel)
             .store(in: &cancellables)
         
-        viewModel.$successMessage
-            .receive(on: DispatchQueue.main)
-            .compactMap { $0 }
-            .sink { [weak self] message in
-                CustomToastView.showSuccessToast(on: self?.view ?? UIView(), message: message)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self?.navigationController?.popViewController(animated: true)
-                }
-            }
-            .store(in: &cancellables)
-        
         viewModel.$errorMessage
             .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .sink { [weak self] message in
-                self?.showErrorAlert(message: message)
+                guard let self else { return }
+                if let errorField = viewModel.errorField {
+                    self.addFinancialGoalView.setTextLabelError(message)
+                    switch errorField {
+                    case .name:
+                        self.addFinancialGoalView.updateErrorLabelPosition(for: self.addFinancialGoalView.nameGoalTextField)
+                    case .amount:
+                        self.addFinancialGoalView.updateErrorLabelPosition(for: self.addFinancialGoalView.amountGoalTextField)
+                    case .date:
+                        self.addFinancialGoalView.updateErrorLabelPosition(for: self.addFinancialGoalView.dateTextField)
+                    }
+                }
             }
             .store(in: &cancellables)
     }
 
-    private func showErrorAlert(message: String) {
-        let alertController = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
-        let actionOk = UIAlertAction(title: "Ок", style: .default)
-        alertController.addAction(actionOk)
-        present(alertController, animated: true)
-    }
-    
     @objc
     private func setupDatePicker() {
         addFinancialGoalView.dateTextField.resignFirstResponder()

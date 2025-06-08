@@ -55,35 +55,17 @@ final class AddMoneyFinancialGoalViewController: UIViewController {
     
     private func bindingViewModel() {
         addMoneyFinancialGoalView.addAmountTextField.textPublisher
-            .subscribe(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.main)
             .assign(to: \.amountString,
                     on: viewModel)
             .store(in: &cancellables)
         
         viewModel.$errorMessage
-            .subscribe(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.main)
             .compactMap { $0 }
             .sink { [weak self] message in
-                self?.showAlert(message: message)
+                self?.addMoneyFinancialGoalView.setErrorMessage(message)
             }
             .store(in: &cancellables)
-        
-        viewModel.$successMessage
-            .subscribe(on: DispatchQueue.main)
-            .compactMap { $0 }
-            .sink { [weak self] message in
-                CustomToastView.showSuccessToast(on: self?.view, message: message)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self?.navigationController?.popViewController(animated: true)
-                }
-            }
-            .store(in: &cancellables)
-    }
-           
-    private func showAlert(message: String) {
-        let alertController = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
-        let actionOk = UIAlertAction(title: "Ок", style: .default)
-        alertController.addAction(actionOk)
-        present(alertController, animated: true)
     }
 }
