@@ -13,7 +13,6 @@ final class ExpensesViewController: UIViewController {
     private var expensesView = ExpensenView()
     weak var coordinator: ProfileCoordinator?
     private let viewModel: ExpensenViewModel
-    private var categories: [CategoryDto] = []
     private var cancellable: Set<AnyCancellable> = .init()
     
     init(viewModel: ExpensenViewModel) {
@@ -32,34 +31,12 @@ final class ExpensesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
-//        bindingViewModel()
         updateCategoriesFromViews()
-        setupCategories()
-    }
-    
-//    private func bindingViewModel() {
-//        viewModel.budgetService.budgetSubject
-//            .receive(on: DispatchQueue.main)
-//            .compactMap({ $0 })
-//            .sink { [weak self] budget in
-//                guard let self else { return }
-//                self.expensesView.pieChartView.centerAttributedText = createCenterAttributedText(amount: String(describing: budget.income))
-//                self.categories = self.viewModel.budgetCategoriesToCategoryDto(budget: budget)
-//                self.expensesView.categories = self.categories 
-//                self.setupPieChart()
-//            }
-//            .store(in: &cancellable)
-//    }
-    
-    private func setupCategories() {
-        expensesView.categories = categories
+        setupPieChart()
     }
     
     private func updateCategoriesFromViews() {
-        categories = expensesView.categoryViews.map { view in
-            let category = view.category
-            return category
-        }
+        expensesView.categories = viewModel.categories
     }
     
     private func setupNavigationBar() {
@@ -79,10 +56,11 @@ extension ExpensesViewController {
         let entries = createPieChartEntries()
         let dataSet = createPieChartDataSet(with: entries)
         configurePieChart(with: dataSet)
+        self.expensesView.pieChartView.centerAttributedText = createCenterAttributedText(amount: viewModel.getIncomeString())
     }
     
     func createPieChartEntries() -> [PieChartDataEntry] {
-        return categories.map { category in
+        return viewModel.categories.map { category in
             let entry = PieChartDataEntry(value: Double(category.persentage))
             entry.label = category.name
             return entry
@@ -91,7 +69,7 @@ extension ExpensesViewController {
     
     func createPieChartDataSet(with entries: [PieChartDataEntry]) -> PieChartDataSet {
         let dataSet = PieChartDataSet(entries: entries)
-        dataSet.colors = categories.map({ UIColor(hex: $0.iconColor) })
+        dataSet.colors = viewModel.categories.map({ UIColor(hex: $0.iconColor) })
         dataSet.valueColors = [.black]
         dataSet.valueFormatter = DefaultValueFormatter(decimals: 0)
         dataSet.drawValuesEnabled = false

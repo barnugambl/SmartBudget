@@ -57,7 +57,7 @@ final class ExpensenView: UIView {
             categoryStack.addArrangedSubview(view)
             
             view.snp.makeConstraints { make in
-                make.height.equalTo(60)
+                make.height.equalTo(Constans.heightItemView)
             }
         }
     }

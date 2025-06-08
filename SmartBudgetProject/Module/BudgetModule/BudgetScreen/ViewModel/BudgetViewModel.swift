@@ -115,7 +115,7 @@ final class BudgetViewModel {
     }
     
     func getColor(for categoryName: String) -> String {
-        return coreDataService.fetchCategoryColor(for: categoryName) ?? "#CCCCCC"
+        return coreDataService.fetchCategoryColor(for: categoryName)
     }
     
     func startNotification() {

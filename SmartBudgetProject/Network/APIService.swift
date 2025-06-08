@@ -11,11 +11,11 @@ final class ApiService: APIServiceProtocol {
     private let baseURL: String
     private let session: URLSession
     
-    init(baseURL: String = "http://46.29.161.201:8080/api/v1", session: URLSession = URLSession.shared) {
+    init(baseURL: String = "http://46.29.161.201:8080/api/v1",
+         session: URLSession = URLSession.shared) {
         self.baseURL = baseURL
         self.session = session
     }
-    
     func get<T: Decodable>(endpoint: String, parameters: [String: Any]? = nil) async throws -> T {
         try await request(endpoint: endpoint, parameters: parameters)
     }

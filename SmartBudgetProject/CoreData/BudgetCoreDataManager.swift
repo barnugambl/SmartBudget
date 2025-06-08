@@ -51,7 +51,7 @@ final class BudgetCoreDataManager {
     }
     
     func updateBudget(budget: Budget?) throws {
-        guard let budget else { return } 
+        guard let budget else { return }
         guard let currentBudget = try fetchCurrentBudget() else { return }
         currentBudget.income = Int32(budget.income)
         
@@ -68,7 +68,7 @@ final class BudgetCoreDataManager {
         try saveContext()
     }
     
-    func fetchCategoryColor(for categoryName: String) -> String? {
+    func fetchCategoryColor(for categoryName: String) -> String {
         let request = NSFetchRequest<NSDictionary>(entityName: "BudgetCategoryCD")
         request.predicate = NSPredicate(format: "name == %@", categoryName)
         request.fetchLimit = 1
@@ -77,10 +77,27 @@ final class BudgetCoreDataManager {
         
         do {
             let result = try viewContext.fetch(request)
-            return result.first?["iconColor"] as? String
+            return result.first?["iconColor"] as? String ?? "8E8E93"
         } catch {
-            print("Error fetching color: \(error)")
-            return nil
+            print(BudgetCoreDataError.fetchFailed)
+            return "8E8E93"
+        }
+        
+    }
+    
+    func fetchCategoryIcon(for categoryName: String) -> String {
+        let request = NSFetchRequest<NSDictionary>(entityName: "BudgetCategoryCD")
+        request.predicate = NSPredicate(format: "name == %@", categoryName)
+        request.fetchLimit = 1
+        request.resultType = .dictionaryResultType
+        request.propertiesToFetch = ["iconName"]
+        
+        do {
+            let result = try viewContext.fetch(request)
+            return result.first?["iconName"] as? String ?? R.image.other_icon.name
+        } catch {
+            print(BudgetCoreDataError.fetchFailed)
+            return R.image.other_icon.name
         }
     }
     
