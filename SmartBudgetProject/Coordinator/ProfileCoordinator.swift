@@ -11,6 +11,7 @@ protocol ProfileCoordinatorDelegate: AnyObject {
     func logout(coordinator: Coordinator)
     func startOnboarding(coordinator: Coordinator)
 }
+
 final class ProfileCoordinator: Coordinator {
     weak var delegate: ProfileCoordinatorDelegate?
     
@@ -18,7 +19,6 @@ final class ProfileCoordinator: Coordinator {
     
     var childCoordinators: [Coordinator] = []
         
-    private let moduleBulder = ModuleBulder()
     private let profileBulder = ProfileScreenBulder.shared
     
     init(navigationController: UINavigationController) {
@@ -32,18 +32,20 @@ final class ProfileCoordinator: Coordinator {
     func showExpensenFlow() {
         let expensesVC = profileBulder.makeExpensesScreen()
         expensesVC.coordinator = self
+        expensesVC.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(expensesVC, animated: true)
     }
     
     func showProfileFlow() {
-        let profileVC = moduleBulder.makeProfileScreen()
+        let profileVC = profileBulder.makeProfileScreen()
         profileVC.coordinator = self
         navigationController.setViewControllers([profileVC], animated: false)
     }
     
     func showEditProfleFlow() {
-        let editProfileVC = moduleBulder.makeEditProfileScreen()
+        let editProfileVC = profileBulder.makeEditProfileScreen()
         editProfileVC.coordinator = self
+        editProfileVC.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(editProfileVC, animated: true)
     }
     

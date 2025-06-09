@@ -13,9 +13,4 @@ class ProfileViewModel {
     func getCurrentUser() -> UserCD? {
         return coreDataManager.getCurrentUser()
     }
-    
-    func exitUser() {
-        UserDefaultsService.shared.isLogged = false
-        coreDataManager.clearUserData()
-    }
 }

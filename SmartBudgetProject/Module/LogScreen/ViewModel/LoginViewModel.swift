@@ -25,7 +25,7 @@ final class LoginViewModel {
     @Published private(set) var errorMessageField: String?
     @Published private(set) var errorMessage: String?
     @Published private(set) var errorField: ErrorFieldLogin?
-        
+    
     private var cleanPhoneNumber: String {
         phoneNumber
             .replacingOccurrences(of: " ", with: "")
@@ -46,7 +46,6 @@ final class LoginViewModel {
             do {
                 if let responce = try await loginService.getUsers(loginForm: loginForm) {
                     UserDefaultsService.shared.isLogged = true
-                    print(UserDefaultsService.shared.isLogged)
                     coreDataManager.saveUser(response: responce)
                     completion(true)
                 } else {

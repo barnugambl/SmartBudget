@@ -17,17 +17,12 @@ final class UserCoreDataManager {
     func saveUser(
         response: AuthResponse,
         in context: NSManagedObjectContext = CoreDataStack.shared.viewContext) {
-            clearUserData()
-            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = UserCD.fetchRequest()
-            let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             do {
-                try context.execute(batchDeleteRequest)
+                clearUserData()
                 let newUser = UserCD(context: context)
                 newUser.id = Int64(response.userId)
                 newUser.refreshToken = response.jwtTokenPairDto.refreshToken
                 newUser.accessToken = response.jwtTokenPairDto.accessToken
-                print("Пользователь с id \(response.userId) создан")
-                
                 try context.save()
             } catch {
                 print("Ошибка при сохранении пользователя: \(error)")
@@ -45,7 +40,7 @@ final class UserCoreDataManager {
             return nil
         }
     }
-    
+        
     func clearUserData(context: NSManagedObjectContext = CoreDataStack.shared.viewContext) {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = UserCD.fetchRequest()
         let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)

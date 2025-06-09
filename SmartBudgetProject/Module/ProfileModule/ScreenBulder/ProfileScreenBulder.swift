@@ -20,4 +20,13 @@ final class ProfileScreenBulder {
         return ExpensesViewController(viewModel: viewModel)
     }
     
+    func makeProfileScreen() -> ProfileViewController {
+        let viewModel = ProfileViewModel()
+        return ProfileViewController(viewModel: viewModel)
+    }
+    
+    func makeEditProfileScreen() -> EditProfileViewController {
+        let viewModel = EditProfileViewModel()
+        return EditProfileViewController(viewModel: viewModel)
+    }
 }

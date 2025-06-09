@@ -59,6 +59,7 @@ extension AppCoordinator: ProfileCoordinatorDelegate {
     func logout(coordinator: Coordinator) {
         if let mainTabBarCoordinator = childCoordinators.first(where: { $0 is MainTabBarCoordinator }) {
             childDidFinish(mainTabBarCoordinator)
+            UserDefaultsService.shared.isLogged = false
         }
         showAuthFlow()
     }

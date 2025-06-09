@@ -9,7 +9,9 @@ import Foundation
 
 class FinancialGoalScreenBulder {
     let financialGoalService = FinancialGoalService.shared
-    let currentUserId = Int(UserCoreDataManager.shared.getCurrentUser()?.id ?? 0)
+    private var currentUserId: Int {
+        Int(UserCoreDataManager.shared.getCurrentUser()?.id ?? 0)
+    }
     
     private init() {}
     
@@ -17,7 +19,6 @@ class FinancialGoalScreenBulder {
     
     func makeFinancialGoalScreen() -> FinancialGoalsViewController {
         let viewModel = FinancialGoalViewModel(userId: currentUserId, financialGoalService: financialGoalService)
-        print(Int(UserCoreDataManager.shared.getCurrentUser()?.id ?? 0))
         return FinancialGoalsViewController(viewModel: viewModel)
     }
     

@@ -25,6 +25,7 @@ final class MainTabBarCoordinator: Coordinator {
     func start() {
         setupTabs()
         navigationController.setViewControllers([tabBarController], animated: true)
+        navigationController.setNavigationBarHidden(true, animated: false)
     }
     
     func setupTabs() {

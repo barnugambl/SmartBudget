@@ -31,18 +31,23 @@ final class FinancialGoalCoordinator: Coordinator {
     func showAddFinancialGoalFlow() {
         let addFinancialGoalVC = moduleBulder.makeAddFinancialGoalScreen()
         addFinancialGoalVC.coordinator = self
+        addFinancialGoalVC.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(addFinancialGoalVC, animated: true)
     }
     
     func showAddMoneyFinancialGoalFlow(goal: Goal) {
         let addMoneyFinancialGoalVC = moduleBulder.makeAddMoneyFinancialGoalScreen(goal: goal)
         addMoneyFinancialGoalVC.coordinator = self
+        addMoneyFinancialGoalVC.hidesBottomBarWhenPushed = true
+
         navigationController.pushViewController(addMoneyFinancialGoalVC, animated: true)
     }
     
     func showEditFinancialGoal(goal: Goal) {
-        let edtiFinancialGoalVC = moduleBulder.makeEditFinancialGoalScreen(goal: goal)
-        edtiFinancialGoalVC.coordinator = self
-        navigationController.pushViewController(edtiFinancialGoalVC, animated: true)
+        let editFinancialGoalVC = moduleBulder.makeEditFinancialGoalScreen(goal: goal)
+        editFinancialGoalVC.coordinator = self
+        editFinancialGoalVC.hidesBottomBarWhenPushed = true
+
+        navigationController.pushViewController(editFinancialGoalVC, animated: true)
     }
 }
