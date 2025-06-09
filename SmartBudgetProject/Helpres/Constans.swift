@@ -22,6 +22,9 @@ enum Constans {
     static let insetXLarge: CGFloat = 40
     static let insetXXLarge: CGFloat = 56
     
+    static let sizeIconContainer: CGFloat = 44
+    static let sizeIcon: CGFloat = sizeIconContainer / 2
+    
     static let textFieldContentInset: CGFloat = 10
     
     static let heightButton: CGFloat = 48
@@ -66,7 +69,13 @@ enum URLConstansNotification {
     }
 }
 
-enum URLConstantLogin {
+enum URLConstantLoginConstans {
     static let login = "/login"
+}
+
+enum URLTransactionConstans {
+    static func getTransactionURL(userId: Int) -> String {
+        return "/transactions/\(userId)"
+    }
 }
  

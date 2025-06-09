@@ -10,7 +10,7 @@ import Foundation
 protocol BudgetAPIServiceProtocol {
     func setupBudget(budget: BudgetRequest) async throws -> Budget?
     func getBudget(userId: Int) async throws -> Budget?
-    func updateBudget(userId: Int, income: Int) async throws -> ServerMessageResponce?
+    func getTransaction(userId: Int) async throws -> [Transaction]
 }
 
 final class BudgetAPIService: BudgetAPIServiceProtocol {
@@ -28,7 +28,8 @@ final class BudgetAPIService: BudgetAPIServiceProtocol {
         try await apiService.get(endpoint: URLConstansBudget.getBudgetURL(userId: userId), parameters: nil)
     }
     
-    func updateBudget(userId: Int, income: Int) async throws -> ServerMessageResponce? {
-        try await apiService.patch(endpoint: URLConstansBudget.updateBudgetURL(userId: userId), body: ["income": income])
+    func getTransaction(userId: Int) async throws -> [Transaction] {
+        try await apiService.get(endpoint: URLTransactionConstans.getTransactionURL(userId: userId), parameters: nil)
     }
+    
 }

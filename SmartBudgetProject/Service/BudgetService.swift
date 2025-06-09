@@ -15,8 +15,8 @@ protocol BudgetServiceProtocol {
     
     func fetchBudget(userId: Int) async throws -> Budget?
     func setupBudget(budget: BudgetRequest) async throws -> Budget?
-    func updateBudget(userId: Int, income: Int) async throws -> ServerMessageResponce?
-    func mockFetchBudget() async throws -> Budget?
+    func fetchTransaction(userId: Int) async throws -> [Transaction]?
+    func fetchTransactionsFromFile(userId: Int) async throws -> [Transaction]? 
 }
 
 class BudgetService: BudgetServiceProtocol {
@@ -52,31 +52,30 @@ extension BudgetService {
         }
     }
     
-    func updateBudget(userId: Int, income: Int) async throws -> ServerMessageResponce? {
+    func fetchTransaction(userId: Int) async throws -> [Transaction]? {
         do {
-            return try await budgetAPIService.updateBudget(userId: userId, income: income)
+            return try await budgetAPIService.getTransaction(userId: userId)
         } catch {
-            print("Не удалось обновить бюджет: \(error)")
-            return nil
-        }
-    }
-    func mockFetchBudget() async throws -> Budget? {
-        guard let url = Bundle.main.url(forResource: "budget", withExtension: "json") else {
-            print("Mock JSON file not found")
-            return nil
-        }
-        
-        do {
-            let data = try Data(contentsOf: url)
-            
-            let decoder = JSONDecoder()
-            let budget = try decoder.decode(Budget.self, from: data)
-            
-            return budget
-        } catch {
-            print("Error decoding mock budget: \(error)")
+            print("Не удалось получить транзакции: \(error)")
             return nil
         }
     }
     
+    func fetchTransactionsFromFile(userId: Int) async throws -> [Transaction]? {
+        do {
+            guard let fileURL = Bundle.main.url(forResource: "Trans", withExtension: "json") else {
+                print("Файл не найден")
+                return nil
+            }
+            
+            let data = try Data(contentsOf: fileURL)
+            
+            let transactions = try JSONDecoder().decode([Transaction].self, from: data)
+            
+            return transactions.filter { $0.userId == userId }
+        } catch {
+            print("Не удалось прочитать файл: \(error)")
+            return nil
+        }
+    }
 }

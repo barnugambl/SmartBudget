@@ -37,31 +37,31 @@ final class BudgetViewModel {
     }
     
     func fetchBudget() {
-            guard budgetService.budgetSubject.value == nil else { return }
-            performRequest(isLoading: \.isLoading, request: { [weak self] in
-                guard let self else { throw UserError.userNotFound }
-                return try await self.budgetService.fetchBudget(userId: self.userId)
-            }, completion: { [weak self] result in
-                guard let self else { return }
-                self.requestTimer?.cancel()
-                switch result {
-                case .success(let budget):
-                    if let budget {
-                        self.budget = budget
-                        self.requestTimer?.cancel()
-                        updateBudget(budget)
-                    } else {
-                        handleError(R.string.localizable.budgetErrorGeneral())
-                        loadBudget()
-                        self.requestTimer?.cancel()
-                    }
-                case .failure:
+        guard budgetService.budgetSubject.value == nil else { return }
+        performRequest(isLoading: \.isLoading, request: { [weak self] in
+            guard let self else { throw UserError.userNotFound }
+            return try await self.budgetService.fetchBudget(userId: self.userId)
+        }, completion: { [weak self] result in
+            guard let self else { return }
+            self.requestTimer?.cancel()
+            switch result {
+            case .success(let budget):
+                if let budget {
+                    self.budget = budget
+                    self.requestTimer?.cancel()
+                    updateBudget(budget)
+                } else {
                     handleError(R.string.localizable.budgetErrorGeneral())
                     loadBudget()
                     self.requestTimer?.cancel()
                 }
-            })
-        }
+            case .failure:
+                handleError(R.string.localizable.budgetErrorGeneral())
+                loadBudget()
+                self.requestTimer?.cancel()
+            }
+        })
+    }
     private func loadBudget() {
         do {
             let budgetCD = try coreDataService.fetchCurrentBudget()
@@ -90,29 +90,29 @@ final class BudgetViewModel {
     }
     
     func refreshBudget() {
-            guard !isRefreshing else { return }
-            isRefreshing = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                self?.performRequest(isLoading: \.isRefreshing, request: { [weak self] in
-                    guard let self else { throw UserError.userNotFound }
-                    return try await self.budgetService.fetchBudget(userId: self.userId)
-                }, completion: { [weak self] result in
-                    guard let self else { return }
-                    self.requestTimer?.cancel()
-                    switch result {
-                    case .success(let budget):
-                        guard let budget else {
-                            self.handleError(R.string.localizable.budgetErrorGeneral())
-                            return
-                        }
-                        self.budget = budget
-                        self.updateBudget(budget)
-                    case .failure:
-                        handleError(R.string.localizable.budgetErrorGeneral())
+        guard !isRefreshing else { return }
+        isRefreshing = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.performRequest(isLoading: \.isRefreshing, request: { [weak self] in
+                guard let self else { throw UserError.userNotFound }
+                return try await self.budgetService.fetchBudget(userId: self.userId)
+            }, completion: { [weak self] result in
+                guard let self else { return }
+                self.requestTimer?.cancel()
+                switch result {
+                case .success(let budget):
+                    guard let budget else {
+                        self.handleError(R.string.localizable.budgetErrorGeneral())
+                        return
                     }
-                })
-            }
+                    self.budget = budget
+                    self.updateBudget(budget)
+                case .failure:
+                    handleError(R.string.localizable.budgetErrorGeneral())
+                }
+            })
         }
+    }
     
     func getColor(for categoryName: String) -> String {
         return coreDataService.fetchCategoryColor(for: categoryName)

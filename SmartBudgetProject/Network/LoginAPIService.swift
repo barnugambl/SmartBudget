@@ -29,6 +29,6 @@ final class LoginAPIService: LoginAPIServiceProtocol {
     }
     
     func getUser(loginForm: LoginForm) async throws -> AuthResponse {
-        try await apiService.post(endpoint: URLConstantLogin.login, body: loginForm)
+        try await apiService.post(endpoint: URLConstantLoginConstans.login, body: loginForm)
     }
 }

@@ -24,7 +24,6 @@ final class BudgetView: UIView {
     
     lazy var budgetCategoryTableView: UITableView = {
         let table = UITableView()
-        table.delegate = self
         table.showsVerticalScrollIndicator = false
         table.separatorStyle = .none
         table.backgroundColor = .systemBackground
@@ -108,12 +107,5 @@ final class BudgetView: UIView {
         )
         
         return centerText
-    }
-}
-
-extension BudgetView: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        pieChartView.highlightValue(Highlight(x: Double(indexPath.row), y: 0, dataSetIndex: 0))
     }
 }

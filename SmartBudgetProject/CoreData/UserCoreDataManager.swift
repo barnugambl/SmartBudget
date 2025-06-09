@@ -14,9 +14,7 @@ final class UserCoreDataManager {
     
     private init() { }
     
-    func saveUser(
-        response: AuthResponse,
-        in context: NSManagedObjectContext = CoreDataStack.shared.viewContext) {
+    func saveUser(response: AuthResponse, in context: NSManagedObjectContext = CoreDataStack.shared.viewContext) {
             do {
                 clearUserData()
                 let newUser = UserCD(context: context)

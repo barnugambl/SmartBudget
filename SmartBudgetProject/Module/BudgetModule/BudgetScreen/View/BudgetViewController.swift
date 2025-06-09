@@ -38,6 +38,7 @@ final class BudgetViewController: UIViewController {
         super.viewDidLoad()
         bindingViewModel()
         setupNavigationBar()
+        setupTableDelegate()
         budgetView.setupTableHeader()
         viewModel.fetchBudget()
         setupRefreshControl()
@@ -56,10 +57,14 @@ final class BudgetViewController: UIViewController {
         viewModel.startNotification()
     }
     
+    private func setupTableDelegate() {
+        budgetView.budgetCategoryTableView.delegate = self
+    }
+    
     private func bindingViewModel() {
         viewModel.budgetService.budgetSubject
             .receive(on: DispatchQueue.main)
-            .compactMap({ $0 })
+            .compactMap { $0 }
             .sink { [weak self] budget in
                 guard let self else { return }
                 self.updateUI(budget: budget)
@@ -125,7 +130,7 @@ final class BudgetViewController: UIViewController {
 }
 
 // MARK: DataSource
-extension BudgetViewController {
+private extension BudgetViewController {
     private func setupDataSource(budgetCategory: [BudgetCategory]) {
         tableViewDataSource = UITableViewDiffableDataSource(
             tableView: budgetView.budgetCategoryTableView,
@@ -148,6 +153,13 @@ extension BudgetViewController {
         snaphot.appendItems(goals)
         tableViewDataSource?.apply(snaphot, animatingDifferences: false)
         
+    }
+}
+
+extension BudgetViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let currentName = viewModel.budget?.categories[indexPath.row].name else { return }
+        self.coordinator?.showTransactionFlow(name: currentName)
     }
 }
 

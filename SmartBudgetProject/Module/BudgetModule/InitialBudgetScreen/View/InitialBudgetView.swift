@@ -124,5 +124,5 @@ final class InitialBudgetView: UIView {
 
 // MARK: Constans
 extension InitialBudgetView {
-    static let confrimButtonInsetBottom: CGFloat = -20
+    static let confrimButtonInsetBottom: CGFloat = 20
 }
