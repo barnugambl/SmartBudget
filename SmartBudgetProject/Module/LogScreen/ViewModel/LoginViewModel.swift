@@ -45,7 +45,6 @@ final class LoginViewModel {
         Task {
             do {
                 if let responce = try await loginService.getUsers(loginForm: loginForm) {
-                    UserDefaultsService.shared.isLogged = true
                     coreDataManager.saveUser(response: responce)
                     completion(true)
                 } else {

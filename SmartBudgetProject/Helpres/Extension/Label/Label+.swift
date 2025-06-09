@@ -9,7 +9,7 @@ import UIKit
 
 extension UILabel {
     static func create(text: String? = nil, fontSize: CGFloat, weight: UIFont.Weight = .regular,
-                       textColor: UIColor = .black, numberOfLines: Int = 0, frame: CGRect = .zero) -> UILabel {
+                       textColor: UIColor = .label, numberOfLines: Int = 0, frame: CGRect = .zero) -> UILabel {
         let label = UILabel(frame: frame)
         label.text = text
         label.font = UIFont.systemFont(ofSize: fontSize, weight: weight)

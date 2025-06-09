@@ -23,7 +23,7 @@ final class DefaultTextField: UITextField {
          fieldBackgroundColor: UIColor = .systemGray6,
          cornerRadius: CGFloat = 10,
          textPlaceHolderSize: CGFloat = 14,
-         textPlaceHolderColor: UIColor = .systemGray2,
+         textPlaceHolderColor: UIColor = .placeholderText,
          textPlaceHolderWeight: UIFont.Weight = .regular,
          frame: CGRect = .zero) {
         
@@ -48,10 +48,10 @@ final class DefaultTextField: UITextField {
         leftView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 1))
         leftViewMode = .always
         keyboardType = keyType
-        textColor = .black
+        textColor = .label
         backgroundColor = fieldBackgroundColor
         layer.cornerRadius = cornerRadius
-        
+        inputAccessoryView = createToolbar()
         attributedPlaceholder = NSAttributedString(
             string: fieldPlaceHolder,
             attributes: [
@@ -59,11 +59,31 @@ final class DefaultTextField: UITextField {
                 .foregroundColor: textPlaceHolderColor
             ]
         )
-            
         if isSecureTextEntry {
             rightView = setupRightView()
             rightViewMode = .always
         }
+    }
+    
+    private func createToolbar() -> UIToolbar {
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
+        toolbar.barStyle = .default
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(
+            title: "Готово",
+            style: .done,
+            target: self,
+            action: #selector(dismissKeyboard))
+        
+        toolbar.items = [flexSpace, doneButton]
+        toolbar.sizeToFit()
+        
+        return toolbar
+    }
+    
+    @objc private func dismissKeyboard() {
+        resignFirstResponder()
     }
     
     private func setupRightView() -> UIView {

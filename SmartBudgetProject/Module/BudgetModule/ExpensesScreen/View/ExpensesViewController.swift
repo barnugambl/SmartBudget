@@ -55,8 +55,10 @@ extension ExpensesViewController {
     func setupPieChart() {
         let entries = createPieChartEntries()
         let dataSet = createPieChartDataSet(with: entries)
-        configurePieChart(with: dataSet)
+        dataSet.entryLabelColor = .label
+        dataSet.entryLabelFont = UIFont.systemFont(ofSize: 14, weight: .medium)
         self.expensesView.pieChartView.centerAttributedText = createCenterAttributedText(amount: viewModel.getIncomeString())
+        configurePieChart(with: dataSet)
     }
     
     func createPieChartEntries() -> [PieChartDataEntry] {
@@ -92,7 +94,7 @@ extension ExpensesViewController {
             string: "Бюджет\n",
             attributes: [
                 .font: UIFont.systemFont(ofSize: FontSizeConstans.body),
-                .foregroundColor: UIColor.gray,
+                .foregroundColor: UIColor.secondaryLabel,
                 .paragraphStyle: paragraphStyle
             ]
         )
@@ -102,7 +104,7 @@ extension ExpensesViewController {
                 string: amount,
                 attributes: [
                     .font: UIFont.boldSystemFont(ofSize: FontSizeConstans.title),
-                    .foregroundColor: UIColor.black,
+                    .foregroundColor: UIColor.label,
                     .paragraphStyle: paragraphStyle
                 ]
             )

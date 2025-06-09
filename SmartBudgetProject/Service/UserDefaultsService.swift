@@ -15,6 +15,7 @@ class UserDefaultsService {
     
     private enum Keys {
         static let isLogged = "isLogged"
+        static let isDarkTheme = "isDarkTheme"
     }
     
     private init(userDefaults: UserDefaults = .standard) {
@@ -28,6 +29,17 @@ extension UserDefaultsService {
         get { userDefaults.bool(forKey: Keys.isLogged) }
         set {
             userDefaults.set(newValue, forKey: Keys.isLogged)
+            userDefaults.synchronize()
+        }
+    }
+}
+
+// MARK: DarkTheme
+extension UserDefaultsService {
+    var isDarkTheme: Bool {
+        get { userDefaults.bool(forKey: Keys.isDarkTheme) }
+        set {
+            userDefaults.set(newValue, forKey: Keys.isDarkTheme)
             userDefaults.synchronize()
         }
     }

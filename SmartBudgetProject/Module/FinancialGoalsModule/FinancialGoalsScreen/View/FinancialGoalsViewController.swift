@@ -187,7 +187,7 @@ extension FinancialGoalsViewController: UITableViewDelegate {
                 let deleteAction = UIAction(title: R.string.localizable.contextMenuDelete(),
                                             image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
-                    self.viewModel.deleteFinancialGoal(goalId: goal.goalId, userId: self.viewModel.userId)
+                    self.viewModel.deleteFinancialGoal(goalId: goal.goalId)
                 }
                 
                 let editAction = UIAction(title: R.string.localizable.contextMenuEdit(),
@@ -204,7 +204,7 @@ extension FinancialGoalsViewController: UITableViewDelegate {
             } else {
                 let deleteAction = UIAction(title: R.string.localizable.contextMenuDelete(),
                                             image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
-                    self?.viewModel.deleteFinancialGoal(goalId: goal.goalId, userId: 1)
+                    self?.viewModel.deleteFinancialGoal(goalId: goal.goalId)
                 }
                 return UIMenu(title: "", children: [deleteAction])
             }

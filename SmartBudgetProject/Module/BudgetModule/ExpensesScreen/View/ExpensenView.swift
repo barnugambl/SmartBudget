@@ -25,12 +25,16 @@ final class ExpensenView: UIView {
     
     lazy var pieChartView: PieChartView = {
         let pieChart = PieChartView()
-        pieChart.drawEntryLabelsEnabled = false
         pieChart.rotationEnabled = false
         pieChart.highlightPerTapEnabled = true
         pieChart.legend.enabled = false
         pieChart.holeRadiusPercent = 0.7
         pieChart.drawEntryLabelsEnabled = true
+        pieChart.holeColor = .clear
+        pieChart.transparentCircleColor = .clear
+        pieChart.noDataText = "Упс, произошла ошибка попробуйте позже"
+        pieChart.noDataTextColor = .label
+        pieChart.noDataFont = UIFont.systemFont(ofSize: 16, weight: .medium)
         return pieChart
     }()
         
@@ -80,7 +84,7 @@ final class ExpensenView: UIView {
         pieChartView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(Constans.insetSmall)
             make.leading.trailing.equalToSuperview().inset(Constans.insetSmall)
-            make.height.equalTo(250)
+            make.height.equalTo(256)
         }
         
         categoryStack.snp.makeConstraints { make in

@@ -9,16 +9,16 @@ final class BudgetView: UIView {
     
     lazy var pieChartView: PieChartView = {
         let pieChart = PieChartView()
-        pieChart.drawEntryLabelsEnabled = false
         pieChart.rotationEnabled = false
         pieChart.highlightPerTapEnabled = true
         pieChart.legend.enabled = false
         pieChart.holeRadiusPercent = 0.7
         pieChart.drawEntryLabelsEnabled = true
-        
+        pieChart.holeColor = .clear
+        pieChart.transparentCircleColor = .clear
         pieChart.noDataText = "Упс, произошла ошибка попробуйте позже"
-        pieChart.noDataTextColor = .systemGray3
-        pieChart.noDataFont = UIFont.systemFont(ofSize: 16)
+        pieChart.noDataTextColor = .label
+        pieChart.noDataFont = UIFont.systemFont(ofSize: 16, weight: .medium)
         return pieChart
     }()
     
@@ -85,12 +85,13 @@ final class BudgetView: UIView {
     func createCenterAttributedText(amount: String) -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
+        paragraphStyle.lineSpacing = 4
         
         let centerText = NSMutableAttributedString(
             string: "Бюджет\n",
             attributes: [
-                .font: UIFont.systemFont(ofSize: FontSizeConstans.body),
-                .foregroundColor: UIColor.gray,
+                .font: UIFont.systemFont(ofSize: FontSizeConstans.body, weight: .medium),
+                .foregroundColor: UIColor.secondaryLabel,
                 .paragraphStyle: paragraphStyle
             ]
         )
@@ -100,12 +101,11 @@ final class BudgetView: UIView {
                 string: amount,
                 attributes: [
                     .font: UIFont.boldSystemFont(ofSize: FontSizeConstans.title),
-                    .foregroundColor: UIColor.black,
+                    .foregroundColor: UIColor.label,
                     .paragraphStyle: paragraphStyle
                 ]
             )
         )
-        
         return centerText
     }
 }

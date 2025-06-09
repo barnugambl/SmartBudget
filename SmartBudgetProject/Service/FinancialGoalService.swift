@@ -17,7 +17,7 @@ protocol FinancialGoalServiceProtocol {
     func updateFinancialGoal(userId: Int, goalId: Int, body: GoalRequest) async throws -> Goal?
     func fetchFinancialGoals(userId: Int) async throws -> [Goal]?
     func deleteFinancialGoal(userId: Int, goalId: Int) async throws -> ServerMessageResponce?
-    func loadMockGoals(userId: Int) async throws -> [Goal]?
+    func updateMoneyGoal(userId: Int, goalId: Int, body: GoalRequestMoney) async throws -> Goal?
 }
 
 class FinancialGoalService: FinancialGoalServiceProtocol {
@@ -71,18 +71,11 @@ extension FinancialGoalService {
         }
     }
     
-    func loadMockGoals(userId: Int) async throws -> [Goal]? {
-        guard let url = Bundle.main.url(forResource: "goals", withExtension: "json") else {
-            print("Файл не найден")
-            return nil
-        }
-        
+    func updateMoneyGoal(userId: Int, goalId: Int, body: GoalRequestMoney) async throws -> Goal? {
         do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            return try decoder.decode([Goal].self, from: data)
+            return try await financialGoalAPIService.updateMoneyFinancialGoal(userId: userId, goalId: goalId, body: body)
         } catch {
-            print("Ошибка загрузки JSON: \(error)")
+            print("Не удалось обновить цель: \(error)")
             return nil
         }
     }

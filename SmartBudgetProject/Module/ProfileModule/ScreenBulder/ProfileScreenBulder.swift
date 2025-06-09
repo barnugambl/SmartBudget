@@ -24,9 +24,4 @@ final class ProfileScreenBulder {
         let viewModel = ProfileViewModel()
         return ProfileViewController(viewModel: viewModel)
     }
-    
-    func makeEditProfileScreen() -> EditProfileViewController {
-        let viewModel = EditProfileViewModel()
-        return EditProfileViewController(viewModel: viewModel)
-    }
 }

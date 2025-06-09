@@ -100,7 +100,7 @@ private extension AddFinancialGoalViewModel {
     
     func validateName() -> Bool {
         guard !name.isEmpty else {
-            errorMessageField = R.string.localizable.goalZeroAmount()
+            errorMessageField = R.string.localizable.goalEmptyName()
             errorField = .name
             return false
         }

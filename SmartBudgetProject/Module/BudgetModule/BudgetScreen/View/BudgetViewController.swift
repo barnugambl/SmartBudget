@@ -168,6 +168,8 @@ extension BudgetViewController {
     func setupPieChart(budget: Budget, colors: [UIColor]) {
         let entries = createPieChartEntries(budget: budget)
         let dataSet = createPieChartDataSet(with: entries, colors: colors)
+        dataSet.entryLabelColor = .label
+        dataSet.entryLabelFont = UIFont.systemFont(ofSize: 14, weight: .medium)
         configurePieChart(with: dataSet)
     }
     

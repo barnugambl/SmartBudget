@@ -42,13 +42,6 @@ final class ProfileCoordinator: Coordinator {
         navigationController.setViewControllers([profileVC], animated: false)
     }
     
-    func showEditProfleFlow() {
-        let editProfileVC = profileBulder.makeEditProfileScreen()
-        editProfileVC.coordinator = self
-        editProfileVC.hidesBottomBarWhenPushed = true
-        navigationController.pushViewController(editProfileVC, animated: true)
-    }
-    
     func showOnboardingFlow() {
         delegate?.startOnboarding(coordinator: self)
     }

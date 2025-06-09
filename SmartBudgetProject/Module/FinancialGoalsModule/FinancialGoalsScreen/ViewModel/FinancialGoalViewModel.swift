@@ -97,7 +97,7 @@ final class FinancialGoalViewModel {
         }
     }
     
-    func deleteFinancialGoal(goalId: Int, userId: Int) {
+    func deleteFinancialGoal(goalId: Int) {
         Task {
             do {
                 if try await financialGoalService.deleteFinancialGoal(userId: userId, goalId: goalId) != nil {

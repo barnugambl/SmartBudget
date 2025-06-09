@@ -30,14 +30,8 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         setupNavigation()
         setupTabBar()
-        setupName()
     }
-    
-    private func setupName() {
-        let name = viewModel.getCurrentUser()?.id
-        self.profileView.nameLabel.text = String(describing: name)
-    }
-    
+
     private func setupTabBar() {
         navigationItem.titleView = profileView.titleLabel
         
@@ -52,12 +46,12 @@ final class ProfileViewController: UIViewController {
         profileView.onEvent = { [weak self] event in
             guard let self else { return }
             switch event {
-            case .didTapEditProfile:
-                self.coordinator?.showEditProfleFlow()
             case .didTapExpenseHistory:
                 break
             case .didTapFinanses:
                 self.coordinator?.showExpensenFlow()
+            case .didToggleDarkTheme(isOn: let isOn):
+                self.viewModel.toggleDarkTheme(isOn: isOn)
             }
         }
     }

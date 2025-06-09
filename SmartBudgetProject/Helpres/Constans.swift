@@ -63,6 +63,28 @@ enum URLConstansBudget {
     }
 }
 
+enum URLConstantGoal {
+    static func createGoalURL(userId: Int) -> String {
+        return "/goals/\(userId)"
+    }
+    
+    static func getGoalsURL(userId: Int) -> String {
+        return "/goals/\(userId)"
+    }
+    
+    static func updateGoalURL(userId: Int, goalId: Int) -> String {
+        return "/goals/\(userId)/\(goalId)"
+    }
+    
+    static func deleteGoalURL(userId: Int, goalId: Int) -> String {
+        return "/goals/\(userId)/\(goalId)"
+    }
+    
+    static func updateMoney(userId: Int, goalId: Int) -> String {
+        return "/goals/\(userId)/\(goalId)"
+    }
+}
+
 enum URLConstansNotification {
     static func getNotification(userId: Int) -> String {
         return "/notifications/\(userId)"

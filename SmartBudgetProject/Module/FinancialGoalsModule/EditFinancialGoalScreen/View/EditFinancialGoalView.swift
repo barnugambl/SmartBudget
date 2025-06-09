@@ -25,15 +25,15 @@ final class EditFinancialGoalView: UIView {
     lazy var amountGoalTextField = AmountTextField()
     lazy var dateTextField: UITextField = {
         let field = UITextField()
-        let leftView = UIView(frame: EditProfileView.sizeLeftView)
+        let leftView = UIView(frame: EditFinancialGoalView.sizeLeftView)
         field.leftView = leftView
         field.leftViewMode = .always
         field.placeholder = R.string.localizable.dateTextFieldPlaceHolder()
         field.backgroundColor = .systemGray6
         field.layer.cornerRadius = Constans.cornerRadiusLarge
         let imageView = UIImageView(image: UIImage(systemName: "calendar"))
-        let paddingView = UIView(frame: EditProfileView.sizePaddingView)
-        imageView.frame = EditProfileView.rightIconSizeDateTextField
+        let paddingView = UIView(frame: EditFinancialGoalView.sizePaddingView)
+        imageView.frame = EditFinancialGoalView.rightIconSizeDateTextField
         paddingView.addSubview(imageView)
         field.rightView = paddingView
         field.rightViewMode = .always
@@ -135,7 +135,7 @@ final class EditFinancialGoalView: UIView {
     }
 }
 
-extension EditProfileView {
+extension EditFinancialGoalView {
     static let heightSeparatorView: CGFloat = 1
     static let rightIconSizeDateTextField: CGRect = CGRect(x: -1, y: 0, width: 20, height: 20)
     static let sizeLeftView = CGRect(x: 0, y: 0, width: 10, height: 1)

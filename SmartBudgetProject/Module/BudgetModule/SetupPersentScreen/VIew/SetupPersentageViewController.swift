@@ -97,7 +97,7 @@ final class SetupPersentageViewController: UIViewController {
                 categories: categories) { isSuccess in
                     if isSuccess {
                         DispatchQueue.main.async {
-                            self.coordinator?.finishOnBoarding()                            
+                            self.coordinator?.finishOnBoarding()
                         }
                     }
                 }
@@ -110,6 +110,8 @@ extension SetupPersentageViewController {
     func setupPieChart() {
         let entries = createPieChartEntries()
         let dataSet = createPieChartDataSet(with: entries)
+        dataSet.entryLabelColor = .label
+        dataSet.entryLabelFont = UIFont.systemFont(ofSize: 14, weight: .medium)
         configurePieChart(with: dataSet)
     }
     
@@ -166,7 +168,7 @@ extension SetupPersentageViewController {
             string: "Бюджет\n",
             attributes: [
                 .font: UIFont.systemFont(ofSize: FontSizeConstans.body),
-                .foregroundColor: UIColor.gray,
+                .foregroundColor: UIColor.secondaryLabel,
                 .paragraphStyle: paragraphStyle
             ]
         )
@@ -176,7 +178,7 @@ extension SetupPersentageViewController {
                 string: amount,
                 attributes: [
                     .font: UIFont.boldSystemFont(ofSize: FontSizeConstans.title),
-                    .foregroundColor: UIColor.black,
+                    .foregroundColor: UIColor.label,
                     .paragraphStyle: paragraphStyle
                 ]
             )
