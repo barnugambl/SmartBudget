@@ -41,7 +41,7 @@ final class ProfileViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Выйти", primaryAction: action)
         
     }
-    
+
     private func setupNavigation() {
         profileView.onEvent = { [weak self] event in
             guard let self else { return }

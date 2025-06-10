@@ -57,7 +57,7 @@ class SetupPersentageViewModel {
             if responce != nil {
                 budgetService.budgetSubject.send(budget)
                 UserDefaultsService.shared.isLogged = true
-                ThemeManager.shared.updateTheme()
+                UserDefaultsService.shared.updateTheme()
                 do {
                     try coreDataService.saveBudget(income: incomeInt, categories: categories)
                 } catch {

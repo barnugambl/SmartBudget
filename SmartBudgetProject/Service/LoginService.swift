@@ -14,12 +14,10 @@ protocol LoginServiceProtocol {
 class LoginService: LoginServiceProtocol {
     let loginAPIService: LoginAPIServiceProtocol
     
-    private init(loginAPIService: LoginAPIServiceProtocol) {
+    init(loginAPIService: LoginAPIServiceProtocol) {
         self.loginAPIService = loginAPIService
     }
-    
-    static let shared = LoginService(loginAPIService: LoginAPIService(apiService: ApiService()))
-    
+        
     func getUsers(loginForm: LoginForm) async throws -> AuthResponse? {
         do {
             return try await loginAPIService.getUser(loginForm: loginForm)

@@ -7,15 +7,10 @@
 
 import Foundation
 
-class ProfileViewModel {
-    private let coreDataManager = UserCoreDataManager.shared
-    private let themeManager: ThemeManager
-    
-    init(themeManager: ThemeManager = .shared) {
-        self.themeManager = themeManager
-    }
-    
+final class ProfileViewModel {
+
     func toggleDarkTheme(isOn: Bool) {
-        themeManager.setDarkTheme(isOn)
+        UserDefaultsService.shared.setDarkTheme(isOn)
     }
 }
+

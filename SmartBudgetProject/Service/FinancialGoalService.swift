@@ -25,10 +25,8 @@ class FinancialGoalService: FinancialGoalServiceProtocol {
     var successMessageSubject = CurrentValueSubject<String?, Never>(nil)
     var updateGoalSubject = PassthroughSubject<Goal, Never>()
     var addGoalSubject = PassthroughSubject<Goal, Never>()
-    
-    static let shared = FinancialGoalService(financialGoalAPIService: FinancialGoalAPIService(apiService: ApiService()))
-    
-    private init(financialGoalAPIService: FinancialGoalAPIServiceProtocol) {
+        
+    init(financialGoalAPIService: FinancialGoalAPIServiceProtocol) {
         self.financialGoalAPIService = financialGoalAPIService
     }
 }

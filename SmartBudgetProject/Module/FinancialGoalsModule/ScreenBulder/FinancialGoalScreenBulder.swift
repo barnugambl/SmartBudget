@@ -8,7 +8,7 @@
 import Foundation
 
 class FinancialGoalScreenBulder {
-    let financialGoalService = FinancialGoalService.shared
+    let financialGoalService = FinancialGoalService(financialGoalAPIService: FinancialGoalAPIService(apiService: ApiService()))
     private var currentUserId: Int {
         Int(UserCoreDataManager.shared.getCurrentUser()?.id ?? 0)
     }

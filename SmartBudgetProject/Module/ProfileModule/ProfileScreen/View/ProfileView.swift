@@ -23,6 +23,8 @@ final class ProfileView: UIView {
         self?.onEvent?(.didTapFinanses)
     }
     
+    lazy var editLanguageItemView = EditLanguageItemView()
+    
     private lazy var expensehistoryButton = ItemView(title: R.string.localizable.expensehistoryButton(),
                                                      iconName: R.image.expensehistory_icon.name) { [weak self] in
             self?.onEvent?(.didTapExpenseHistory)
@@ -31,13 +33,8 @@ final class ProfileView: UIView {
     private lazy var darkThemeButton = ItemView(title: R.string.localizable.darkThemeButton(),
                                                 iconName: R.image.moon_icon.name)
 
-    private lazy var editLanguageButton = ItemView(title: R.string.localizable.editLanguageButton(),
-                                                   iconName: R.image.language_icon.name) { [weak self] in
-        
-    }
-    
     private lazy var buttonStack = UIStackView.create(stackSpacing: Constans.largeStackSpacing,
-    views: [financesButton, expensehistoryButton, darkThemeButton, editLanguageButton])
+    views: [financesButton, expensehistoryButton, darkThemeButton])
     
     private lazy var darkThemeSwitch: UISwitch = {
         let swt = UISwitch()
@@ -66,23 +63,29 @@ final class ProfileView: UIView {
     }
     
     private func setupLayout() {
-        addSubviews(buttonStack)
-        darkThemeButton.addSubview(darkThemeSwitch)
-        
-        buttonStack.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(Constans.insetXLarge)
-            make.trailing.leading.equalToSuperview().inset(Constans.insetSmall)
+        addSubviews(buttonStack, editLanguageItemView)
+
+        buttonStack.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide.snp.top).offset(Constans.insetXLarge)
+            $0.leading.trailing.equalToSuperview().inset(Constans.insetSmall)
         }
-        
-        buttonStack.arrangedSubviews.forEach({ $0.snp.makeConstraints { make in
-            make.height.equalTo(ProfileView.heightItemView)
-        }})
-        
-        darkThemeSwitch.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().inset(Constans.insetSmall)
+
+        buttonStack.arrangedSubviews.forEach {
+            $0.snp.makeConstraints { $0.height.equalTo(ProfileView.heightItemView) }
+        }
+
+        editLanguageItemView.snp.makeConstraints {
+            $0.top.equalTo(buttonStack.snp.bottom).offset(32)
+            $0.leading.trailing.equalToSuperview().inset(Constans.insetSmall)
+        }
+
+        darkThemeButton.addSubview(darkThemeSwitch)
+        darkThemeSwitch.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(Constans.insetSmall)
         }
     }
+
 }
 
 // MARK: Constans
