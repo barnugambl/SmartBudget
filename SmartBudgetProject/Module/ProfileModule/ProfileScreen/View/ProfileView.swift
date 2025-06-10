@@ -16,7 +16,7 @@ enum ProfileViewEvent {
 final class ProfileView: UIView {
     var onEvent: ((ProfileViewEvent) -> Void)?
     
-    lazy var titleLabel = UILabel.create(text: "Личный кабинет", fontSize: FontSizeConstans.title, weight: .medium)
+    lazy var titleLabel = UILabel.create(text: R.string.localizable.titleProfileLabel(), fontSize: FontSizeConstans.title, weight: .medium)
         
     private lazy var financesButton = ItemView(title: R.string.localizable.myFinancesButton(),
                                                iconName: R.image.finance_icon.name) { [weak self] in
@@ -75,7 +75,7 @@ final class ProfileView: UIView {
         }
 
         editLanguageItemView.snp.makeConstraints {
-            $0.top.equalTo(buttonStack.snp.bottom).offset(32)
+            $0.top.equalTo(buttonStack.snp.bottom).offset(Constans.insetLarge)
             $0.leading.trailing.equalToSuperview().inset(Constans.insetSmall)
         }
 

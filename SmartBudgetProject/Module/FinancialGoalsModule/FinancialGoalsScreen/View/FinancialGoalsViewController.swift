@@ -18,7 +18,6 @@ final class FinancialGoalsViewController: UIViewController {
     private var financialGoalsView = FinancialGoalsView()
     private var tableViewDataSource: UITableViewDiffableDataSource<TableSection, Goal>?
     private var cancellable = Set<AnyCancellable>()
-    private let refreshControl = UIRefreshControl()
     weak var coordinator: FinancialGoalCoordinator?
     
     init(viewModel: FinancialGoalViewModel) {
@@ -45,8 +44,8 @@ final class FinancialGoalsViewController: UIViewController {
     }
     
     private func setupRefreshControl() {
-        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
-        financialGoalsView.financialGoalsTableView.refreshControl = refreshControl
+        financialGoalsView.refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        financialGoalsView.financialGoalsTableView.refreshControl = self.financialGoalsView.refreshControl
     }
     
     @objc private func refreshData() {
@@ -76,7 +75,7 @@ final class FinancialGoalsViewController: UIViewController {
         
         viewModel.finishLoading = { [weak self] in
             DispatchQueue.main.async {
-                self?.refreshControl.endRefreshing()
+                self?.financialGoalsView.refreshControl.endRefreshing()
             }
         }
         

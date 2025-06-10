@@ -30,6 +30,7 @@ final class BudgetViewModel {
     init(userId: Int, budgetService: BudgetServiceProtocol) {
         self.userId = userId
         self.budgetService = budgetService
+        updateBudgetForTransactions()
     }
     
     func resetMessages() {
@@ -62,6 +63,33 @@ final class BudgetViewModel {
             }
         })
     }
+    
+    func updateBudgetForTransactions() {
+        budgetService.updateBudgetForTransaction
+            .compactMap { $0 }
+            .sink { [weak self] transactions in
+                guard let self, var currentBudget = self.budget else { return }
+                var spentByCategory: [String: Int] = [:]
+                
+                for transaction in transactions {
+                    let amount = Int(transaction.amount) ?? 0
+                    spentByCategory[transaction.category, default: 0] += amount
+                }
+                
+                for (categoryName, totalSpent) in spentByCategory {
+                    if let categoryIndex = currentBudget.categories.firstIndex(where: { $0.name == categoryName }) {
+                        currentBudget.categories[categoryIndex].spent += totalSpent
+                        currentBudget.categories[categoryIndex].remaining = max(0,
+                                                                                currentBudget.categories[categoryIndex].limit -
+                                                                                currentBudget.categories[categoryIndex].spent)
+                    }
+                }
+                self.budget = currentBudget
+                self.updateBudget(currentBudget)
+            }
+            .store(in: &cancellable)
+    }
+    
     private func loadBudget() {
         do {
             let budgetCD = try coreDataService.fetchCurrentBudget()

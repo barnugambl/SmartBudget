@@ -2,56 +2,56 @@
     {
         "userId": 5,
         "date": "2025-06-08",
-        "amount": "-1250.50",
+        "amount": "1250.50",
         "category": "Продукты",
         "description": "Покупки в Пятерочке"
     },
     {
         "userId": 5,
         "date": "2025-06-07",
-        "amount": "-350.00",
+        "amount": "350.00",
         "category": "Транспорт",
         "description": "Такси до работы"
     },
     {
         "userId": 5,
         "date": "2025-06-05",
-        "amount": "-8750.00",
+        "amount": "8750.00",
         "category": "Коммунальные услуги",
         "description": "Оплата за квартиру"
     },
     {
         "userId": 5,
         "date": "2025-06-04",
-        "amount": "-1200.00",
+        "amount": "1200.00",
         "category": "Развлечения",
         "description": "Кинотеатр"
     },
     {
         "userId": 5,
         "date": "2025-06-03",
-        "amount": "-500.00",
+        "amount": "500.00",
         "category": "Другое",
         "description": "Подарок коллеге"
     },
     {
         "userId": 5,
         "date": "2025-06-01",
-        "amount": "30000.00",
+        "amount": "4000.00",
         "category": "Накопления",
-        "description": "Зарплата"
+        "description": "Акции"
     },
     {
         "userId": 5,
         "date": "2025-05-30",
-        "amount": "-2400.00",
+        "amount": "2400.00",
         "category": "Продукты",
         "description": "Ашан"
     },
     {
         "userId": 15,
         "date": "2025-05-28",
-        "amount": "-75.00",
+        "amount": "75.00",
         "category": "Транспорт",
         "description": "Метро"
     }

@@ -12,6 +12,7 @@ protocol BudgetServiceProtocol {
     var initialBudgetSubject: CurrentValueSubject<(String, [CategoryDto]), Never> { get }
     var budgetSubject: CurrentValueSubject<(Budget)?, Never> { get }
     var updateColorSubject: CurrentValueSubject<(String, String)?, Never> { get }
+    var updateBudgetForTransaction: CurrentValueSubject<[Transaction]?, Never> { get }
     
     func fetchBudget(userId: Int) async throws -> Budget?
     func setupBudget(budget: BudgetRequest) async throws -> Budget?
@@ -24,6 +25,7 @@ class BudgetService: BudgetServiceProtocol {
     let initialBudgetSubject = CurrentValueSubject<(String, [CategoryDto]), Never>(("", CategoryDto.defaultCategories()))
     let budgetSubject = CurrentValueSubject<(Budget)?, Never>(nil)
     var updateColorSubject = CurrentValueSubject<(String, String)?, Never>(nil)
+    var updateBudgetForTransaction = CurrentValueSubject<[Transaction]?, Never>(nil)
     
     private init(budgetAPIService: BudgetAPIServiceProtocol) {
         self.budgetAPIService = budgetAPIService

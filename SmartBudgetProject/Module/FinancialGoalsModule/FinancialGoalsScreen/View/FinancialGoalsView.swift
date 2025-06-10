@@ -17,6 +17,12 @@ final class FinancialGoalsView: UIView {
         return table
     }()
     
+    lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.tintColor = UIColor(hex: ColorConstans.yellow)
+        return control
+    }()
+
     lazy var loadIndicator = CustomSpinnerSimple()
 
     override init(frame: CGRect) {

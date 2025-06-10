@@ -7,32 +7,6 @@
 
 import UIKit
 
-enum TransactionCategory: String {
-    case products = "Продукты"
-    case transport = "Транспорт"
-    case utilities = "Коммунальные услуги"
-    case entertainment = "Развлечения"
-    case other = "Другое"
-    case savings = "Накопления"
-    
-    var iconName: String {
-        switch self {
-        case .products:
-            return R.image.food_icon.name
-        case .transport:
-            return R.image.transport_icon.name
-        case .utilities:
-            return R.image.faucet_icon.name
-        case .entertainment:
-            return R.image.event_icon.name
-        case .other:
-            return R.image.other_icon.name
-        case .savings:
-            return R.image.coins_icon.name
-        }
-    }
-}
-
 final class TransactionTableViewCell: UITableViewCell {
     private lazy var descriptionLabel = UILabel.create(fontSize: FontSizeConstans.body, weight: .medium)
     private lazy var dateLabel = UILabel.create(fontSize: FontSizeConstans.subbody, weight: .regular)

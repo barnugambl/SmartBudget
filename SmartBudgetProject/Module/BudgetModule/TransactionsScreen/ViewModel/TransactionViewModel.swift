@@ -10,6 +10,7 @@ import Combine
 
 final class TransactionViewModel {
     let budgetService: BudgetServiceProtocol
+    
     var transaction: [Transaction] = []
     let userId = Int(UserCoreDataManager.shared.getCurrentUser()?.id ?? 0)
     private let coreDataManager = BudgetCoreDataManager.shared
@@ -20,6 +21,7 @@ final class TransactionViewModel {
         self.budgetService = budgetService
         fetchTransactions()
     }
+
     
     func fetchTransactions() {
         errorMessage = nil
@@ -27,8 +29,9 @@ final class TransactionViewModel {
             let responce = try await budgetService.fetchTransactionsFromFile(userId: userId)
             if let responce {
                 transaction = responce
+                budgetService.updateBudgetForTransaction.send(responce)
             } else {
-                errorMessage = "Упс что то пошло не так, попробуйте позже"
+                errorMessage = R.string.localizable.budgetErrorGeneral()
             }
         }
     }
