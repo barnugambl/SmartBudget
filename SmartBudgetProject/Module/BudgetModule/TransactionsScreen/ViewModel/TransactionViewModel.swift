@@ -22,7 +22,6 @@ final class TransactionViewModel {
         fetchTransactions()
     }
 
-    
     func fetchTransactions() {
         errorMessage = nil
         Task {
