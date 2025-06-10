@@ -31,7 +31,7 @@ final class ProfileViewController: UIViewController {
         setupNavigation()
         setupTabBar()
     }
-    
+
     private func setupTabBar() {
         navigationItem.titleView = profileView.titleLabel
         
@@ -39,17 +39,19 @@ final class ProfileViewController: UIViewController {
             self?.coordinator?.logout()
         }
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Выйти", primaryAction: action)
+        
     }
-    
+
     private func setupNavigation() {
         profileView.onEvent = { [weak self] event in
+            guard let self else { return }
             switch event {
-            case .didTapEditProfile:
-                self?.coordinator?.showEditProfleFlow()
             case .didTapExpenseHistory:
                 break
             case .didTapFinanses:
-                break
+                self.coordinator?.showExpensenFlow()
+            case .didToggleDarkTheme(isOn: let isOn):
+                self.viewModel.toggleDarkTheme(isOn: isOn)
             }
         }
     }

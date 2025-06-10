@@ -23,7 +23,14 @@ final class ExpensesCoordinator: Coordinator {
     }
     
     func showExpensesFlow() {
-        let expensesVC = budgetBulder.makeExpensesScreen()
+        let expensesVC = budgetBulder.makeBudgetScreen()
+        expensesVC.coordinator = self
         navigationController.setViewControllers([expensesVC], animated: false)
+    }
+    
+    func showTransactionFlow(name: String) {
+        let transtactionVC = budgetBulder.makeTranstactionScreen(name: name)
+        transtactionVC.coordinator = self
+        navigationController.pushViewController(transtactionVC, animated: true)
     }
 }

@@ -7,6 +7,10 @@
 
 import Foundation
 
-class ProfileViewModel {
-    
+final class ProfileViewModel {
+
+    func toggleDarkTheme(isOn: Bool) {
+        UserDefaultsService.shared.setDarkTheme(isOn)
+    }
 }
+

@@ -17,18 +17,19 @@ final class FinancialGoalsView: UIView {
         return table
     }()
     
-    lazy var loadIndicator: UIActivityIndicatorView = {
-        let indicatior = UIActivityIndicatorView(style: .large)
-        indicatior.color = UIColor(hex: ColorConstans.yellow)
-        indicatior.hidesWhenStopped = true
-        return indicatior
+    lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.tintColor = UIColor(hex: ColorConstans.yellow)
+        return control
     }()
-    
+
+    lazy var loadIndicator = CustomSpinnerSimple()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         setupLayout()
-        loadIndicator.startAnimating()
+        loadIndicator.startAnimation()
     }
     
     required init?(coder: NSCoder) {
@@ -40,7 +41,7 @@ final class FinancialGoalsView: UIView {
     }
     
     func showTable() {
-        loadIndicator.stopAnimating()
+        loadIndicator.stopAnimation()
         financialGoalsTableView.isHidden = false
     }
     
@@ -53,6 +54,7 @@ final class FinancialGoalsView: UIView {
         
         loadIndicator.snp.makeConstraints { make in
             make.center.equalToSuperview()
+            make.size.equalTo(Constans.heightSpinner)
         }
     }
 }

@@ -77,14 +77,10 @@ enter the 5-digit code specified in the SMS";
 "dateGoalLabel" = "End date";
 "positiveResult" = "The goal was achieved!";
 "negativeResult" = "Failed to achieve the goal :(";
-"financialGoal_error_zeroAmount" = "Amount must be greater than 0";
-"financialGoal_error_emptyAmount" = "Amount cannot be empty";
-"financialGoal_error_emptyName" = "Goal name cannot be empty";
-"financialGoal_error_emptyDate" = "Date cannot be empty";
-"financialGoal_error_timeout" = "Oops, something went wrong. Please try again later";
-"financialGoal_error_general" = "Oops, an error occurred. Please try again";
-"financialGoal_success_created" = "Goal successfully created";
-"financialGoal_success_added" = "Amount successfully added";
+"nameLabel" = "Name";
+"dateLabel" = "Date";
+"amountLabel" = "Target amount";
+"editGoalLabel" = "Edit goal";
 
 
 //MARK: ExpensesScreen
@@ -120,5 +116,26 @@ enter the 5-digit code specified in the SMS";
 "budgetErrorZero" = "Budget must be greater than 0";
 "budgetErrorGeneral" = "Oops, something went wrong";
 
+// MARK: - Financial Messages
+"goalEmptyName" = "Goal name cannot be empty";
+"goalEmptyAmount" = "Amount cannot be empty";
+"goalZeroAmount" = "Amount must be greater than 0";
+"goalEmptyDate" = "Date cannot be empty";
+"goalCreateSuccess" = "Goal successfully created";
+"goalUpdateSuccess" = "Goal successfully updated";
+"goalAddMoneySuccess" = "Amount successfully added";
+"goalDeleteSuccess" = "Goal successfully deleted";
+"goalGeneralError" = "Oops, an error occurred, please try again";
+"goalTimeoutError" = "Server timeout exceeded";
+"goalNoChanges" = "No changes to save";
 
+// MARK: - Context Menu
+"contextMenuDelete" = "Delete";
+"contextMenuEdit" = "Edit";
+"contextMenuAddMoney" = "Add money";
 
+// MARK: Notification
+"notification.warning.title" = "⚠️ Warning";
+"notification.error.title" = "❌ Error";
+"notification.info.title" = "Notification";
+"notification.category.subtitle" = "Category: %@";

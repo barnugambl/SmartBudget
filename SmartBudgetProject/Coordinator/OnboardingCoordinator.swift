@@ -40,8 +40,8 @@ final class OnboardingCoordinator: Coordinator {
         navigationController.pushViewController(setupCategoryVC, animated: true)
     }
     
-    func showSetupPersentScreen(categories: [CategoryDto]) {
-        let setupPersentVC = budgetBulder.makeSetupPersentScreen(categories: categories)
+    func showSetupPersentScreen() {
+        let setupPersentVC = budgetBulder.makeSetupPersentScreen()
         setupPersentVC.coordinator = self
         navigationController.pushViewController(setupPersentVC, animated: true)
     }

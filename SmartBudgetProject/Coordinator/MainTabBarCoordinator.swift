@@ -15,7 +15,7 @@ final class MainTabBarCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     
     private var tabBarController: CustomTabBarController
-        
+    
     init(navigationController: UINavigationController, profileDelegate: ProfileCoordinatorDelegate?) {
         self.navigationController = navigationController
         self.profileDelegate = profileDelegate
@@ -25,6 +25,7 @@ final class MainTabBarCoordinator: Coordinator {
     func start() {
         setupTabs()
         navigationController.setViewControllers([tabBarController], animated: true)
+        navigationController.setNavigationBarHidden(true, animated: false)
     }
     
     func setupTabs() {
@@ -50,4 +51,3 @@ final class MainTabBarCoordinator: Coordinator {
         tabBarController.setupTabBar()
     }
 }
-

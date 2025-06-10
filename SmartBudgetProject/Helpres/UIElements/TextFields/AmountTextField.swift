@@ -17,9 +17,9 @@ final class AmountTextField: UITextField {
         leftViewMode = .always
         backgroundColor = .systemGray2
         layer.cornerRadius = 25
+        textColor = .white
         keyboardType = .numberPad
         font = UIFont.systemFont(ofSize: 25, weight: .heavy)
-        textColor = .systemBackground
         delegate = self
 
         let placeholderText = "0 \(currencySymbol)"
@@ -27,13 +27,15 @@ final class AmountTextField: UITextField {
             string: placeholderText,
             attributes: [
                 .font: font ?? UIFont(),
-                .foregroundColor: textColor ?? .systemBackground
+                .foregroundColor: UIColor.white
             ]
         )
+        inputAccessoryView = createToolbar()
     }
     
     private func formatAmount(_ string: String) -> String {
-        let cleanString = string.replacingOccurrences(of: "\\D", with: "", options: .regularExpression)
+        let cleanString = string.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
+        guard !cleanString.isEmpty else { return "" }
         guard let number = Int(cleanString) else { return "" }
         
         let formatter = NumberFormatter()
@@ -42,6 +44,27 @@ final class AmountTextField: UITextField {
         formatter.maximumFractionDigits = 0
         
         return formatter.string(from: NSNumber(value: number)).map { "\($0) \(currencySymbol)" } ?? ""
+    }
+    
+    private func createToolbar() -> UIToolbar {
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
+        toolbar.barStyle = .default
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(
+            title: "Готово",
+            style: .done,
+            target: self,
+            action: #selector(dismissKeyboard))
+        
+        toolbar.items = [flexSpace, doneButton]
+        toolbar.sizeToFit()
+        
+        return toolbar
+    }
+    
+    @objc private func dismissKeyboard() {
+        resignFirstResponder()
     }
 }
 

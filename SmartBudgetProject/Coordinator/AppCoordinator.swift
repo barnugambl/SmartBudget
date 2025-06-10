@@ -16,7 +16,11 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        showAuthFlow()
+        if UserDefaultsService.shared.isLogged {
+            showMainFlow()
+        } else {
+            showAuthFlow()
+        }
     }
     
     func showMainFlow() {
@@ -41,11 +45,29 @@ extension AppCoordinator: AuthCoordinatorDelegate {
 }
 
 extension AppCoordinator: ProfileCoordinatorDelegate {
+    func startOnboarding(coordinator: Coordinator) {
+        if let mainTabBarCoordinator = childCoordinators.first(where: { $0 is MainTabBarCoordinator }) {
+            childDidFinish(mainTabBarCoordinator)
+        }
+        
+        let onboardingCoordinator = OnboardingCoordinator(navigationController: navigationController)
+        childCoordinators.append(onboardingCoordinator)
+        onboardingCoordinator.delegate = self
+        onboardingCoordinator.start()
+    }
+    
     func logout(coordinator: Coordinator) {
         if let mainTabBarCoordinator = childCoordinators.first(where: { $0 is MainTabBarCoordinator }) {
             childDidFinish(mainTabBarCoordinator)
+            UserDefaultsService.shared.isLogged = false
         }
         showAuthFlow()
     }
 }
 
+extension AppCoordinator: OnboardingCoordinatorDelegate {
+    func didFinishOnBoarding(coordinator: any Coordinator) {
+        childDidFinish(coordinator)
+        showMainFlow()
+    }
+}

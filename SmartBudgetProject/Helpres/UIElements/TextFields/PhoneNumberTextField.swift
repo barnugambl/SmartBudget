@@ -21,10 +21,9 @@ final class PhoneNumberTextField: UITextField {
     private func setup() {
         leftView = UIView(frame: .init(x: 0, y: 0, width: 10, height: 1))
         leftViewMode = .always
-        textColor = .black
+        textColor = .label
         backgroundColor = .systemGray6
         layer.cornerRadius = 10
-                
         attributedPlaceholder = NSAttributedString(
             string: placeholderText,
             attributes: [
@@ -35,6 +34,28 @@ final class PhoneNumberTextField: UITextField {
         
         delegate = self
         keyboardType = .phonePad
+        inputAccessoryView = createToolbar()
+    }
+    
+    private func createToolbar() -> UIToolbar {
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
+        toolbar.barStyle = .default
+        
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(
+            title: "Готово",
+            style: .done,
+            target: self,
+            action: #selector(dismissKeyboard))
+        
+        toolbar.items = [flexSpace, doneButton]
+        toolbar.sizeToFit()
+        
+        return toolbar
+    }
+    
+    @objc private func dismissKeyboard() {
+        resignFirstResponder()
     }
 }
 
@@ -74,6 +95,7 @@ extension PhoneNumberTextField: UITextFieldDelegate {
         }
         
         textField.text = formatPhoneNumber(newDigits)
+        textField.notifyTextChanged()
         
         return false
     }

@@ -22,9 +22,13 @@ enum Constans {
     static let insetXLarge: CGFloat = 40
     static let insetXXLarge: CGFloat = 56
     
+    static let sizeIconContainer: CGFloat = 44
+    static let sizeIcon: CGFloat = sizeIconContainer / 2
+    
     static let textFieldContentInset: CGFloat = 10
     
     static let heightButton: CGFloat = 48
+    static let heightSpinner: CGFloat = 48
     static let heightTextField: CGFloat = 48
     static let heightTextFieldMedium: CGFloat = 56
     static let heightButtonMedium: CGFloat = 56
@@ -47,7 +51,7 @@ enum ColorConstans {
     static let yellow = "FFDD2D"
 }
 
-enum URLConstans {
+enum URLConstansBudget {
     static let setupBudgetURL = "/budget"
     
     static func getBudgetURL(userId: Int) -> String {
@@ -57,5 +61,43 @@ enum URLConstans {
     static func updateBudgetURL(userId: Int) -> String {
         return "/budget/\(userId)"
     }
-    
 }
+
+enum URLConstantGoal {
+    static func createGoalURL(userId: Int) -> String {
+        return "/goals/\(userId)"
+    }
+    
+    static func getGoalsURL(userId: Int) -> String {
+        return "/goals/\(userId)"
+    }
+    
+    static func updateGoalURL(userId: Int, goalId: Int) -> String {
+        return "/goals/\(userId)/\(goalId)"
+    }
+    
+    static func deleteGoalURL(userId: Int, goalId: Int) -> String {
+        return "/goals/\(userId)/\(goalId)"
+    }
+    
+    static func updateMoney(userId: Int, goalId: Int) -> String {
+        return "/goals/\(userId)/\(goalId)"
+    }
+}
+
+enum URLConstansNotification {
+    static func getNotification(userId: Int) -> String {
+        return "/notifications/\(userId)"
+    }
+}
+
+enum URLConstantLoginConstans {
+    static let login = "/login"
+}
+
+enum URLTransactionConstans {
+    static func getTransactionURL(userId: Int) -> String {
+        return "/transactions/\(userId)"
+    }
+}
+ 

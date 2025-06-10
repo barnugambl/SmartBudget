@@ -4,31 +4,49 @@ import SnapKit
 
 final class BudgetView: UIView {
     lazy var titleLabel = UILabel.create(text: R.string.localizable.expensesLabel(), fontSize: FontSizeConstans.title)
+    
+    lazy var loadIndicator = CustomSpinnerSimple()
+    
     lazy var pieChartView: PieChartView = {
         let pieChart = PieChartView()
-        pieChart.drawEntryLabelsEnabled = false
         pieChart.rotationEnabled = false
         pieChart.highlightPerTapEnabled = true
         pieChart.legend.enabled = false
         pieChart.holeRadiusPercent = 0.7
         pieChart.drawEntryLabelsEnabled = true
+        pieChart.holeColor = .clear
+        pieChart.transparentCircleColor = .clear
+        pieChart.noDataText = "Упс, произошла ошибка попробуйте позже"
+        pieChart.noDataTextColor = .label
+        pieChart.noDataFont = UIFont.systemFont(ofSize: 16, weight: .medium)
         return pieChart
     }()
     
     lazy var budgetCategoryTableView: UITableView = {
         let table = UITableView()
-        table.delegate = self
         table.showsVerticalScrollIndicator = false
         table.separatorStyle = .none
         table.backgroundColor = .systemBackground
         table.register(BudgetCategoryViewCell.self, forCellReuseIdentifier: BudgetCategoryViewCell.reuseIdentifier)
         return table
     }()
+    
+    lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.tintColor = UIColor(hex: ColorConstans.yellow)
+        return control
+    }()
         
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
         setupLayout()
+        loadIndicator.startAnimation()
+    }
+    
+    func showView() {
+        loadIndicator.stopAnimation()
+        budgetCategoryTableView.isHidden = false
     }
     
     required init?(coder: NSCoder) {
@@ -37,6 +55,7 @@ final class BudgetView: UIView {
     
     private func setupView() {
         backgroundColor = .systemBackground
+        budgetCategoryTableView.refreshControl = refreshControl
     }
     
     func setupTableHeader() {
@@ -52,21 +71,27 @@ final class BudgetView: UIView {
     }
 
     private func setupLayout() {
-        addSubview(budgetCategoryTableView)
+        addSubviews(budgetCategoryTableView, loadIndicator)
         budgetCategoryTableView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
+        }
+        
+        loadIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(Constans.heightSpinner)
         }
     }
     
     func createCenterAttributedText(amount: String) -> NSAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
+        paragraphStyle.lineSpacing = 4
         
         let centerText = NSMutableAttributedString(
             string: "Бюджет\n",
             attributes: [
-                .font: UIFont.systemFont(ofSize: FontSizeConstans.body),
-                .foregroundColor: UIColor.gray,
+                .font: UIFont.systemFont(ofSize: FontSizeConstans.body, weight: .medium),
+                .foregroundColor: UIColor.secondaryLabel,
                 .paragraphStyle: paragraphStyle
             ]
         )
@@ -76,19 +101,11 @@ final class BudgetView: UIView {
                 string: amount,
                 attributes: [
                     .font: UIFont.boldSystemFont(ofSize: FontSizeConstans.title),
-                    .foregroundColor: UIColor.black,
+                    .foregroundColor: UIColor.label,
                     .paragraphStyle: paragraphStyle
                 ]
             )
         )
-        
         return centerText
-    }
-}
-
-extension BudgetView: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        pieChartView.highlightValue(Highlight(x: Double(indexPath.row), y: 0, dataSetIndex: 0))
     }
 }

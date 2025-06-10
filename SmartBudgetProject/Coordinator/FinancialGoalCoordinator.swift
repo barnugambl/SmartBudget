@@ -12,10 +12,8 @@ final class FinancialGoalCoordinator: Coordinator {
     
     var childCoordinators: [Coordinator] = []
     
-    private let moduleBulder = ModuleBulder()
+    private let moduleBulder = FinancialGoalScreenBulder.shared
     
-    private let viewModel = FinancialGoalViewModel(userId: 1, goalId: 1, financilGoaSevice: FinancialGoalAPIService(apiService: ApiService()))
-        
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
@@ -25,20 +23,31 @@ final class FinancialGoalCoordinator: Coordinator {
     }
     
     private func showFinancialFlow() {
-        let financialGoalVC = moduleBulder.makeFinancialGoalScreen(viewModel: viewModel)
+        let financialGoalVC = moduleBulder.makeFinancialGoalScreen()
         financialGoalVC.coordinator = self
         navigationController.setViewControllers([financialGoalVC], animated: false)
     }
     
     func showAddFinancialGoalFlow() {
-        let addFinancialGoalVC = moduleBulder.makeAddFinancialGoalScreen(viewModel: viewModel)
+        let addFinancialGoalVC = moduleBulder.makeAddFinancialGoalScreen()
         addFinancialGoalVC.coordinator = self
+        addFinancialGoalVC.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(addFinancialGoalVC, animated: true)
     }
     
-    func showAddMoneyFinancialGoalFlow(nameGoal: String, userId: Int) {
-        let addMoneyFinancialGoalVC = moduleBulder.makeAddMoneyFinancialGoalScreen(viewModel: viewModel, nameGoal: nameGoal, userId: userId)
+    func showAddMoneyFinancialGoalFlow(goal: Goal) {
+        let addMoneyFinancialGoalVC = moduleBulder.makeAddMoneyFinancialGoalScreen(goal: goal)
         addMoneyFinancialGoalVC.coordinator = self
+        addMoneyFinancialGoalVC.hidesBottomBarWhenPushed = true
+
         navigationController.pushViewController(addMoneyFinancialGoalVC, animated: true)
+    }
+    
+    func showEditFinancialGoal(goal: Goal) {
+        let editFinancialGoalVC = moduleBulder.makeEditFinancialGoalScreen(goal: goal)
+        editFinancialGoalVC.coordinator = self
+        editFinancialGoalVC.hidesBottomBarWhenPushed = true
+
+        navigationController.pushViewController(editFinancialGoalVC, animated: true)
     }
 }

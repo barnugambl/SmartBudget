@@ -20,7 +20,7 @@ final class BudgetViewController: UIViewController {
     private var tableViewDataSource: UITableViewDiffableDataSource<BudgetCategoryTableSection, BudgetCategory>?
     private var cancellable: Set<AnyCancellable> = .init()
     weak var coordinator: ExpensesCoordinator?
-
+    
     init(viewModel: BudgetViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -38,22 +38,87 @@ final class BudgetViewController: UIViewController {
         super.viewDidLoad()
         bindingViewModel()
         setupNavigationBar()
+        setupTableDelegate()
         budgetView.setupTableHeader()
+        viewModel.fetchBudget()
+        setupRefreshControl()
+        fetchNotification()
+    }
+    
+    private func setupRefreshControl() {
+        budgetView.refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+    }
+    
+    @objc private func handleRefresh() {
+        viewModel.refreshBudget()
+    }
+    
+    private func fetchNotification() {
+        viewModel.startNotification()
+    }
+    
+    private func setupTableDelegate() {
+        budgetView.budgetCategoryTableView.delegate = self
     }
     
     private func bindingViewModel() {
-        viewModel.budgetSubject
-            .compactMap({ $0 })
+        viewModel.budgetService.budgetSubject
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] budget, colors in
+            .compactMap { $0 }
+            .sink { [weak self] budget in
                 guard let self else { return }
-                self.updateUI(budget: budget, colors: colors)
+                self.updateUI(budget: budget)
             }
             .store(in: &cancellable)
+        
+        viewModel.$budget
+            .receive(on: DispatchQueue.main)
+            .compactMap({ $0 })
+            .sink { [weak self] budget in
+                guard let self else { return }
+                self.viewModel.budgetService.budgetSubject.send(budget)
+                self.updateUI(budget: budget)
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
+                guard let self else { return }
+                if isLoading {
+                    self.budgetView.budgetCategoryTableView.isHidden = true
+                    self.budgetView.loadIndicator.startAnimation()
+                } else {
+                    self.budgetView.budgetCategoryTableView.isHidden = false
+                    self.budgetView.loadIndicator.stopAnimation()
+                }
+            }
+            .store(in: &cancellable)
+        
+        viewModel.$errorMessage
+            .receive(on: DispatchQueue.main)
+            .compactMap({ $0 })
+            .sink { [weak self] message in
+                guard let self else { return }
+                CustomToastView.showErrorToast(on: self.budgetView, message: message)
+                self.viewModel.resetMessages()
+            }
+            .store(in: &cancellable)
+        
+        viewModel.finishLoading = { [weak self] in
+            DispatchQueue.main.async {
+                self?.budgetView.refreshControl.endRefreshing()
+            }
+        }
     }
     
-    private func updateUI(budget: Budget, colors: [UIColor]) {
-        setupPieChart(budget: budget, colors: colors)
+    private func updateUI(budget: Budget) {
+        let colors = budget.categories.compactMap { category -> UIColor in
+            let colorHex = viewModel.getColor(for: category.name)
+            return UIColor(hex: colorHex)
+        }
+        
+        setupPieChart(budget: budget, colors: colors.isEmpty ? [.systemBlue] : colors)
         budgetView.pieChartView.centerAttributedText = budgetView.createCenterAttributedText(amount: "\(budget.income)")
         setupDataSource(budgetCategory: budget.categories)
     }
@@ -65,7 +130,7 @@ final class BudgetViewController: UIViewController {
 }
 
 // MARK: DataSource
-extension BudgetViewController {
+private extension BudgetViewController {
     private func setupDataSource(budgetCategory: [BudgetCategory]) {
         tableViewDataSource = UITableViewDiffableDataSource(
             tableView: budgetView.budgetCategoryTableView,
@@ -86,8 +151,15 @@ extension BudgetViewController {
         var snaphot = NSDiffableDataSourceSnapshot<BudgetCategoryTableSection, BudgetCategory>()
         snaphot.appendSections([.main])
         snaphot.appendItems(goals)
-        tableViewDataSource?.apply(snaphot)
+        tableViewDataSource?.apply(snaphot, animatingDifferences: false)
         
+    }
+}
+
+extension BudgetViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let currentName = viewModel.budget?.categories[indexPath.row].name else { return }
+        self.coordinator?.showTransactionFlow(name: currentName)
     }
 }
 
@@ -96,6 +168,8 @@ extension BudgetViewController {
     func setupPieChart(budget: Budget, colors: [UIColor]) {
         let entries = createPieChartEntries(budget: budget)
         let dataSet = createPieChartDataSet(with: entries, colors: colors)
+        dataSet.entryLabelColor = .label
+        dataSet.entryLabelFont = UIFont.systemFont(ofSize: 14, weight: .medium)
         configurePieChart(with: dataSet)
     }
     
